@@ -1,4 +1,4 @@
-module Geometry.ArcLengthParameterization
+module Curve.ArcLengthParameterization
     exposing
         ( ArcLengthParameterization
         , arcLengthToParameterValue
@@ -11,22 +11,25 @@ module Geometry.ArcLengthParameterization
 majority of cases the individual curve modules such as `QuadraticSpline2d`
 should contain all the functionality you need to construct an arc length
 parameterization and use it to do things like evaluate a curve at evenly-spaced
-points. This module is primarily for use internally by those curve modules.
+points. This module is primarily for use internally by those curve modules, but
+may be useful if you want to do some fancy mapping between arc length and curve
+parameter values.
 
 @docs ArcLengthParameterization
 
 
 # Constructing
 
-@docs parameterization
+@docs build
 
 
 # Evaluating
 
-@docs fromParameterization, toParameterValue, fromParameterValue
+@docs totalArcLength, arcLengthToParameterValue, parameterValueToArcLength
 
 -}
 
+import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
 import Float.Extra as Float
 
 
@@ -81,16 +84,16 @@ segmentsPerLeaf =
 Curve parameter values are assumed to be in the range [0,1].
 
 -}
-build : { tolerance : Float, derivativeMagnitude : Float -> Float, maxSecondDerivativeMagnitude : Float } -> ArcLengthParameterization
-build { tolerance, derivativeMagnitude, maxSecondDerivativeMagnitude } =
+build : { maxError : Float, derivativeMagnitude : Float -> Float, maxSecondDerivativeMagnitude : Float } -> ArcLengthParameterization
+build { maxError, derivativeMagnitude, maxSecondDerivativeMagnitude } =
     let
         height =
-            if tolerance <= 0 then
+            if maxError <= 0 then
                 0
             else
                 let
                     numSegments =
-                        maxSecondDerivativeMagnitude / (8 * tolerance)
+                        maxSecondDerivativeMagnitude / (8 * maxError)
 
                     numLeaves =
                         numSegments / toFloat segmentsPerLeaf
@@ -223,15 +226,15 @@ buildTree derivativeMagnitude lengthAtStart_ paramAtStart_ paramAtEnd height =
 
 
 {-| Convert an arc length to the corresponding parameter value. If the given
-arc length is less than zero or greater than the total arc length of the curve,
-returns `Nothing`.
+arc length is less than zero or greater than the total arc length of the curve
+(as reported by `totalArcLength`), returns `Nothing`.
 -}
-arcLengthToParameterValue : Float -> ArcLengthParameterization -> Maybe Float
+arcLengthToParameterValue : Float -> ArcLengthParameterization -> Maybe ParameterValue
 arcLengthToParameterValue s (ArcLengthParameterization tree) =
     if s == 0 then
-        Just 0
+        Just ParameterValue.zero
     else if s > 0 && s <= lengthAtEnd tree then
-        Just (unsafeToParameterValue tree s)
+        Just (ParameterValue.clamped (unsafeToParameterValue tree s))
     else
         Nothing
 
@@ -330,11 +333,14 @@ lengthAtEnd tree =
 {-| Find the total arc length of some curve given its arc length
 parameterization;
 
-    ArcLengthParameterization.totalArcLength parameterization
+    ArcLengthParameterization.totalArcLength
+        parameterization
 
 is equivalent to
 
-    ArcLengthParameterization.parameterValueToArcLength parameterization 1
+    ArcLengthParameterization.parameterValueToArcLength
+        ParameterValue.one
+        parameterization
 
 but is more efficient and returns a plain `Float` instead of a `Maybe Float`.
 
@@ -344,17 +350,14 @@ totalArcLength (ArcLengthParameterization tree) =
     lengthAtEnd tree
 
 
-{-| Convert a parameter value to the corresponding arc length. If the given
-parameter value is less than zero or greater than one, returns `Nothing`.
+{-| Convert a parameter value to the corresponding arc length.
 -}
-parameterValueToArcLength : Float -> ArcLengthParameterization -> Maybe Float
-parameterValueToArcLength t (ArcLengthParameterization tree) =
-    if t == 0 then
-        Just 0
-    else if t > 0 && t <= 1 then
-        Just (unsafeToArcLength tree t)
+parameterValueToArcLength : ParameterValue -> ArcLengthParameterization -> Float
+parameterValueToArcLength parameterValue (ArcLengthParameterization tree) =
+    if parameterValue == ParameterValue.zero then
+        0
     else
-        Nothing
+        unsafeToArcLength tree (ParameterValue.value parameterValue)
 
 
 unsafeToArcLength : SegmentTree -> Float -> Float

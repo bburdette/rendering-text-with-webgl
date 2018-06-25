@@ -1,32 +1,13 @@
-module Tests.CubicSpline3d
-    exposing
-        ( arcLengthMatchesAnalytical
-        , derivativeAndMagnitudeAreConsistent
-        , fromEndpointsReproducesSpline
-        , jsonRoundTrips
-        , pointAtArcLengthIsEnd
-        , pointAtZeroLengthIsStart
-        )
+module Tests.CubicSpline3d exposing (..)
 
 import CubicSpline3d
-import Expect exposing (FloatingPointTolerance(Absolute))
+import Expect exposing (FloatingPointTolerance(..))
 import Fuzz
-import Geometry.Accuracy as Accuracy
-import Geometry.Decode as Decode
-import Geometry.Encode as Encode
 import Geometry.Expect as Expect
 import Geometry.Fuzz as Fuzz
 import Test exposing (Test)
-import Tests.Generic as Generic
 import Tests.QuadraticSpline3d
 import Vector3d
-
-
-jsonRoundTrips : Test
-jsonRoundTrips =
-    Generic.jsonRoundTrips Fuzz.cubicSpline3d
-        Encode.cubicSpline3d
-        Decode.cubicSpline3d
 
 
 fromEndpointsReproducesSpline : Test
@@ -64,8 +45,7 @@ arcLengthMatchesAnalytical =
         (\quadraticSpline ->
             quadraticSpline
                 |> CubicSpline3d.fromQuadraticSpline
-                |> CubicSpline3d.arcLengthParameterized
-                    (Accuracy.maxError 1.0e-3)
+                |> CubicSpline3d.arcLengthParameterized { maxError = 1.0e-3 }
                 |> CubicSpline3d.arcLength
                 |> Expect.within (Absolute 1.0e-3)
                     (Tests.QuadraticSpline3d.analyticalLength quadraticSpline)
@@ -79,9 +59,9 @@ pointAtZeroLengthIsStart =
         (\spline ->
             let
                 parameterizedCurve =
-                    CubicSpline3d.arcLengthParameterized
-                        (Accuracy.maxError 1.0e-3)
-                        spline
+                    spline
+                        |> CubicSpline3d.arcLengthParameterized
+                            { maxError = 1.0e-3 }
             in
             CubicSpline3d.pointAlong parameterizedCurve 0
                 |> Expect.equal (Just (CubicSpline3d.startPoint spline))
@@ -95,27 +75,13 @@ pointAtArcLengthIsEnd =
         (\spline ->
             let
                 parameterizedCurve =
-                    CubicSpline3d.arcLengthParameterized
-                        (Accuracy.maxError 1.0e-3)
-                        spline
+                    spline
+                        |> CubicSpline3d.arcLengthParameterized
+                            { maxError = 1.0e-3 }
 
                 arcLength =
                     CubicSpline3d.arcLength parameterizedCurve
             in
             CubicSpline3d.pointAlong parameterizedCurve arcLength
                 |> Expect.equal (Just (CubicSpline3d.endPoint spline))
-        )
-
-
-derivativeAndMagnitudeAreConsistent : Test
-derivativeAndMagnitudeAreConsistent =
-    Test.fuzz2
-        Fuzz.cubicSpline3d
-        (Fuzz.floatRange 0 1)
-        "derivative and derivativeMagnitude are consistent"
-        (\spline t ->
-            CubicSpline3d.derivative spline t
-                |> Maybe.map Vector3d.length
-                |> Expect.just Expect.approximately
-                    (CubicSpline3d.derivativeMagnitude spline t)
         )

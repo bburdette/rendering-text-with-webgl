@@ -3,13 +3,13 @@ module Polygon2d.Monotone
         ( faces
         , init
         , monotonePolygons
-        , removeDuplicates
         , testPolygon
         , triangulation
         )
 
 import Array.Hamt as Array exposing (Array)
 import Dict exposing (Dict)
+import Future.Tuple as Tuple
 import Geometry.Types as Types exposing (Polygon2d(..))
 import LineSegment2d exposing (LineSegment2d)
 import Point2d exposing (Point2d)
@@ -45,10 +45,8 @@ comparePoints p1 p2 =
     in
     if y1 < y2 then
         LT
-
     else if y1 > y2 then
         GT
-
     else
         compare x2 x1
 
@@ -80,20 +78,15 @@ kind previous current next =
     if compareToPrevious == GT && compareToNext == GT then
         if leftTurn previous current next then
             Start
-
         else
             Split
-
     else if compareToPrevious == LT && compareToNext == LT then
         if leftTurn previous current next then
             End
-
         else
             Merge
-
     else if compareToPrevious == GT then
         Right
-
     else
         Left
 
@@ -104,38 +97,58 @@ toVertices points =
         [] ->
             []
 
-        first :: rest ->
+        [ singlePoint ] ->
+            -- TODO use as combined split/merge vertex
+            []
+
+        [ firstPoint, secondPoint ] ->
+            if comparePoints firstPoint secondPoint == GT then
+                [ { position = firstPoint, kind = Split }
+                , { position = secondPoint, kind = Merge }
+                ]
+            else
+                [ { position = firstPoint, kind = Merge }
+                , { position = secondPoint, kind = Split }
+                ]
+
+        firstPoint :: secondPoint :: thirdPoint :: rest ->
             let
-                last =
-                    List.foldl always first rest
+                lastPoint =
+                    List.foldl always thirdPoint rest
 
-                collect previous points accumulated =
-                    case points of
+                collect previousPoint currentPoint remainingPoints accumulated =
+                    case remainingPoints of
                         [] ->
-                            []
-
-                        [ last ] ->
                             let
-                                newVertex =
-                                    { position = last
-                                    , kind = kind previous last first
+                                lastVertex =
+                                    { position = currentPoint
+                                    , kind =
+                                        kind
+                                            previousPoint
+                                            currentPoint
+                                            firstPoint
                                     }
                             in
-                            List.reverse (newVertex :: accumulated)
+                            List.reverse (lastVertex :: accumulated)
 
-                        current :: next :: rest ->
+                        nextPoint :: followingPoints ->
                             let
                                 newVertex =
-                                    { position = current
-                                    , kind = kind previous current next
+                                    { position = currentPoint
+                                    , kind =
+                                        kind
+                                            previousPoint
+                                            currentPoint
+                                            nextPoint
                                     }
                             in
                             collect
-                                current
-                                (next :: rest)
+                                currentPoint
+                                nextPoint
+                                followingPoints
                                 (newVertex :: accumulated)
             in
-            collect last points []
+            collect lastPoint firstPoint (secondPoint :: thirdPoint :: rest) []
 
 
 type alias Edge =
@@ -170,7 +183,6 @@ removeDuplicates points =
                         -- Drop the last point since it's equal to the
                         -- first
                         firstPoint :: List.reverse otherPoints
-
                     else
                         -- Keep all points
                         firstPoint :: List.reverse accumulatedPoints
@@ -191,7 +203,6 @@ accumulateDistinctPoints previousPoint points accumulatedPoints =
                 updatedPoints =
                     if point == previousPoint then
                         accumulatedPoints
-
                     else
                         point :: accumulatedPoints
             in
@@ -220,15 +231,36 @@ init (Polygon2d { outerLoop, innerLoops }) =
                         newEdges =
                             Array.initialize length
                                 (\index ->
-                                    { startVertexIndex =
-                                        index + offset
-                                    , endVertexIndex =
-                                        ((index + 1) % length) + offset
-                                    , nextEdgeIndex =
-                                        ((index + 1) % length) + offset
-                                    , previousEdgeIndex =
-                                        ((index - 1) % length) + offset
-                                    }
+                                    if index == 0 then
+                                        { startVertexIndex =
+                                            offset
+                                        , endVertexIndex =
+                                            offset + 1
+                                        , nextEdgeIndex =
+                                            offset + 1
+                                        , previousEdgeIndex =
+                                            offset + length - 1
+                                        }
+                                    else if index == length - 1 then
+                                        { startVertexIndex =
+                                            offset + index
+                                        , endVertexIndex =
+                                            offset
+                                        , nextEdgeIndex =
+                                            offset
+                                        , previousEdgeIndex =
+                                            offset + index - 1
+                                        }
+                                    else
+                                        { startVertexIndex =
+                                            offset + index
+                                        , endVertexIndex =
+                                            offset + index + 1
+                                        , nextEdgeIndex =
+                                            offset + index + 1
+                                        , previousEdgeIndex =
+                                            offset + index - 1
+                                        }
                                 )
                     in
                     ( offset + length, Array.append accumulated newEdges )
@@ -417,7 +449,6 @@ handleEndVertex index state =
                                         state
                                             |> addDiagonal index helperVertex
                                             |> Tuple.first
-
                                     else
                                         state
                             in
@@ -468,7 +499,6 @@ handleMergeVertex index point state =
                                         state
                                             |> addDiagonal index rightHelper
                                             |> Tuple.first
-
                                     else
                                         state
 
@@ -487,7 +517,6 @@ handleMergeVertex index point state =
                                                             if leftHelper.isMerge then
                                                                 rightUpdated
                                                                     |> addDiagonal index leftHelper
-
                                                             else
                                                                 ( rightUpdated, index )
                                                     in
@@ -513,7 +542,6 @@ handleRightVertex index point state =
                                     if helperVertex.isMerge then
                                         state
                                             |> addDiagonal index helperVertex
-
                                     else
                                         ( state, index )
                             in
@@ -538,7 +566,6 @@ handleLeftVertex index state =
                                         state
                                             |> addDiagonal index helperVertex
                                             |> Tuple.first
-
                                     else
                                         state
                             in
@@ -584,7 +611,6 @@ buildLoop state points startIndex currentIndex ( processedEdgeIndices, accumulat
                         ( updatedEdgeIndices
                         , List.reverse newAccumulated
                         )
-
                     else
                         buildLoop
                             state
@@ -613,7 +639,6 @@ collectMonotoneLoops state =
             in
             if Set.member index processedEdgeIndices then
                 accumulated
-
             else
                 let
                     ( updatedEdgeIndices, loop ) =
@@ -655,7 +680,7 @@ monotonePolygons polygon =
 
         priorityQueue =
             vertices
-                |> List.indexedMap (\i v -> ( i, v ))
+                |> List.indexedMap Tuple.pair
                 |> List.sortWith
                     (\( _, firstVertex ) ( _, secondVertex ) ->
                         comparePoints secondVertex.position firstVertex.position
@@ -732,7 +757,6 @@ addLeftChainVertex vertex state =
                 , chainEnd = vertex
                 , faces = newFace :: state.faces
                 }
-
             else
                 { chainStart = state.chainStart
                 , chainInterior = [ state.chainEnd ]
@@ -755,7 +779,6 @@ addLeftChainVertex vertex state =
                     , chainEnd = firstInterior
                     , faces = newFace :: state.faces
                     }
-
             else
                 { chainStart = state.chainStart
                 , chainInterior = state.chainEnd :: state.chainInterior
@@ -781,7 +804,6 @@ addRightChainVertex vertex state =
                 , chainEnd = vertex
                 , faces = newFace :: state.faces
                 }
-
             else
                 { chainStart = state.chainStart
                 , chainInterior = [ state.chainEnd ]
@@ -804,7 +826,6 @@ addRightChainVertex vertex state =
                     , chainEnd = firstInterior
                     , faces = newFace :: state.faces
                     }
-
             else
                 { chainStart = state.chainStart
                 , chainInterior = state.chainEnd :: state.chainInterior
@@ -908,20 +929,16 @@ faces vertices =
                         -- new vertex on the right will connect to all chain
                         -- vertices on the left
                         startNewRightChain vertex state
-
                     else if state.chainStart.nextVertexIndex == vertex.index then
                         -- new vertex on the left will connect to all chain
                         -- vertices on the right
                         startNewLeftChain vertex state
-
                     else if vertex.nextVertexIndex == state.chainEnd.index then
                         -- continuing left chain
                         addRightChainVertex vertex state
-
                     else if state.chainEnd.nextVertexIndex == vertex.index then
                         -- continuing right chain
                         addLeftChainVertex vertex state
-
                     else
                         error state
             in

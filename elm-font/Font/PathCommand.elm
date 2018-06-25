@@ -8,6 +8,7 @@ module Font.PathCommand
 
 import Array.Hamt as Array
 import CubicSpline2d exposing (CubicSpline2d)
+import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
 import Point2d exposing (Point2d)
 import Polygon2d as Polygon2d exposing (Polygon2d)
 import Polygon2d.Monotone as Monotone
@@ -137,10 +138,11 @@ triangulate path =
 
 pathToPolygon : Int -> List PathCommand -> List Point2d
 pathToPolygon n commands =
-    Monotone.removeDuplicates (List.reverse (pathToPolygonHelp (samples n) commands []))
+    removeDuplicates
+        (List.reverse (pathToPolygonHelp (ParameterValue.steps n) commands []))
 
 
-pathToPolygonHelp : List Float -> List PathCommand -> List Point2d -> List Point2d
+pathToPolygonHelp : List ParameterValue -> List PathCommand -> List Point2d -> List Point2d
 pathToPolygonHelp samples commands loop =
     case commands of
         [] ->
@@ -164,14 +166,14 @@ pathToPolygonHelp samples commands loop =
                         loop
 
                     point :: rest ->
-                        QuadraticSpline2d.pointsOn
+                        QuadraticSpline2d.pointsAt
+                            samples
                             (QuadraticSpline2d.with
                                 { startPoint = Point2d.fromCoordinates ( x2, y2 )
                                 , controlPoint = Point2d.fromCoordinates ( x1, y1 )
                                 , endPoint = point
                                 }
                             )
-                            samples
                             ++ rest
                 )
 
@@ -183,7 +185,8 @@ pathToPolygonHelp samples commands loop =
                         loop
 
                     point :: rest ->
-                        CubicSpline2d.pointsOn
+                        CubicSpline2d.pointsAt
+                            samples
                             (CubicSpline2d.with
                                 { startPoint = Point2d.fromCoordinates ( x3, y3 )
                                 , startControlPoint = Point2d.fromCoordinates ( x2, y2 )
@@ -191,13 +194,53 @@ pathToPolygonHelp samples commands loop =
                                 , endPoint = point
                                 }
                             )
-                            samples
                             ++ rest
                 )
 
 
-samples : Int -> List Float
-samples n =
-    List.map
-        (\a -> toFloat a / toFloat n)
-        (List.range 0 n)
+{-| Removes consequitive duplicates. Copied from ianmackenzie/elm-geometry
+-}
+removeDuplicates : List Point2d -> List Point2d
+removeDuplicates points =
+    case points of
+        [] ->
+            []
+
+        firstPoint :: rest ->
+            let
+                -- Strip out adjacent duplicates
+                accumulatedPoints =
+                    accumulateDistinctPoints firstPoint rest []
+            in
+            case accumulatedPoints of
+                lastPoint :: otherPoints ->
+                    if lastPoint == firstPoint then
+                        -- Drop the last point since it's equal to the
+                        -- first
+                        firstPoint :: List.reverse otherPoints
+
+                    else
+                        -- Keep all points
+                        firstPoint :: List.reverse accumulatedPoints
+
+                [] ->
+                    -- Just have the first point
+                    [ firstPoint ]
+
+
+accumulateDistinctPoints : Point2d -> List Point2d -> List Point2d -> List Point2d
+accumulateDistinctPoints previousPoint points accumulatedPoints =
+    case points of
+        [] ->
+            accumulatedPoints
+
+        point :: rest ->
+            let
+                updatedPoints =
+                    if point == previousPoint then
+                        accumulatedPoints
+
+                    else
+                        point :: accumulatedPoints
+            in
+            accumulateDistinctPoints point rest updatedPoints

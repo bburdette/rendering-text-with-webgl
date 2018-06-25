@@ -1,31 +1,12 @@
-module Tests.QuadraticSpline3d
-    exposing
-        ( analyticalLength
-        , arcLengthMatchesAnalytical
-        , curvedSpline
-        , jsonRoundTrips
-        , pointAtArcLengthIsEnd
-        , pointAtZeroLengthIsStart
-        )
+module Tests.QuadraticSpline3d exposing (..)
 
-import Expect exposing (FloatingPointTolerance(Absolute))
+import Expect exposing (FloatingPointTolerance(..))
 import Fuzz exposing (Fuzzer)
-import Geometry.Accuracy as Accuracy
-import Geometry.Decode as Decode
-import Geometry.Encode as Encode
 import Geometry.Fuzz as Fuzz
 import Point3d
 import QuadraticSpline3d exposing (QuadraticSpline3d)
 import Test exposing (Test)
-import Tests.Generic as Generic
 import Tests.QuadraticSpline2d
-
-
-jsonRoundTrips : Test
-jsonRoundTrips =
-    Generic.jsonRoundTrips Fuzz.quadraticSpline3d
-        Encode.quadraticSpline3d
-        Decode.quadraticSpline3d
 
 
 analyticalLength : QuadraticSpline3d -> Float
@@ -106,9 +87,9 @@ arcLengthMatchesAnalytical =
     Test.fuzz curvedSpline
         "arc length matches analytical formula"
         (\spline ->
-            QuadraticSpline3d.arcLengthParameterized
-                (Accuracy.maxError 1.0e-3)
-                spline
+            spline
+                |> QuadraticSpline3d.arcLengthParameterized
+                    { maxError = 1.0e-3 }
                 |> QuadraticSpline3d.arcLength
                 |> Expect.within (Absolute 1.0e-3) (analyticalLength spline)
         )
@@ -121,9 +102,9 @@ pointAtZeroLengthIsStart =
         (\spline ->
             let
                 parameterizedCurve =
-                    QuadraticSpline3d.arcLengthParameterized
-                        (Accuracy.maxError 1.0e-3)
-                        spline
+                    spline
+                        |> QuadraticSpline3d.arcLengthParameterized
+                            { maxError = 1.0e-3 }
             in
             QuadraticSpline3d.pointAlong parameterizedCurve 0
                 |> Expect.equal (Just (QuadraticSpline3d.startPoint spline))
@@ -137,9 +118,9 @@ pointAtArcLengthIsEnd =
         (\spline ->
             let
                 parameterizedCurve =
-                    QuadraticSpline3d.arcLengthParameterized
-                        (Accuracy.maxError 1.0e-3)
-                        spline
+                    spline
+                        |> QuadraticSpline3d.arcLengthParameterized
+                            { maxError = 1.0e-3 }
 
                 arcLength =
                     QuadraticSpline3d.arcLength parameterizedCurve

@@ -19696,9 +19696,6 @@ var _w0rm$rendering_text_with_webgl$Geometry_Types$CubicSpline3d = function (a) 
 var _w0rm$rendering_text_with_webgl$Geometry_Types$EllipticalArc2d = function (a) {
 	return {ctor: 'EllipticalArc2d', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Geometry_Types$MaxError = function (a) {
-	return {ctor: 'MaxError', _0: a};
-};
 
 var _w0rm$rendering_text_with_webgl$Bootstrap_Direction2d$components = function (_p0) {
 	var _p1 = _p0;
@@ -21162,9 +21159,126 @@ var _w0rm$rendering_text_with_webgl$Circle2d$placeIn = F2(
 			A2(_w0rm$rendering_text_with_webgl$Point2d$placeIn, frame, _p26.centerPoint));
 	});
 
-var _w0rm$rendering_text_with_webgl$Geometry_Accuracy$maxError = _w0rm$rendering_text_with_webgl$Geometry_Types$MaxError;
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0;
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue = function (a) {
+	return {ctor: 'ParameterValue', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(0);
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$half = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(0.5);
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$one = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(1);
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$clamped = function (givenValue) {
+	return _elm_lang$core$Basics$isNaN(givenValue) ? _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(givenValue) : _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(
+		A3(_elm_lang$core$Basics$clamp, 0, 1, givenValue));
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$checked = function (givenValue) {
+	return _elm_lang$core$Basics$isNaN(givenValue) ? _elm_lang$core$Maybe$Nothing : (((_elm_lang$core$Native_Utils.cmp(0, givenValue) < 1) && (_elm_lang$core$Native_Utils.cmp(givenValue, 1) < 1)) ? _elm_lang$core$Maybe$Just(
+		_w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(givenValue)) : _elm_lang$core$Maybe$Nothing);
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$midpoint = F2(
+	function (_p3, _p2) {
+		var _p4 = _p3;
+		var _p6 = _p4._0;
+		var _p5 = _p2;
+		return _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(_p6 + ((_p5._0 - _p6) / 2));
+	});
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$oneMinus = function (_p7) {
+	var _p8 = _p7;
+	return _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(1 - _p8._0);
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$endpointsHelp = F4(
+	function (startIndex, index, divisor, accumulated) {
+		endpointsHelp:
+		while (true) {
+			var parameterValue = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(
+				_elm_lang$core$Basics$toFloat(index) / divisor);
+			var newAccumulated = {ctor: '::', _0: parameterValue, _1: accumulated};
+			if (_elm_lang$core$Native_Utils.eq(index, startIndex)) {
+				return newAccumulated;
+			} else {
+				var _v4 = startIndex,
+					_v5 = index - 1,
+					_v6 = divisor,
+					_v7 = newAccumulated;
+				startIndex = _v4;
+				index = _v5;
+				divisor = _v6;
+				accumulated = _v7;
+				continue endpointsHelp;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$steps = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) < 0) ? {ctor: '[]'} : A4(
+		_w0rm$rendering_text_with_webgl$Curve_ParameterValue$endpointsHelp,
+		0,
+		n,
+		_elm_lang$core$Basics$toFloat(n),
+		{ctor: '[]'});
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$leading = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) < 0) ? {ctor: '[]'} : A4(
+		_w0rm$rendering_text_with_webgl$Curve_ParameterValue$endpointsHelp,
+		0,
+		n - 1,
+		_elm_lang$core$Basics$toFloat(n),
+		{ctor: '[]'});
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$trailing = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) < 0) ? {ctor: '[]'} : A4(
+		_w0rm$rendering_text_with_webgl$Curve_ParameterValue$endpointsHelp,
+		1,
+		n,
+		_elm_lang$core$Basics$toFloat(n),
+		{ctor: '[]'});
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$range = function (_p9) {
+	var _p10 = _p9;
+	var _p11 = _p10.numSteps;
+	if (_elm_lang$core$Native_Utils.cmp(_p11, 1) < 0) {
+		return {ctor: '[]'};
+	} else {
+		var endIndex = _p10.includeEnd ? _p11 : (_p11 - 1);
+		var startIndex = _p10.includeStart ? 0 : 1;
+		return (_elm_lang$core$Native_Utils.cmp(startIndex, endIndex) < 1) ? A4(
+			_w0rm$rendering_text_with_webgl$Curve_ParameterValue$endpointsHelp,
+			startIndex,
+			endIndex,
+			_elm_lang$core$Basics$toFloat(_p11),
+			{ctor: '[]'}) : {ctor: '[]'};
+	}
+};
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$midpointsHelp = F3(
+	function (index, divisor, accumulated) {
+		midpointsHelp:
+		while (true) {
+			var parameterValue = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$ParameterValue(
+				_elm_lang$core$Basics$toFloat(index) / divisor);
+			var newAccumulated = {ctor: '::', _0: parameterValue, _1: accumulated};
+			if (_elm_lang$core$Native_Utils.eq(index, 1)) {
+				return newAccumulated;
+			} else {
+				var _v9 = index - 2,
+					_v10 = divisor,
+					_v11 = newAccumulated;
+				index = _v9;
+				divisor = _v10;
+				accumulated = _v11;
+				continue midpointsHelp;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Curve_ParameterValue$midpoints = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) < 0) ? {ctor: '[]'} : A3(
+		_w0rm$rendering_text_with_webgl$Curve_ParameterValue$midpointsHelp,
+		(2 * n) - 1,
+		2 * _elm_lang$core$Basics$toFloat(n),
+		{ctor: '[]'});
+};
 
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$paramAtStart = function (tree) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$paramAtStart = function (tree) {
 	var _p0 = tree;
 	if (_p0.ctor === 'Node') {
 		return _p0._0.paramAtStart;
@@ -21172,7 +21286,7 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$paramAtSt
 		return _p0._0.param0;
 	}
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToArcLength = F2(
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$unsafeToArcLength = F2(
 	function (tree, t) {
 		unsafeToArcLength:
 		while (true) {
@@ -21234,7 +21348,7 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToA
 				var _p17 = _p1._0.rightBranch;
 				if (_elm_lang$core$Native_Utils.cmp(
 					t,
-					_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$paramAtStart(_p17)) < 0) {
+					_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$paramAtStart(_p17)) < 0) {
 					var _v2 = _p1._0.leftBranch,
 						_v3 = t;
 					tree = _v2;
@@ -21250,13 +21364,15 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToA
 			}
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$parameterValueToArcLength = F2(
-	function (t, _p18) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$parameterValueToArcLength = F2(
+	function (parameterValue, _p18) {
 		var _p19 = _p18;
-		return _elm_lang$core$Native_Utils.eq(t, 0) ? _elm_lang$core$Maybe$Just(0) : (((_elm_lang$core$Native_Utils.cmp(t, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) ? _elm_lang$core$Maybe$Just(
-			A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToArcLength, _p19._0, t)) : _elm_lang$core$Maybe$Nothing);
+		return _elm_lang$core$Native_Utils.eq(parameterValue, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero) ? 0 : A2(
+			_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$unsafeToArcLength,
+			_p19._0,
+			_w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue));
 	});
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtEnd = function (tree) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtEnd = function (tree) {
 	var _p20 = tree;
 	if (_p20.ctor === 'Node') {
 		return _p20._0.lengthAtEnd;
@@ -21264,11 +21380,11 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtE
 		return _p20._0.length8;
 	}
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$totalArcLength = function (_p21) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$totalArcLength = function (_p21) {
 	var _p22 = _p21;
-	return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtEnd(_p22._0);
+	return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtEnd(_p22._0);
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtStart = function (tree) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtStart = function (tree) {
 	var _p23 = tree;
 	if (_p23.ctor === 'Node') {
 		return _p23._0.lengthAtStart;
@@ -21276,7 +21392,7 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtS
 		return _p23._0.length0;
 	}
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToParameterValue = F2(
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$unsafeToParameterValue = F2(
 	function (tree, s) {
 		unsafeToParameterValue:
 		while (true) {
@@ -21338,7 +21454,7 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToP
 				var _p40 = _p24._0.rightBranch;
 				if (_elm_lang$core$Native_Utils.cmp(
 					s,
-					_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtStart(_p40)) < 0) {
+					_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtStart(_p40)) < 0) {
 					var _v11 = _p24._0.leftBranch,
 						_v12 = s;
 					tree = _v11;
@@ -21354,26 +21470,27 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToP
 			}
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue = F2(
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue = F2(
 	function (s, _p41) {
 		var _p42 = _p41;
 		var _p43 = _p42._0;
-		return _elm_lang$core$Native_Utils.eq(s, 0) ? _elm_lang$core$Maybe$Just(0) : (((_elm_lang$core$Native_Utils.cmp(s, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(
+		return _elm_lang$core$Native_Utils.eq(s, 0) ? _elm_lang$core$Maybe$Just(_w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero) : (((_elm_lang$core$Native_Utils.cmp(s, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(
 			s,
-			_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtEnd(_p43)) < 1)) ? _elm_lang$core$Maybe$Just(
-			A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$unsafeToParameterValue, _p43, s)) : _elm_lang$core$Maybe$Nothing);
+			_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtEnd(_p43)) < 1)) ? _elm_lang$core$Maybe$Just(
+			_w0rm$rendering_text_with_webgl$Curve_ParameterValue$clamped(
+				A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$unsafeToParameterValue, _p43, s))) : _elm_lang$core$Maybe$Nothing);
 	});
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$segmentsPerLeaf = 8;
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$ArcLengthParameterization = function (a) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$segmentsPerLeaf = 8;
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$ArcLengthParameterization = function (a) {
 	return {ctor: 'ArcLengthParameterization', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$Leaf = function (a) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$Leaf = function (a) {
 	return {ctor: 'Leaf', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$Node = function (a) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$Node = function (a) {
 	return {ctor: 'Node', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$buildTree = F5(
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$buildTree = F5(
 	function (derivativeMagnitude, lengthAtStart_, paramAtStart_, paramAtEnd, height) {
 		var paramDelta = paramAtEnd - paramAtStart_;
 		if (_elm_lang$core$Native_Utils.eq(height, 0)) {
@@ -21397,33 +21514,33 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$buildTree
 			var length6 = length5 + (derivativeMagnitude(param5 + offset) * paramStep);
 			var length7 = length6 + (derivativeMagnitude(param6 + offset) * paramStep);
 			var length8 = length7 + (derivativeMagnitude(param7 + offset) * paramStep);
-			return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$Leaf(
+			return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$Leaf(
 				{param0: param0, param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, length0: length0, length1: length1, length2: length2, length3: length3, length4: length4, length5: length5, length6: length6, length7: length7, length8: length8});
 		} else {
 			var paramAtMid = paramAtStart_ + (0.5 * paramDelta);
 			var branchHeight = height - 1;
-			var leftBranch = A5(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$buildTree, derivativeMagnitude, lengthAtStart_, paramAtStart_, paramAtMid, branchHeight);
-			var lengthAtLeftEnd = _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtEnd(leftBranch);
-			var rightBranch = A5(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$buildTree, derivativeMagnitude, lengthAtLeftEnd, paramAtMid, paramAtEnd, branchHeight);
-			return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$Node(
+			var leftBranch = A5(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$buildTree, derivativeMagnitude, lengthAtStart_, paramAtStart_, paramAtMid, branchHeight);
+			var lengthAtLeftEnd = _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtEnd(leftBranch);
+			var rightBranch = A5(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$buildTree, derivativeMagnitude, lengthAtLeftEnd, paramAtMid, paramAtEnd, branchHeight);
+			return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$Node(
 				{
 					lengthAtStart: lengthAtStart_,
-					lengthAtEnd: _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$lengthAtEnd(rightBranch),
+					lengthAtEnd: _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$lengthAtEnd(rightBranch),
 					paramAtStart: paramAtStart_,
 					leftBranch: leftBranch,
 					rightBranch: rightBranch
 				});
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$build = function (_p44) {
+var _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$build = function (_p44) {
 	var _p45 = _p44;
-	var _p46 = _p45.tolerance;
+	var _p46 = _p45.maxError;
 	var height = function () {
 		if (_elm_lang$core$Native_Utils.cmp(_p46, 0) < 1) {
 			return 0;
 		} else {
 			var numSegments = _p45.maxSecondDerivativeMagnitude / (8 * _p46);
-			var numLeaves = numSegments / _elm_lang$core$Basics$toFloat(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$segmentsPerLeaf);
+			var numLeaves = numSegments / _elm_lang$core$Basics$toFloat(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$segmentsPerLeaf);
 			return A2(
 				_elm_lang$core$Basics$max,
 				0,
@@ -21431,35 +21548,37 @@ var _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$build = f
 					A2(_elm_lang$core$Basics$logBase, 2, numLeaves)));
 		}
 	}();
-	return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$ArcLengthParameterization(
-		A5(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$buildTree, _p45.derivativeMagnitude, 0, 0, 1, height));
+	return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$ArcLengthParameterization(
+		A5(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$buildTree, _p45.derivativeMagnitude, 0, 0, 1, height));
 };
 
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$underlyingSpline = function (_p0) {
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$fromArcLengthParameterized = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0;
+	return _p1._0.underlyingSpline;
 };
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$parameterValueToArcLength = F2(
-	function (_p2, t) {
-		var _p3 = _p2;
-		return A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$parameterValueToArcLength, t, _p3._1);
-	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLengthToParameterValue = F2(
-	function (_p4, s) {
-		var _p5 = _p4;
-		return A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p5._1);
-	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLength = function (_p6) {
-	var _p7 = _p6;
-	return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$totalArcLength(_p7._1);
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLengthParameterization = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0.parameterization;
 };
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint = function (_p8) {
-	var _p9 = _p8;
-	return _p9._0.controlPoint;
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLength = function (parameterizedSpline) {
+	return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$totalArcLength(
+		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLengthParameterization(parameterizedSpline));
 };
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint = function (_p10) {
-	var _p11 = _p10;
-	return _p11._0.endPoint;
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$fromNondegenerate = function (nondegenerateSpline) {
+	var _p4 = nondegenerateSpline;
+	if (_p4.ctor === 'NonZeroSecondDerivative') {
+		return _p4._0;
+	} else {
+		return _p4._0;
+	}
+};
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint = function (_p5) {
+	var _p6 = _p5;
+	return _p6._0.controlPoint;
+};
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint = function (_p7) {
+	var _p8 = _p7;
+	return _p8._0.endPoint;
 };
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endDerivative = function (spline) {
 	return A2(
@@ -21470,9 +21589,9 @@ var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endDerivative = function (
 			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline),
 			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline)));
 };
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint = function (_p12) {
-	var _p13 = _p12;
-	return _p13._0.startPoint;
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint = function (_p9) {
+	var _p10 = _p9;
+	return _p10._0.startPoint;
 };
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startDerivative = function (spline) {
 	return A2(
@@ -21484,18 +21603,18 @@ var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startDerivative = function
 			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline)));
 };
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$boundingBox = function (spline) {
-	var _p14 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var _p11 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline));
-	var x3 = _p14._0;
-	var y3 = _p14._1;
-	var _p15 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x3 = _p11._0;
+	var y3 = _p11._1;
+	var _p12 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline));
-	var x2 = _p15._0;
-	var y2 = _p15._1;
-	var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x2 = _p12._0;
+	var y2 = _p12._1;
+	var _p13 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline));
-	var x1 = _p16._0;
-	var y1 = _p16._1;
+	var x1 = _p13._0;
+	var y1 = _p13._1;
 	return _w0rm$rendering_text_with_webgl$BoundingBox2d$fromExtrema(
 		{
 			minX: A2(
@@ -21517,126 +21636,145 @@ var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$boundingBox = function (sp
 		});
 };
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
-			var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
-			var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
-			var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
-			var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
-			return _elm_lang$core$Maybe$Just(
-				A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
+	function (spline, parameterValue) {
+		var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
+		var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
+		var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
+		var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
+		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
+		return A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
 	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointsOn = F2(
-	function (arc, parameterValues) {
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointsAt = F2(
+	function (parameterValues, spline) {
 		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn(arc),
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn(spline),
 			parameterValues);
 	});
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointAlong = F2(
-	function (_p17, s) {
-		var _p18 = _p17;
+	function (_p14, distance) {
+		var _p15 = _p14;
+		var _p16 = _p15._0;
 		return A2(
-			_elm_lang$core$Maybe$andThen,
-			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn(_p18._0),
-			A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p18._1));
+			_elm_lang$core$Maybe$map,
+			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn(_p16.underlyingSpline),
+			A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p16.parameterization));
 	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivative = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
-			var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
-			var v2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p2, p3);
-			var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
-			var v1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p1, p2);
-			return _elm_lang$core$Maybe$Just(
-				A2(
-					_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
-					2,
-					A3(_w0rm$rendering_text_with_webgl$Vector2d$interpolateFrom, v1, v2, t)));
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$firstDerivative = F2(
+	function (spline, parameterValue) {
+		var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
+		var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
+		var v2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p2, p3);
+		var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
+		var v1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p1, p2);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
+		return A2(
+			_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
+			2,
+			A3(_w0rm$rendering_text_with_webgl$Vector2d$interpolateFrom, v1, v2, t));
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$firstDerivativesAt = F2(
+	function (parameterValues, spline) {
+		return A2(
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$firstDerivative(spline),
+			parameterValues);
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirection = F2(
+	function (nondegenerateSpline, parameterValue) {
+		var _p17 = nondegenerateSpline;
+		if (_p17.ctor === 'NonZeroSecondDerivative') {
+			var _p19 = _p17._1;
+			var firstDerivativeVector = A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$firstDerivative, _p17._0, parameterValue);
+			var _p18 = _w0rm$rendering_text_with_webgl$Vector2d$direction(firstDerivativeVector);
+			if (_p18.ctor === 'Just') {
+				return _p18._0;
+			} else {
+				return _elm_lang$core$Native_Utils.eq(parameterValue, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$one) ? _w0rm$rendering_text_with_webgl$Direction2d$flip(_p19) : _p19;
+			}
+		} else {
+			return _p17._1;
+		}
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirectionsAt = F2(
+	function (parameterValues, nondegenerateSpline) {
+		return A2(
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirection(nondegenerateSpline),
+			parameterValues);
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$sample = F2(
+	function (nondegenerateSpline, parameterValue) {
+		return {
+			ctor: '_Tuple2',
+			_0: A2(
+				_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointOn,
+				_w0rm$rendering_text_with_webgl$QuadraticSpline2d$fromNondegenerate(nondegenerateSpline),
+				parameterValue),
+			_1: A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirection, nondegenerateSpline, parameterValue)
+		};
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$samplesAt = F2(
+	function (parameterValues, nondegenerateSpline) {
+		return A2(
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$sample(nondegenerateSpline),
+			parameterValues);
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$sampleAlong = F2(
+	function (_p20, distance) {
+		var _p21 = _p20;
+		var _p23 = _p21._0;
+		var _p22 = _p23.nondegenerateSpline;
+		if (_p22.ctor === 'Just') {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				_w0rm$rendering_text_with_webgl$QuadraticSpline2d$sample(_p22._0),
+				A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p23.parameterization));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
 	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivatives = F2(
-	function (spline, parameterValues) {
-		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivative(spline),
-			parameterValues);
-	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentAlong = F2(
-	function (_p19, s) {
-		var _p20 = _p19;
-		return A2(
-			_elm_lang$core$Maybe$andThen,
-			_w0rm$rendering_text_with_webgl$Vector2d$direction,
-			A2(
-				_elm_lang$core$Maybe$andThen,
-				_w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivative(_p20._0),
-				A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p20._1)));
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirectionAlong = F2(
+	function (_p24, distance) {
+		var _p25 = _p24;
+		var _p27 = _p25._0;
+		var _p26 = _p27.nondegenerateSpline;
+		if (_p26.ctor === 'Just') {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				_w0rm$rendering_text_with_webgl$QuadraticSpline2d$tangentDirection(_p26._0),
+				A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p27.parameterization));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
 	});
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivativeMagnitude = function (spline) {
-	var _p21 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var _p28 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline));
-	var x3 = _p21._0;
-	var y3 = _p21._1;
-	var _p22 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x3 = _p28._0;
+	var y3 = _p28._1;
+	var _p29 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline));
-	var x2 = _p22._0;
-	var y2 = _p22._1;
+	var x2 = _p29._0;
+	var y2 = _p29._1;
 	var x23 = x3 - x2;
 	var y23 = y3 - y2;
-	var _p23 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var _p30 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline));
-	var x1 = _p23._0;
-	var y1 = _p23._1;
+	var x1 = _p30._0;
+	var y1 = _p30._1;
 	var x12 = x2 - x1;
 	var x123 = x23 - x12;
 	var y12 = y2 - y1;
 	var y123 = y23 - y12;
 	return function (t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var y13 = y12 + (t * y123);
-			var x13 = x12 + (t * x123);
-			return 2 * _elm_lang$core$Basics$sqrt((x13 * x13) + (y13 * y13));
-		} else {
-			return 0;
-		}
+		var y13 = y12 + (t * y123);
+		var x13 = x12 + (t * x123);
+		return 2 * _elm_lang$core$Basics$sqrt((x13 * x13) + (y13 * y13));
 	};
 };
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$sample = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
-			var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
-			var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
-			var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
-			var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
-			return _elm_lang$core$Maybe$Just(
-				{
-					ctor: '_Tuple2',
-					_0: A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t),
-					_1: A2(
-						_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
-						2,
-						A2(_w0rm$rendering_text_with_webgl$Vector2d$from, q1, q2))
-				});
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$samples = F2(
-	function (spline, parameterValues) {
-		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$sample(spline),
-			parameterValues);
-	});
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$secondDerivative = function (spline) {
 	var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
 	var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
@@ -21703,12 +21841,13 @@ var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$placeIn = function (frame)
 		_w0rm$rendering_text_with_webgl$Point2d$placeIn(frame));
 };
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$splitAt = F2(
-	function (t, spline) {
+	function (parameterValue, spline) {
 		var p3 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$endPoint(spline);
 		var p2 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$controlPoint(spline);
-		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
 		var p1 = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$startPoint(spline);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
 		var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
+		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
 		var r = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
 		return {
 			ctor: '_Tuple2',
@@ -21718,50 +21857,87 @@ var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$splitAt = F2(
 				{startPoint: r, controlPoint: q2, endPoint: p3})
 		};
 	});
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$bisect = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$splitAt(0.5);
-var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$ArcLengthParameterized = F2(
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$bisect = _w0rm$rendering_text_with_webgl$QuadraticSpline2d$splitAt(_w0rm$rendering_text_with_webgl$Curve_ParameterValue$half);
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$NonZeroFirstDerivative = F2(
 	function (a, b) {
-		return {ctor: 'ArcLengthParameterized', _0: a, _1: b};
+		return {ctor: 'NonZeroFirstDerivative', _0: a, _1: b};
 	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$NonZeroSecondDerivative = F2(
+	function (a, b) {
+		return {ctor: 'NonZeroSecondDerivative', _0: a, _1: b};
+	});
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$nondegenerate = function (spline) {
+	var _p31 = _w0rm$rendering_text_with_webgl$Vector2d$direction(
+		_w0rm$rendering_text_with_webgl$QuadraticSpline2d$secondDerivative(spline));
+	if (_p31.ctor === 'Just') {
+		return _elm_lang$core$Maybe$Just(
+			A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$NonZeroSecondDerivative, spline, _p31._0));
+	} else {
+		var firstDerivativeVector = A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$firstDerivative, spline, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero);
+		var _p32 = _w0rm$rendering_text_with_webgl$Vector2d$direction(firstDerivativeVector);
+		if (_p32.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(
+				A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$NonZeroFirstDerivative, spline, _p32._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	}
+};
+var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$ArcLengthParameterized = function (a) {
+	return {ctor: 'ArcLengthParameterized', _0: a};
+};
 var _w0rm$rendering_text_with_webgl$QuadraticSpline2d$arcLengthParameterized = F2(
-	function (_p24, spline) {
-		var _p25 = _p24;
-		var maxSecondDerivativeMagnitude = _w0rm$rendering_text_with_webgl$Vector2d$length(
-			_w0rm$rendering_text_with_webgl$QuadraticSpline2d$secondDerivative(spline));
-		var parameterization = _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$build(
+	function (_p33, spline) {
+		var _p34 = _p33;
+		var parameterization = _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$build(
 			{
-				tolerance: _p25._0,
+				maxError: _p34.maxError,
 				derivativeMagnitude: _w0rm$rendering_text_with_webgl$QuadraticSpline2d$derivativeMagnitude(spline),
-				maxSecondDerivativeMagnitude: maxSecondDerivativeMagnitude
+				maxSecondDerivativeMagnitude: _w0rm$rendering_text_with_webgl$Vector2d$length(
+					_w0rm$rendering_text_with_webgl$QuadraticSpline2d$secondDerivative(spline))
 			});
-		return A2(_w0rm$rendering_text_with_webgl$QuadraticSpline2d$ArcLengthParameterized, spline, parameterization);
+		return _w0rm$rendering_text_with_webgl$QuadraticSpline2d$ArcLengthParameterized(
+			{
+				underlyingSpline: spline,
+				parameterization: parameterization,
+				nondegenerateSpline: _w0rm$rendering_text_with_webgl$QuadraticSpline2d$nondegenerate(spline)
+			});
 	});
 
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$underlyingSpline = function (_p0) {
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$fromArcLengthParameterized = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0;
+	return _p1._0.underlyingSpline;
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$parameterValueToArcLength = F2(
-	function (_p2, t) {
-		var _p3 = _p2;
-		return A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$parameterValueToArcLength, t, _p3._1);
-	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLengthToParameterValue = F2(
-	function (_p4, s) {
-		var _p5 = _p4;
-		return A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p5._1);
-	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLength = function (_p6) {
-	var _p7 = _p6;
-	return _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$totalArcLength(_p7._1);
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLengthParameterization = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0.parameterization;
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint = function (_p8) {
-	var _p9 = _p8;
-	return _p9._0.endPoint;
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLength = function (parameterizedSpline) {
+	return _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$totalArcLength(
+		_w0rm$rendering_text_with_webgl$CubicSpline2d$arcLengthParameterization(parameterizedSpline));
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint = function (_p10) {
-	var _p11 = _p10;
-	return _p11._0.endControlPoint;
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$fromNondegenerate = function (nondegenerateSpline) {
+	var _p4 = nondegenerateSpline;
+	switch (_p4.ctor) {
+		case 'NonZeroThirdDerivative':
+			return _p4._0;
+		case 'NonZeroSecondDerivative':
+			return _p4._0;
+		default:
+			return _p4._0;
+	}
+};
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint = function (_p5) {
+	var _p6 = _p5;
+	return _p6._0.endControlPoint;
+};
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint = function (_p7) {
+	var _p8 = _p7;
+	return _p8._0.startControlPoint;
+};
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint = function (_p9) {
+	var _p10 = _p9;
+	return _p10._0.endPoint;
 };
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$endDerivative = function (spline) {
 	return A2(
@@ -21772,13 +21948,9 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$endDerivative = function (spli
 			_w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline),
 			_w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline)));
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint = function (_p12) {
-	var _p13 = _p12;
-	return _p13._0.startControlPoint;
-};
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint = function (_p14) {
-	var _p15 = _p14;
-	return _p15._0.startPoint;
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint = function (_p11) {
+	var _p12 = _p11;
+	return _p12._0.startPoint;
 };
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$startDerivative = function (spline) {
 	return A2(
@@ -21790,22 +21962,22 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$startDerivative = function (sp
 			_w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline)));
 };
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$boundingBox = function (spline) {
-	var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var _p13 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline));
-	var x4 = _p16._0;
-	var y4 = _p16._1;
-	var _p17 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x4 = _p13._0;
+	var y4 = _p13._1;
+	var _p14 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline));
-	var x3 = _p17._0;
-	var y3 = _p17._1;
-	var _p18 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x3 = _p14._0;
+	var y3 = _p14._1;
+	var _p15 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline));
-	var x2 = _p18._0;
-	var y2 = _p18._1;
-	var _p19 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
+	var x2 = _p15._0;
+	var y2 = _p15._1;
+	var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(
 		_w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline));
-	var x1 = _p19._0;
-	var y1 = _p19._1;
+	var x1 = _p16._0;
+	var y1 = _p16._1;
 	return _w0rm$rendering_text_with_webgl$BoundingBox2d$fromExtrema(
 		{
 			minX: A2(
@@ -21827,176 +21999,209 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$boundingBox = function (spline
 		});
 };
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$pointOn = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
-			var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-			var q3 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p3, p4, t);
-			var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-			var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
-			var r2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q2, q3, t);
-			var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
-			var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
-			var r1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
-			return _elm_lang$core$Maybe$Just(
-				A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, r1, r2, t));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
+	function (spline, parameterValue) {
+		var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
+		var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
+		var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
+		var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
+		var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
+		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
+		var q3 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p3, p4, t);
+		var r1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
+		var r2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q2, q3, t);
+		return A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, r1, r2, t);
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$pointsOn = F2(
-	function (spline, parameterValues) {
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$pointsAt = F2(
+	function (parameterValues, spline) {
 		return A2(
-			_elm_lang$core$List$filterMap,
+			_elm_lang$core$List$map,
 			_w0rm$rendering_text_with_webgl$CubicSpline2d$pointOn(spline),
 			parameterValues);
 	});
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$pointAlong = F2(
-	function (_p20, s) {
-		var _p21 = _p20;
+	function (_p17, distance) {
+		var _p18 = _p17;
+		var _p19 = _p18._0;
 		return A2(
-			_elm_lang$core$Maybe$andThen,
-			_w0rm$rendering_text_with_webgl$CubicSpline2d$pointOn(_p21._0),
-			A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p21._1));
+			_elm_lang$core$Maybe$map,
+			_w0rm$rendering_text_with_webgl$CubicSpline2d$pointOn(_p19.underlyingSpline),
+			A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p19.parameterization));
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$derivative = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
-			var _p22 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p4);
-			var x4 = _p22._0;
-			var y4 = _p22._1;
-			var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-			var _p23 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p3);
-			var x3 = _p23._0;
-			var y3 = _p23._1;
-			var vx3 = x4 - x3;
-			var vy3 = y4 - y3;
-			var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-			var _p24 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
-			var x2 = _p24._0;
-			var y2 = _p24._1;
-			var vx2 = x3 - x2;
-			var vy2 = y3 - y2;
-			var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
-			var _p25 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
-			var x1 = _p25._0;
-			var y1 = _p25._1;
-			var vx1 = x2 - x1;
-			var vy1 = y2 - y1;
-			if (_elm_lang$core$Native_Utils.cmp(t, 0.5) < 1) {
-				var wy2 = vy2 + (t * (vy3 - vy2));
-				var wx2 = vx2 + (t * (vx3 - vx2));
-				var wy1 = vy1 + (t * (vy2 - vy1));
-				var wx1 = vx1 + (t * (vx2 - vx1));
-				return _elm_lang$core$Maybe$Just(
-					_w0rm$rendering_text_with_webgl$Vector2d$fromComponents(
-						{ctor: '_Tuple2', _0: 3 * (wx1 + (t * (wx2 - wx1))), _1: 3 * (wy1 + (t * (wy2 - wy1)))}));
-			} else {
-				var u = 1 - t;
-				var wx1 = vx2 + (u * (vx1 - vx2));
-				var wy1 = vy2 + (u * (vy1 - vy2));
-				var wx2 = vx3 + (u * (vx2 - vx3));
-				var wy2 = vy3 + (u * (vy2 - vy3));
-				return _elm_lang$core$Maybe$Just(
-					_w0rm$rendering_text_with_webgl$Vector2d$fromComponents(
-						{ctor: '_Tuple2', _0: 3 * (wx2 + (u * (wx1 - wx2))), _1: 3 * (wy2 + (u * (wy1 - wy2)))}));
-			}
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivative = F2(
+	function (spline, parameterValue) {
+		var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
+		var _p20 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p4);
+		var x4 = _p20._0;
+		var y4 = _p20._1;
+		var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
+		var _p21 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p3);
+		var x3 = _p21._0;
+		var y3 = _p21._1;
+		var vx3 = x4 - x3;
+		var vy3 = y4 - y3;
+		var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
+		var _p22 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
+		var x2 = _p22._0;
+		var y2 = _p22._1;
+		var vx2 = x3 - x2;
+		var vy2 = y3 - y2;
+		var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+		var _p23 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
+		var x1 = _p23._0;
+		var y1 = _p23._1;
+		var vx1 = x2 - x1;
+		var vy1 = y2 - y1;
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
+		if (_elm_lang$core$Native_Utils.cmp(t, 0.5) < 1) {
+			var wy2 = vy2 + (t * (vy3 - vy2));
+			var wx2 = vx2 + (t * (vx3 - vx2));
+			var wy1 = vy1 + (t * (vy2 - vy1));
+			var wx1 = vx1 + (t * (vx2 - vx1));
+			return _w0rm$rendering_text_with_webgl$Vector2d$fromComponents(
+				{ctor: '_Tuple2', _0: 3 * (wx1 + (t * (wx2 - wx1))), _1: 3 * (wy1 + (t * (wy2 - wy1)))});
 		} else {
-			return _elm_lang$core$Maybe$Nothing;
+			var u = 1 - t;
+			var wx1 = vx2 + (u * (vx1 - vx2));
+			var wy1 = vy2 + (u * (vy1 - vy2));
+			var wx2 = vx3 + (u * (vx2 - vx3));
+			var wy2 = vy3 + (u * (vy2 - vy3));
+			return _w0rm$rendering_text_with_webgl$Vector2d$fromComponents(
+				{ctor: '_Tuple2', _0: 3 * (wx2 + (u * (wx1 - wx2))), _1: 3 * (wy2 + (u * (wy1 - wy2)))});
 		}
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$derivatives = F2(
-	function (spline, parameterValues) {
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivativesAt = F2(
+	function (parameterValues, spline) {
 		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$CubicSpline2d$derivative(spline),
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivative(spline),
 			parameterValues);
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$tangentAlong = F2(
-	function (_p26, s) {
-		var _p27 = _p26;
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative = F2(
+	function (spline, parameterValue) {
+		var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
+		var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
+		var u3 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p3, p4);
+		var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
+		var u2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p2, p3);
+		var v2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u3, u2);
+		var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+		var u1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p1, p2);
+		var v1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u2, u1);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
 		return A2(
-			_elm_lang$core$Maybe$andThen,
-			_w0rm$rendering_text_with_webgl$Vector2d$direction,
-			A2(
-				_elm_lang$core$Maybe$andThen,
-				_w0rm$rendering_text_with_webgl$CubicSpline2d$derivative(_p27._0),
-				A2(_w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$arcLengthToParameterValue, s, _p27._1)));
+			_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
+			6,
+			A3(_w0rm$rendering_text_with_webgl$Vector2d$interpolateFrom, v1, v2, t));
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$derivativeMagnitude = function (spline) {
-	var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
-	var _p28 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p4);
-	var x4 = _p28._0;
-	var y4 = _p28._1;
-	var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-	var _p29 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p3);
-	var x3 = _p29._0;
-	var y3 = _p29._1;
-	var x34 = x4 - x3;
-	var y34 = y4 - y3;
-	var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-	var _p30 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
-	var x2 = _p30._0;
-	var y2 = _p30._1;
-	var x23 = x3 - x2;
-	var x234 = x34 - x23;
-	var y23 = y3 - y2;
-	var y234 = y34 - y23;
-	var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
-	var _p31 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
-	var x1 = _p31._0;
-	var y1 = _p31._1;
-	var x12 = x2 - x1;
-	var x123 = x23 - x12;
-	var y12 = y2 - y1;
-	var y123 = y23 - y12;
-	return function (t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var y24 = y23 + (t * y234);
-			var x24 = x23 + (t * x234);
-			var y13 = y12 + (t * y123);
-			var y14 = y13 + (t * (y24 - y13));
-			var x13 = x12 + (t * x123);
-			var x14 = x13 + (t * (x24 - x13));
-			return 3 * _elm_lang$core$Basics$sqrt((x14 * x14) + (y14 * y14));
-		} else {
-			return 0;
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirection = F2(
+	function (nondegenerateSpline, parameterValue) {
+		var _p24 = nondegenerateSpline;
+		switch (_p24.ctor) {
+			case 'NonZeroFirstDerivative':
+				return _p24._1;
+			case 'NonZeroSecondDerivative':
+				var _p26 = _p24._1;
+				var firstDerivativeVector = A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivative, _p24._0, parameterValue);
+				var _p25 = _w0rm$rendering_text_with_webgl$Vector2d$direction(firstDerivativeVector);
+				if (_p25.ctor === 'Just') {
+					return _p25._0;
+				} else {
+					return _elm_lang$core$Native_Utils.eq(parameterValue, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$one) ? _w0rm$rendering_text_with_webgl$Direction2d$flip(_p26) : _p26;
+				}
+			default:
+				var _p30 = _p24._0;
+				var firstDerivativeVector = A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivative, _p30, parameterValue);
+				var _p27 = _w0rm$rendering_text_with_webgl$Vector2d$direction(firstDerivativeVector);
+				if (_p27.ctor === 'Just') {
+					return _p27._0;
+				} else {
+					var secondDerivativeVector = A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative, _p30, parameterValue);
+					var _p28 = _w0rm$rendering_text_with_webgl$Vector2d$direction(secondDerivativeVector);
+					if (_p28.ctor === 'Just') {
+						var _p29 = _p28._0;
+						return _elm_lang$core$Native_Utils.eq(parameterValue, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$one) ? _w0rm$rendering_text_with_webgl$Direction2d$flip(_p29) : _p29;
+					} else {
+						return _p24._1;
+					}
+				}
 		}
-	};
-};
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirectionsAt = F2(
+	function (parameterValues, nondegenerateSpline) {
+		return A2(
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirection(nondegenerateSpline),
+			parameterValues);
+	});
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$sample = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
-			var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-			var q3 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p3, p4, t);
-			var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-			var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
-			var r2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q2, q3, t);
-			var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
-			var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
-			var r1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
-			return _elm_lang$core$Maybe$Just(
-				{
-					ctor: '_Tuple2',
-					_0: A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, r1, r2, t),
-					_1: A2(
-						_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
-						3,
-						A2(_w0rm$rendering_text_with_webgl$Vector2d$from, r1, r2))
-				});
+	function (nondegenerateSpline, parameterValue) {
+		return {
+			ctor: '_Tuple2',
+			_0: A2(
+				_w0rm$rendering_text_with_webgl$CubicSpline2d$pointOn,
+				_w0rm$rendering_text_with_webgl$CubicSpline2d$fromNondegenerate(nondegenerateSpline),
+				parameterValue),
+			_1: A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirection, nondegenerateSpline, parameterValue)
+		};
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$samplesAt = F2(
+	function (parameterValues, nondegenerateSpline) {
+		return A2(
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$CubicSpline2d$sample(nondegenerateSpline),
+			parameterValues);
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$sampleAlong = F2(
+	function (_p31, distance) {
+		var _p32 = _p31;
+		var _p34 = _p32._0;
+		var _p33 = _p34.nondegenerateSpline;
+		if (_p33.ctor === 'Just') {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				_w0rm$rendering_text_with_webgl$CubicSpline2d$sample(_p33._0),
+				A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p34.parameterization));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$samples = F2(
-	function (spline, parameterValues) {
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirectionAlong = F2(
+	function (_p35, distance) {
+		var _p36 = _p35;
+		var _p38 = _p36._0;
+		var _p37 = _p38.nondegenerateSpline;
+		if (_p37.ctor === 'Just') {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				_w0rm$rendering_text_with_webgl$CubicSpline2d$tangentDirection(_p37._0),
+				A2(_w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$arcLengthToParameterValue, distance, _p38.parameterization));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivativesAt = F2(
+	function (parameterValues, spline) {
 		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$CubicSpline2d$sample(spline),
+			_elm_lang$core$List$map,
+			_w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative(spline),
 			parameterValues);
 	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$thirdDerivative = function (spline) {
+	var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
+	var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
+	var u3 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p3, p4);
+	var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
+	var u2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p2, p3);
+	var v2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u3, u2);
+	var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+	var u1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p1, p2);
+	var v1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u2, u1);
+	return A2(
+		_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
+		6,
+		A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, v2, v1));
+};
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$maxSecondDerivativeMagnitude = function (spline) {
 	var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
 	var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
@@ -22012,34 +22217,43 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$maxSecondDerivativeMagnitude =
 		_w0rm$rendering_text_with_webgl$Vector2d$length(v1),
 		_w0rm$rendering_text_with_webgl$Vector2d$length(v2));
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative = F2(
-	function (spline, t) {
-		if ((_elm_lang$core$Native_Utils.cmp(0, t) < 1) && (_elm_lang$core$Native_Utils.cmp(t, 1) < 1)) {
-			var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
-			var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-			var u3 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p3, p4);
-			var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-			var u2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p2, p3);
-			var v2 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u3, u2);
-			var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
-			var u1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$from, p1, p2);
-			var v1 = A2(_w0rm$rendering_text_with_webgl$Vector2d$difference, u2, u1);
-			return _elm_lang$core$Maybe$Just(
-				A2(
-					_w0rm$rendering_text_with_webgl$Vector2d$scaleBy,
-					6,
-					A3(_w0rm$rendering_text_with_webgl$Vector2d$interpolateFrom, v1, v2, t)));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivatives = F2(
-	function (spline, parameterValues) {
-		return A2(
-			_elm_lang$core$List$filterMap,
-			_w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative(spline),
-			parameterValues);
-	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$derivativeMagnitude = function (spline) {
+	var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
+	var _p39 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p4);
+	var x4 = _p39._0;
+	var y4 = _p39._1;
+	var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
+	var _p40 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p3);
+	var x3 = _p40._0;
+	var y3 = _p40._1;
+	var x34 = x4 - x3;
+	var y34 = y4 - y3;
+	var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
+	var _p41 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
+	var x2 = _p41._0;
+	var y2 = _p41._1;
+	var x23 = x3 - x2;
+	var x234 = x34 - x23;
+	var y23 = y3 - y2;
+	var y234 = y34 - y23;
+	var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+	var _p42 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
+	var x1 = _p42._0;
+	var y1 = _p42._1;
+	var x12 = x2 - x1;
+	var x123 = x23 - x12;
+	var y12 = y2 - y1;
+	var y123 = y23 - y12;
+	return function (t) {
+		var y24 = y23 + (t * y234);
+		var x24 = x23 + (t * x234);
+		var y13 = y12 + (t * y123);
+		var y14 = y13 + (t * (y24 - y13));
+		var x13 = x12 + (t * x123);
+		var x14 = x13 + (t * (x24 - x13));
+		return 3 * _elm_lang$core$Basics$sqrt((x14 * x14) + (y14 * y14));
+	};
+};
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$with = _w0rm$rendering_text_with_webgl$Geometry_Types$CubicSpline2d;
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$fromEndpoints = function ($arguments) {
 	var endControlPoint_ = A2(
@@ -22061,6 +22275,15 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$fromQuadraticSpline = function
 	var startControlPoint_ = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, startPoint_, controlPoint_, 2 / 3);
 	return _w0rm$rendering_text_with_webgl$CubicSpline2d$with(
 		{startPoint: startPoint_, startControlPoint: startControlPoint_, endControlPoint: endControlPoint_, endPoint: endPoint_});
+};
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$reverse = function (spline) {
+	return _w0rm$rendering_text_with_webgl$CubicSpline2d$with(
+		{
+			startPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline),
+			startControlPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline),
+			endControlPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline),
+			endPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline)
+		});
 };
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$mapControlPoints = F2(
 	function ($function, spline) {
@@ -22109,26 +22332,18 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$placeIn = function (frame) {
 	return _w0rm$rendering_text_with_webgl$CubicSpline2d$mapControlPoints(
 		_w0rm$rendering_text_with_webgl$Point2d$placeIn(frame));
 };
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$reverse = function (spline) {
-	return _w0rm$rendering_text_with_webgl$CubicSpline2d$with(
-		{
-			startPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline),
-			startControlPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline),
-			endControlPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline),
-			endPoint: _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline)
-		});
-};
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$splitAt = F2(
-	function (t, spline) {
+	function (parameterValue, spline) {
 		var p4 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endPoint(spline);
 		var p3 = _w0rm$rendering_text_with_webgl$CubicSpline2d$endControlPoint(spline);
-		var q3 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p3, p4, t);
 		var p2 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startControlPoint(spline);
-		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
-		var r2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q2, q3, t);
 		var p1 = _w0rm$rendering_text_with_webgl$CubicSpline2d$startPoint(spline);
+		var t = _w0rm$rendering_text_with_webgl$Curve_ParameterValue$value(parameterValue);
 		var q1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p1, p2, t);
+		var q2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p2, p3, t);
+		var q3 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, p3, p4, t);
 		var r1 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q1, q2, t);
+		var r2 = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, q2, q3, t);
 		var s = A3(_w0rm$rendering_text_with_webgl$Point2d$interpolateFrom, r1, r2, t);
 		return {
 			ctor: '_Tuple2',
@@ -22138,21 +22353,61 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$splitAt = F2(
 				{startPoint: s, startControlPoint: r2, endControlPoint: q3, endPoint: p4})
 		};
 	});
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$bisect = _w0rm$rendering_text_with_webgl$CubicSpline2d$splitAt(0.5);
-var _w0rm$rendering_text_with_webgl$CubicSpline2d$ArcLengthParameterized = F2(
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$bisect = _w0rm$rendering_text_with_webgl$CubicSpline2d$splitAt(_w0rm$rendering_text_with_webgl$Curve_ParameterValue$half);
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroFirstDerivative = F2(
 	function (a, b) {
-		return {ctor: 'ArcLengthParameterized', _0: a, _1: b};
+		return {ctor: 'NonZeroFirstDerivative', _0: a, _1: b};
 	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroSecondDerivative = F2(
+	function (a, b) {
+		return {ctor: 'NonZeroSecondDerivative', _0: a, _1: b};
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroThirdDerivative = F2(
+	function (a, b) {
+		return {ctor: 'NonZeroThirdDerivative', _0: a, _1: b};
+	});
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$nondegenerate = function (spline) {
+	var _p43 = _w0rm$rendering_text_with_webgl$Vector2d$direction(
+		_w0rm$rendering_text_with_webgl$CubicSpline2d$thirdDerivative(spline));
+	if (_p43.ctor === 'Just') {
+		return _elm_lang$core$Maybe$Just(
+			A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroThirdDerivative, spline, _p43._0));
+	} else {
+		var secondDerivativeVector = A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$secondDerivative, spline, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero);
+		var _p44 = _w0rm$rendering_text_with_webgl$Vector2d$direction(secondDerivativeVector);
+		if (_p44.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(
+				A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroSecondDerivative, spline, _p44._0));
+		} else {
+			var firstDerivativeVector = A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$firstDerivative, spline, _w0rm$rendering_text_with_webgl$Curve_ParameterValue$zero);
+			var _p45 = _w0rm$rendering_text_with_webgl$Vector2d$direction(firstDerivativeVector);
+			if (_p45.ctor === 'Just') {
+				return _elm_lang$core$Maybe$Just(
+					A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$NonZeroFirstDerivative, spline, _p45._0));
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	}
+};
+var _w0rm$rendering_text_with_webgl$CubicSpline2d$ArcLengthParameterized = function (a) {
+	return {ctor: 'ArcLengthParameterized', _0: a};
+};
 var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLengthParameterized = F2(
-	function (_p32, spline) {
-		var _p33 = _p32;
-		var parameterization = _w0rm$rendering_text_with_webgl$Geometry_ArcLengthParameterization$build(
+	function (_p46, spline) {
+		var _p47 = _p46;
+		var parameterization = _w0rm$rendering_text_with_webgl$Curve_ArcLengthParameterization$build(
 			{
-				tolerance: _p33._0,
+				maxError: _p47.maxError,
 				derivativeMagnitude: _w0rm$rendering_text_with_webgl$CubicSpline2d$derivativeMagnitude(spline),
 				maxSecondDerivativeMagnitude: _w0rm$rendering_text_with_webgl$CubicSpline2d$maxSecondDerivativeMagnitude(spline)
 			});
-		return A2(_w0rm$rendering_text_with_webgl$CubicSpline2d$ArcLengthParameterized, spline, parameterization);
+		return _w0rm$rendering_text_with_webgl$CubicSpline2d$ArcLengthParameterized(
+			{
+				underlyingSpline: spline,
+				parameterization: parameterization,
+				nondegenerateSpline: _w0rm$rendering_text_with_webgl$CubicSpline2d$nondegenerate(spline)
+			});
 	});
 
 var _w0rm$rendering_text_with_webgl$Font_Glyph$empty = {path: '', advanceWidth: 0, leftSideBearing: 0};
@@ -23121,6 +23376,11 @@ var _w0rm$rendering_text_with_webgl$LineSegment2d$placeIn = function (frame) {
 	return _w0rm$rendering_text_with_webgl$LineSegment2d$mapEndpoints(
 		_w0rm$rendering_text_with_webgl$Point2d$placeIn(frame));
 };
+
+var _w0rm$rendering_text_with_webgl$Future_Tuple$pair = F2(
+	function (first, second) {
+		return {ctor: '_Tuple2', _0: first, _1: second};
+	});
 
 var _w0rm$rendering_text_with_webgl$Polygon2d_EdgeSet$leftOf = F2(
 	function (point, _p0) {
@@ -24120,82 +24380,108 @@ var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$toVertices = function (po
 	if (_p34.ctor === '[]') {
 		return {ctor: '[]'};
 	} else {
-		var _p39 = _p34._0;
-		var collect = F3(
-			function (previous, points, accumulated) {
-				collect:
-				while (true) {
-					var _p35 = points;
-					if (_p35.ctor === '[]') {
-						return {ctor: '[]'};
-					} else {
-						if (_p35._1.ctor === '[]') {
-							var _p36 = _p35._0;
-							var newVertex = {
-								position: _p36,
-								kind: A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$kind, previous, _p36, _p39)
-							};
-							return _elm_lang$core$List$reverse(
-								{ctor: '::', _0: newVertex, _1: accumulated});
-						} else {
-							var _p38 = _p35._1._0;
-							var _p37 = _p35._0;
-							var newVertex = {
-								position: _p37,
-								kind: A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$kind, previous, _p37, _p38)
-							};
-							var _v33 = _p37,
-								_v34 = {ctor: '::', _0: _p38, _1: _p35._1._1},
-								_v35 = {ctor: '::', _0: newVertex, _1: accumulated};
-							previous = _v33;
-							points = _v34;
-							accumulated = _v35;
-							continue collect;
-						}
+		if (_p34._1.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			if (_p34._1._1.ctor === '[]') {
+				var _p36 = _p34._1._0;
+				var _p35 = _p34._0;
+				return _elm_lang$core$Native_Utils.eq(
+					A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$comparePoints, _p35, _p36),
+					_elm_lang$core$Basics$GT) ? {
+					ctor: '::',
+					_0: {position: _p35, kind: _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$Split},
+					_1: {
+						ctor: '::',
+						_0: {position: _p36, kind: _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$Merge},
+						_1: {ctor: '[]'}
 					}
-				}
-			});
-		var last = A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$always, _p39, _p34._1);
-		return A3(
-			collect,
-			last,
-			points,
-			{ctor: '[]'});
+				} : {
+					ctor: '::',
+					_0: {position: _p35, kind: _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$Merge},
+					_1: {
+						ctor: '::',
+						_0: {position: _p36, kind: _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$Split},
+						_1: {ctor: '[]'}
+					}
+				};
+			} else {
+				var _p41 = _p34._1._1._0;
+				var _p40 = _p34._1._1._1;
+				var _p39 = _p34._0;
+				var collect = F4(
+					function (previousPoint, currentPoint, remainingPoints, accumulated) {
+						collect:
+						while (true) {
+							var _p37 = remainingPoints;
+							if (_p37.ctor === '[]') {
+								var lastVertex = {
+									position: currentPoint,
+									kind: A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p39)
+								};
+								return _elm_lang$core$List$reverse(
+									{ctor: '::', _0: lastVertex, _1: accumulated});
+							} else {
+								var _p38 = _p37._0;
+								var newVertex = {
+									position: currentPoint,
+									kind: A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p38)
+								};
+								var _v33 = currentPoint,
+									_v34 = _p38,
+									_v35 = _p37._1,
+									_v36 = {ctor: '::', _0: newVertex, _1: accumulated};
+								previousPoint = _v33;
+								currentPoint = _v34;
+								remainingPoints = _v35;
+								accumulated = _v36;
+								continue collect;
+							}
+						}
+					});
+				var lastPoint = A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$always, _p41, _p40);
+				return A4(
+					collect,
+					lastPoint,
+					_p39,
+					{
+						ctor: '::',
+						_0: _p34._1._0,
+						_1: {ctor: '::', _0: _p41, _1: _p40}
+					},
+					{ctor: '[]'});
+			}
+		}
 	}
 };
-var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$init = function (_p40) {
-	var _p41 = _p40;
+var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$init = function (_p42) {
+	var _p43 = _p42;
 	var allLoops = A2(
 		_elm_lang$core$List$map,
 		function (loop) {
 			return _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$removeDuplicates(loop);
 		},
-		{ctor: '::', _0: _p41._0.outerLoop, _1: _p41._0.innerLoops});
+		{ctor: '::', _0: _p43._0.outerLoop, _1: _p43._0.innerLoops});
 	var vertices = _elm_lang$core$List$concat(
 		A2(_elm_lang$core$List$map, _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$toVertices, allLoops));
 	var edges = _elm_lang$core$Tuple$second(
 		A3(
 			_elm_lang$core$List$foldl,
 			F2(
-				function (loop, _p42) {
-					var _p43 = _p42;
-					var _p44 = _p43._0;
+				function (loop, _p44) {
+					var _p45 = _p44;
+					var _p46 = _p45._0;
 					var length = _elm_lang$core$List$length(loop);
 					var newEdges = A2(
 						_Skinney$elm_array_exploration$Array_Hamt$initialize,
 						length,
 						function (index) {
-							return {
-								startVertexIndex: index + _p44,
-								endVertexIndex: A2(_elm_lang$core$Basics_ops['%'], index + 1, length) + _p44,
-								nextEdgeIndex: A2(_elm_lang$core$Basics_ops['%'], index + 1, length) + _p44,
-								previousEdgeIndex: A2(_elm_lang$core$Basics_ops['%'], index - 1, length) + _p44
-							};
+							return _elm_lang$core$Native_Utils.eq(index, 0) ? {startVertexIndex: _p46, endVertexIndex: _p46 + 1, nextEdgeIndex: _p46 + 1, previousEdgeIndex: (_p46 + length) - 1} : (_elm_lang$core$Native_Utils.eq(index, length - 1) ? {startVertexIndex: _p46 + index, endVertexIndex: _p46, nextEdgeIndex: _p46, previousEdgeIndex: (_p46 + index) - 1} : {startVertexIndex: _p46 + index, endVertexIndex: (_p46 + index) + 1, nextEdgeIndex: (_p46 + index) + 1, previousEdgeIndex: (_p46 + index) - 1});
 						});
 					return {
 						ctor: '_Tuple2',
-						_0: _p44 + length,
-						_1: A2(_Skinney$elm_array_exploration$Array_Hamt$append, _p43._1, newEdges)
+						_0: _p46 + length,
+						_1: A2(_Skinney$elm_array_exploration$Array_Hamt$append, _p45._1, newEdges)
 					};
 				}),
 			{ctor: '_Tuple2', _0: 0, _1: _Skinney$elm_array_exploration$Array_Hamt$empty},
@@ -24204,44 +24490,38 @@ var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$init = function (_p40) {
 };
 var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$monotonePolygons = function (polygon) {
 	var handleVertex = F2(
-		function (_p45, current) {
-			var _p46 = _p45;
-			var _p49 = _p46._1;
-			var _p48 = _p46._0;
-			var _p47 = _p49.kind;
-			switch (_p47.ctor) {
+		function (_p47, current) {
+			var _p48 = _p47;
+			var _p51 = _p48._1;
+			var _p50 = _p48._0;
+			var _p49 = _p51.kind;
+			switch (_p49.ctor) {
 				case 'Start':
-					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleStartVertex, _p48, current);
+					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleStartVertex, _p50, current);
 				case 'End':
-					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleEndVertex, _p48, current);
+					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleEndVertex, _p50, current);
 				case 'Right':
-					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleRightVertex, _p48, _p49.position, current);
+					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleRightVertex, _p50, _p51.position, current);
 				case 'Left':
-					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleLeftVertex, _p48, current);
+					return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleLeftVertex, _p50, current);
 				case 'Split':
-					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleSplitVertex, _p48, _p49.position, current);
+					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleSplitVertex, _p50, _p51.position, current);
 				default:
-					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleMergeVertex, _p48, _p49.position, current);
+					return A3(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$handleMergeVertex, _p50, _p51.position, current);
 			}
 		});
-	var _p50 = _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$init(polygon);
-	var vertices = _p50.vertices;
-	var edges = _p50.edges;
+	var _p52 = _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$init(polygon);
+	var vertices = _p52.vertices;
+	var edges = _p52.edges;
 	var priorityQueue = A2(
 		_elm_lang$core$List$sortWith,
 		F2(
-			function (_p52, _p51) {
-				var _p53 = _p52;
-				var _p54 = _p51;
-				return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$comparePoints, _p54._1.position, _p53._1.position);
+			function (_p54, _p53) {
+				var _p55 = _p54;
+				var _p56 = _p53;
+				return A2(_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$comparePoints, _p56._1.position, _p55._1.position);
 			}),
-		A2(
-			_elm_lang$core$List$indexedMap,
-			F2(
-				function (i, v) {
-					return {ctor: '_Tuple2', _0: i, _1: v};
-				}),
-			vertices));
+		A2(_elm_lang$core$List$indexedMap, _w0rm$rendering_text_with_webgl$Future_Tuple$pair, vertices));
 	var initialState = {
 		edgeSet: _w0rm$rendering_text_with_webgl$Polygon2d_EdgeSet$empty,
 		helpers: _elm_lang$core$Dict$empty,
@@ -24253,9 +24533,9 @@ var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$monotonePolygons = functi
 	return _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$collectMonotoneLoops(finalState);
 };
 var _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$triangulation = function (polygon) {
-	var _p55 = _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$monotonePolygons(polygon);
-	var points = _p55._0;
-	var loops = _p55._1;
+	var _p57 = _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$monotonePolygons(polygon);
+	var points = _p57._0;
+	var loops = _p57._1;
 	return A2(
 		_ianmackenzie$elm_triangular_mesh$TriangularMesh$indexed,
 		points,
@@ -24499,106 +24779,149 @@ var _w0rm$rendering_text_with_webgl$Polygon2d$area = function (polygon) {
 			_w0rm$rendering_text_with_webgl$Polygon2d$innerLoops(polygon)));
 };
 
-var _w0rm$rendering_text_with_webgl$Font_PathCommand$samples = function (n) {
-	return A2(
-		_elm_lang$core$List$map,
-		function (a) {
-			return _elm_lang$core$Basics$toFloat(a) / _elm_lang$core$Basics$toFloat(n);
-		},
-		A2(_elm_lang$core$List$range, 0, n));
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$accumulateDistinctPoints = F3(
+	function (previousPoint, points, accumulatedPoints) {
+		accumulateDistinctPoints:
+		while (true) {
+			var _p0 = points;
+			if (_p0.ctor === '[]') {
+				return accumulatedPoints;
+			} else {
+				var _p1 = _p0._0;
+				var updatedPoints = _elm_lang$core$Native_Utils.eq(_p1, previousPoint) ? accumulatedPoints : {ctor: '::', _0: _p1, _1: accumulatedPoints};
+				var _v1 = _p1,
+					_v2 = _p0._1,
+					_v3 = updatedPoints;
+				previousPoint = _v1;
+				points = _v2;
+				accumulatedPoints = _v3;
+				continue accumulateDistinctPoints;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$removeDuplicates = function (points) {
+	var _p2 = points;
+	if (_p2.ctor === '[]') {
+		return {ctor: '[]'};
+	} else {
+		var _p4 = _p2._0;
+		var accumulatedPoints = A3(
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$accumulateDistinctPoints,
+			_p4,
+			_p2._1,
+			{ctor: '[]'});
+		var _p3 = accumulatedPoints;
+		if (_p3.ctor === '::') {
+			return _elm_lang$core$Native_Utils.eq(_p3._0, _p4) ? {
+				ctor: '::',
+				_0: _p4,
+				_1: _elm_lang$core$List$reverse(_p3._1)
+			} : {
+				ctor: '::',
+				_0: _p4,
+				_1: _elm_lang$core$List$reverse(accumulatedPoints)
+			};
+		} else {
+			return {
+				ctor: '::',
+				_0: _p4,
+				_1: {ctor: '[]'}
+			};
+		}
+	}
 };
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygonHelp = F3(
 	function (samples, commands, loop) {
 		pathToPolygonHelp:
 		while (true) {
-			var _p0 = commands;
-			if (_p0.ctor === '[]') {
+			var _p5 = commands;
+			if (_p5.ctor === '[]') {
 				return loop;
 			} else {
-				switch (_p0._0.ctor) {
+				switch (_p5._0.ctor) {
 					case 'MoveTo':
-						var _v1 = samples,
-							_v2 = _p0._1,
-							_v3 = {
+						var _v7 = samples,
+							_v8 = _p5._1,
+							_v9 = {
 							ctor: '::',
 							_0: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-								{ctor: '_Tuple2', _0: _p0._0._0, _1: _p0._0._1}),
+								{ctor: '_Tuple2', _0: _p5._0._0, _1: _p5._0._1}),
 							_1: loop
 						};
-						samples = _v1;
-						commands = _v2;
-						loop = _v3;
+						samples = _v7;
+						commands = _v8;
+						loop = _v9;
 						continue pathToPolygonHelp;
 					case 'LineTo':
-						var _v4 = samples,
-							_v5 = _p0._1,
-							_v6 = {
+						var _v10 = samples,
+							_v11 = _p5._1,
+							_v12 = {
 							ctor: '::',
 							_0: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-								{ctor: '_Tuple2', _0: _p0._0._0, _1: _p0._0._1}),
+								{ctor: '_Tuple2', _0: _p5._0._0, _1: _p5._0._1}),
 							_1: loop
 						};
-						samples = _v4;
-						commands = _v5;
-						loop = _v6;
+						samples = _v10;
+						commands = _v11;
+						loop = _v12;
 						continue pathToPolygonHelp;
 					case 'QuadraticCurveTo':
-						var _v8 = samples,
-							_v9 = _p0._1,
-							_v10 = function () {
-							var _p1 = loop;
-							if (_p1.ctor === '[]') {
+						var _v14 = samples,
+							_v15 = _p5._1,
+							_v16 = function () {
+							var _p6 = loop;
+							if (_p6.ctor === '[]') {
 								return loop;
 							} else {
 								return A2(
 									_elm_lang$core$Basics_ops['++'],
 									A2(
-										_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointsOn,
+										_w0rm$rendering_text_with_webgl$QuadraticSpline2d$pointsAt,
+										samples,
 										_w0rm$rendering_text_with_webgl$QuadraticSpline2d$with(
 											{
 												startPoint: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-													{ctor: '_Tuple2', _0: _p0._0._2, _1: _p0._0._3}),
+													{ctor: '_Tuple2', _0: _p5._0._2, _1: _p5._0._3}),
 												controlPoint: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-													{ctor: '_Tuple2', _0: _p0._0._0, _1: _p0._0._1}),
-												endPoint: _p1._0
-											}),
-										samples),
-									_p1._1);
+													{ctor: '_Tuple2', _0: _p5._0._0, _1: _p5._0._1}),
+												endPoint: _p6._0
+											})),
+									_p6._1);
 							}
 						}();
-						samples = _v8;
-						commands = _v9;
-						loop = _v10;
+						samples = _v14;
+						commands = _v15;
+						loop = _v16;
 						continue pathToPolygonHelp;
 					default:
-						var _v12 = samples,
-							_v13 = _p0._1,
-							_v14 = function () {
-							var _p2 = loop;
-							if (_p2.ctor === '[]') {
+						var _v18 = samples,
+							_v19 = _p5._1,
+							_v20 = function () {
+							var _p7 = loop;
+							if (_p7.ctor === '[]') {
 								return loop;
 							} else {
 								return A2(
 									_elm_lang$core$Basics_ops['++'],
 									A2(
-										_w0rm$rendering_text_with_webgl$CubicSpline2d$pointsOn,
+										_w0rm$rendering_text_with_webgl$CubicSpline2d$pointsAt,
+										samples,
 										_w0rm$rendering_text_with_webgl$CubicSpline2d$with(
 											{
 												startPoint: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-													{ctor: '_Tuple2', _0: _p0._0._4, _1: _p0._0._5}),
+													{ctor: '_Tuple2', _0: _p5._0._4, _1: _p5._0._5}),
 												startControlPoint: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-													{ctor: '_Tuple2', _0: _p0._0._2, _1: _p0._0._3}),
+													{ctor: '_Tuple2', _0: _p5._0._2, _1: _p5._0._3}),
 												endControlPoint: _w0rm$rendering_text_with_webgl$Point2d$fromCoordinates(
-													{ctor: '_Tuple2', _0: _p0._0._0, _1: _p0._0._1}),
-												endPoint: _p2._0
-											}),
-										samples),
-									_p2._1);
+													{ctor: '_Tuple2', _0: _p5._0._0, _1: _p5._0._1}),
+												endPoint: _p7._0
+											})),
+									_p7._1);
 							}
 						}();
-						samples = _v12;
-						commands = _v13;
-						loop = _v14;
+						samples = _v18;
+						commands = _v19;
+						loop = _v20;
 						continue pathToPolygonHelp;
 				}
 			}
@@ -24606,53 +24929,53 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygonHelp = F3(
 	});
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon = F2(
 	function (n, commands) {
-		return _w0rm$rendering_text_with_webgl$Polygon2d_Monotone$removeDuplicates(
+		return _w0rm$rendering_text_with_webgl$Font_PathCommand$removeDuplicates(
 			_elm_lang$core$List$reverse(
 				A3(
 					_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygonHelp,
-					_w0rm$rendering_text_with_webgl$Font_PathCommand$samples(n),
+					_w0rm$rendering_text_with_webgl$Curve_ParameterValue$steps(n),
 					commands,
 					{ctor: '[]'})));
 	});
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$pointInPath = F2(
 	function (startPath, point) {
-		var _p3 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(point);
-		var px = _p3._0;
-		var py = _p3._1;
+		var _p8 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(point);
+		var px = _p8._0;
+		var py = _p8._1;
 		var checkFor = F3(
-			function (_p5, _p4, result) {
-				var _p6 = _p5;
-				var _p10 = _p6._1;
-				var _p7 = _p4;
-				var _p9 = _p7._1;
-				var _p8 = _p7._0;
+			function (_p10, _p9, result) {
+				var _p11 = _p10;
+				var _p15 = _p11._1;
+				var _p12 = _p9;
+				var _p14 = _p12._1;
+				var _p13 = _p12._0;
 				return ((!_elm_lang$core$Native_Utils.eq(
-					_elm_lang$core$Native_Utils.cmp(_p9, py) > 0,
-					_elm_lang$core$Native_Utils.cmp(_p10, py) > 0)) && (_elm_lang$core$Native_Utils.cmp(px, (((_p6._0 - _p8) * (py - _p9)) / (_p10 - _p9)) + _p8) < 0)) ? (!result) : result;
+					_elm_lang$core$Native_Utils.cmp(_p14, py) > 0,
+					_elm_lang$core$Native_Utils.cmp(_p15, py) > 0)) && (_elm_lang$core$Native_Utils.cmp(px, (((_p11._0 - _p13) * (py - _p14)) / (_p15 - _p14)) + _p13) < 0)) ? (!result) : result;
 			});
 		var pointInPathHelp = F3(
 			function (veryFirst, path, result) {
 				pointInPathHelp:
 				while (true) {
-					var _p11 = path;
-					if (_p11.ctor === '::') {
-						if (_p11._1.ctor === '::') {
-							var _p12 = _p11._1._0;
-							var _v18 = veryFirst,
-								_v19 = {ctor: '::', _0: _p12, _1: _p11._1._1},
-								_v20 = A3(
+					var _p16 = path;
+					if (_p16.ctor === '::') {
+						if (_p16._1.ctor === '::') {
+							var _p17 = _p16._1._0;
+							var _v24 = veryFirst,
+								_v25 = {ctor: '::', _0: _p17, _1: _p16._1._1},
+								_v26 = A3(
 								checkFor,
-								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p11._0),
-								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p12),
+								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p16._0),
+								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p17),
 								result);
-							veryFirst = _v18;
-							path = _v19;
-							result = _v20;
+							veryFirst = _v24;
+							path = _v25;
+							result = _v26;
 							continue pointInPathHelp;
 						} else {
 							return A3(
 								checkFor,
-								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p11._0),
+								_w0rm$rendering_text_with_webgl$Point2d$coordinates(_p16._0),
 								_w0rm$rendering_text_with_webgl$Point2d$coordinates(veryFirst),
 								result);
 						}
@@ -24661,9 +24984,9 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$pointInPath = F2(
 					}
 				}
 			});
-		var _p13 = startPath;
-		if ((_p13.ctor === '::') && (_p13._1.ctor === '::')) {
-			return A3(pointInPathHelp, _p13._0, startPath, false);
+		var _p18 = startPath;
+		if ((_p18.ctor === '::') && (_p18._1.ctor === '::')) {
+			return A3(pointInPathHelp, _p18._0, startPath, false);
 		} else {
 			return false;
 		}
@@ -24672,30 +24995,30 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$windingHelp = F3(
 	function (first, points, w) {
 		windingHelp:
 		while (true) {
-			var _p14 = points;
-			if (_p14.ctor === '::') {
-				if (_p14._1.ctor === '::') {
-					var _p17 = _p14._1._0;
-					var _p15 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p17);
-					var x2 = _p15._0;
-					var y2 = _p15._1;
-					var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._0);
-					var x1 = _p16._0;
-					var y1 = _p16._1;
-					var _v23 = first,
-						_v24 = {ctor: '::', _0: _p17, _1: _p14._1._1},
-						_v25 = w + ((x2 - x1) * (y2 + y1));
-					first = _v23;
-					points = _v24;
-					w = _v25;
+			var _p19 = points;
+			if (_p19.ctor === '::') {
+				if (_p19._1.ctor === '::') {
+					var _p22 = _p19._1._0;
+					var _p20 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p22);
+					var x2 = _p20._0;
+					var y2 = _p20._1;
+					var _p21 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._0);
+					var x1 = _p21._0;
+					var y1 = _p21._1;
+					var _v29 = first,
+						_v30 = {ctor: '::', _0: _p22, _1: _p19._1._1},
+						_v31 = w + ((x2 - x1) * (y2 + y1));
+					first = _v29;
+					points = _v30;
+					w = _v31;
 					continue windingHelp;
 				} else {
-					var _p18 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(first);
-					var x2 = _p18._0;
-					var y2 = _p18._1;
-					var _p19 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._0);
-					var x1 = _p19._0;
-					var y1 = _p19._1;
+					var _p23 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(first);
+					var x2 = _p23._0;
+					var y2 = _p23._1;
+					var _p24 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._0);
+					var x1 = _p24._0;
+					var y1 = _p24._1;
 					return w + ((x2 - x1) * (y2 + y1));
 				}
 			} else {
@@ -24704,44 +25027,44 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$windingHelp = F3(
 		}
 	});
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$winding = function (points) {
-	var _p20 = points;
-	if ((_p20.ctor === '::') && (_p20._1.ctor === '::')) {
+	var _p25 = points;
+	if ((_p25.ctor === '::') && (_p25._1.ctor === '::')) {
 		return _elm_lang$core$Native_Utils.cmp(
-			A3(_w0rm$rendering_text_with_webgl$Font_PathCommand$windingHelp, _p20._0, points, 0),
+			A3(_w0rm$rendering_text_with_webgl$Font_PathCommand$windingHelp, _p25._0, points, 0),
 			0) < 0;
 	} else {
 		return false;
 	}
 };
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate = function (path) {
-	var _p21 = A2(_elm_lang$core$List$partition, _w0rm$rendering_text_with_webgl$Font_PathCommand$winding, path);
-	var outlines = _p21._0;
-	var holes = _p21._1;
+	var _p26 = A2(_elm_lang$core$List$partition, _w0rm$rendering_text_with_webgl$Font_PathCommand$winding, path);
+	var outlines = _p26._0;
+	var holes = _p26._1;
 	return A2(
 		_elm_lang$core$List$concatMap,
-		function (_p22) {
-			var _p23 = _p22;
-			var _p26 = _p23._0;
+		function (_p27) {
+			var _p28 = _p27;
+			var _p31 = _p28._0;
 			return A2(
 				_elm_lang$core$List$concatMap,
 				function (vertices) {
 					return A2(
 						_elm_lang$core$List$filterMap,
-						function (_p24) {
-							var _p25 = _p24;
+						function (_p29) {
+							var _p30 = _p29;
 							return A4(
 								_elm_lang$core$Maybe$map3,
 								F3(
 									function (v0, v1, v2) {
 										return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
 									}),
-								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p25._0, _p26),
-								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p25._1, _p26),
-								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p25._2, _p26));
+								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p30._0, _p31),
+								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p30._1, _p31),
+								A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p30._2, _p31));
 						},
 						_w0rm$rendering_text_with_webgl$Polygon2d_Monotone$faces(vertices));
 				},
-				_p23._1);
+				_p28._1);
 		},
 		A2(
 			_elm_lang$core$List$map,
@@ -24752,14 +25075,14 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate = function (pat
 							outerLoop: outerLoop,
 							innerLoops: A2(
 								_elm_lang$core$List$filter,
-								function (_p27) {
+								function (_p32) {
 									return A2(
 										_elm_lang$core$Maybe$withDefault,
 										false,
 										A2(
 											_elm_lang$core$Maybe$map,
 											_w0rm$rendering_text_with_webgl$Font_PathCommand$pointInPath(outerLoop),
-											_elm_lang$core$List$head(_p27)));
+											_elm_lang$core$List$head(_p32)));
 								},
 								holes)
 						}));
@@ -27611,6 +27934,32 @@ var _w0rm$rendering_text_with_webgl$Formatting$Center = {ctor: 'Center'};
 var _w0rm$rendering_text_with_webgl$Formatting$Right = {ctor: 'Right'};
 var _w0rm$rendering_text_with_webgl$Formatting$Left = {ctor: 'Left'};
 
+var _w0rm$rendering_text_with_webgl$Slides$thankYou = {
+	ctor: '::',
+	_0: A2(
+		_w0rm$rendering_text_with_webgl$Formatting$position,
+		{ctor: '_Tuple2', _0: 0, _1: 0},
+		{
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Custom$zoom(
+				{width: 1280, height: 720, text: 'That’s all. Thank you!', fontSize: 195}),
+			_1: {ctor: '[]'}
+		}),
+	_1: {ctor: '[]'}
+};
+var _w0rm$rendering_text_with_webgl$Slides$lineBreaking = {
+	ctor: '::',
+	_0: A2(
+		_w0rm$rendering_text_with_webgl$Formatting$position,
+		{ctor: '_Tuple2', _0: 0, _1: 0},
+		{
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Custom$typewriter(
+				{width: 1280, height: 720, fontSize: 150, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
+			_1: {ctor: '[]'}
+		}),
+	_1: {ctor: '[]'}
+};
 var _w0rm$rendering_text_with_webgl$Slides$bulletPoints = {
 	ctor: '::',
 	_0: 'Parse SVG path with elm-tools/parser',
@@ -27622,7 +27971,7 @@ var _w0rm$rendering_text_with_webgl$Slides$bulletPoints = {
 			_0: 'Find outlines and holes based on winding',
 			_1: {
 				ctor: '::',
-				_0: 'Triangulate outlines with holes using monotone triangulation algorithm from ianmackenzie/elm-geometry',
+				_0: 'Triangulate outlines with holes using monotone polygon triangulation algorithm from ianmackenzie/elm-geometry',
 				_1: {
 					ctor: '::',
 					_0: 'Generate a WebGL mesh',
@@ -27670,32 +28019,6 @@ var _w0rm$rendering_text_with_webgl$Slides$steps = function (n) {
 			_elm_lang$core$List$map,
 			_w0rm$rendering_text_with_webgl$Formatting$bullet,
 			A2(_elm_lang$core$List$take, n, _w0rm$rendering_text_with_webgl$Slides$bulletPoints)));
-};
-var _w0rm$rendering_text_with_webgl$Slides$thankYou = {
-	ctor: '::',
-	_0: A2(
-		_w0rm$rendering_text_with_webgl$Formatting$position,
-		{ctor: '_Tuple2', _0: 0, _1: 0},
-		{
-			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Custom$zoom(
-				{width: 1280, height: 720, text: 'That’s all. Thank you!', fontSize: 195}),
-			_1: {ctor: '[]'}
-		}),
-	_1: {ctor: '[]'}
-};
-var _w0rm$rendering_text_with_webgl$Slides$lineBreaking = {
-	ctor: '::',
-	_0: A2(
-		_w0rm$rendering_text_with_webgl$Formatting$position,
-		{ctor: '_Tuple2', _0: 0, _1: 0},
-		{
-			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Custom$typewriter(
-				{width: 1280, height: 720, fontSize: 150, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
-			_1: {ctor: '[]'}
-		}),
-	_1: {ctor: '[]'}
 };
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
 	ctor: '::',

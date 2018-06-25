@@ -1,15 +1,13 @@
 {
-    "version": "2.1.0",
+    "type": "package",
+    "name": "ianmackenzie/elm-geometry",
     "summary": "2D/3D geometric data types and operations",
-    "repository": "https://github.com/opensolid/geometry.git",
     "license": "MPL-2.0",
-    "source-directories": [
-        "src"
-    ],
+    "version": "2.1.0",
     "exposed-modules": [
-        "Arc.SweptAngle",
         "Arc2d",
         "Arc3d",
+        "Arc.SweptAngle",
         "Axis2d",
         "Axis3d",
         "BoundingBox2d",
@@ -43,12 +41,16 @@
         "Vector2d",
         "Vector3d"
     ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
-        "Skinney/elm-array-exploration": "2.0.5 <= v < 3.0.0",
-        "elm-lang/core": "5.0.0 <= v < 6.0.0",
+        "elm/core": "1.0.0 <= v < 2.0.0",
         "ianmackenzie/elm-float-extra": "1.0.0 <= v < 2.0.0",
         "ianmackenzie/elm-interval": "1.0.0 <= v < 2.0.0",
         "ianmackenzie/elm-triangular-mesh": "1.0.0 <= v < 2.0.0"
     },
-    "elm-version": "0.18.0 <= v < 0.19.0"
+    "test-dependencies": {
+        "elm-explorations/test": "1.0.0 <= v < 2.0.0",
+        "eeue56/elm-shrink": "2.0.0 <= v < 3.0.0",
+        "elm/random": "1.0.0 <= v < 2.0.0"
+    }
 }

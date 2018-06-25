@@ -30,6 +30,7 @@ module Geometry.Fuzz
         , frame3d
         , lineSegment2d
         , lineSegment3d
+        , parameterValue
         , plane3d
         , point2d
         , point3d
@@ -57,6 +58,7 @@ import Circle2d exposing (Circle2d)
 import Circle3d exposing (Circle3d)
 import CubicSpline2d exposing (CubicSpline2d)
 import CubicSpline3d exposing (CubicSpline3d)
+import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
 import Direction2d exposing (Direction2d)
 import Direction3d exposing (Direction3d)
 import Ellipse2d exposing (Ellipse2d)
@@ -70,10 +72,12 @@ import Plane3d exposing (Plane3d)
 import Point2d exposing (Point2d)
 import Point3d exposing (Point3d)
 import Polygon2d exposing (Polygon2d)
+import Polygon2d.Random as Random
 import Polyline2d exposing (Polyline2d)
 import Polyline3d exposing (Polyline3d)
 import QuadraticSpline2d exposing (QuadraticSpline2d)
 import QuadraticSpline3d exposing (QuadraticSpline3d)
+import Shrink
 import SketchPlane3d exposing (SketchPlane3d)
 import Sphere3d exposing (Sphere3d)
 import Triangle2d exposing (Triangle2d)
@@ -90,6 +94,11 @@ scalar =
 positiveScalar : Fuzzer Float
 positiveScalar =
     Fuzz.map abs scalar
+
+
+parameterValue : Fuzzer ParameterValue
+parameterValue =
+    Fuzz.map ParameterValue.clamped (Fuzz.floatRange 0 1)
 
 
 vector2d : Fuzzer Vector2d
@@ -110,13 +119,13 @@ direction2d =
 direction3d : Fuzzer Direction3d
 direction3d =
     let
-        phi =
+        phiFuzzer =
             Fuzz.map acos (Fuzz.floatRange -1 1)
 
-        theta =
+        thetaFuzzer =
             Fuzz.floatRange -pi pi
 
-        direction phi theta =
+        toDirection phi theta =
             let
                 r =
                     sin phi
@@ -132,7 +141,7 @@ direction3d =
             in
             Direction3d.unsafe ( x, y, z )
     in
-    Fuzz.map2 direction phi theta
+    Fuzz.map2 toDirection phiFuzzer thetaFuzzer
 
 
 point2d : Fuzzer Point2d
@@ -257,15 +266,16 @@ polyline3d =
 
 polygon2d : Fuzzer Polygon2d
 polygon2d =
-    Fuzz.map2
-        (\outerLoop innerLoops ->
-            Polygon2d.with
-                { outerLoop = outerLoop
-                , innerLoops = innerLoops
+    let
+        boundingBox =
+            BoundingBox2d.fromExtrema
+                { minX = -10
+                , maxX = 10
+                , minY = -10
+                , maxY = 10
                 }
-        )
-        (Fuzz.list point2d)
-        (Fuzz.list (Fuzz.list point2d))
+    in
+    Fuzz.custom (Random.polygon2d boundingBox) Shrink.noShrink
 
 
 circle2d : Fuzzer Circle2d
