@@ -83,7 +83,7 @@ getGlyphAndMesh keyCode =
             glyph.path
                 |> Parser.run ParsePathCommand.path
                 |> Result.withDefault []
-                |> List.map PathCommand.pathToPolygon
+                |> List.map (PathCommand.pathToPolygon 10)
                 |> Mesh.mesh3d
     in
     ( glyph, mesh )
@@ -94,7 +94,7 @@ getGlyphAndMesh keyCode =
 base : Mesh Attributes3d
 base =
     Mesh.mesh3d
-        [ PathCommand.pathToPolygon
+        [ PathCommand.pathToPolygon 10
             [ MoveTo 0 780 -- ascender
             , LineTo 0 -220 -- descender
             , LineTo 694 -220

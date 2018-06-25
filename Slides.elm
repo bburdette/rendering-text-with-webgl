@@ -28,21 +28,41 @@ Twitter: [@unsoundscapes](https://twitter.com/unsoundscapes)
 
 GitHub: [@w0rm](https://github.com/w0rm)"""
         ]
-    , position ( 840, 465 ) [ image ( 240, 140 ) "assets/soundcloud.png" ]
+    , position ( 840, 465 ) [ image ( 230, 145 ) "assets/soundcloud.png" ]
     ]
 
 
 cssProperties : List Content
 cssProperties =
-    [ title "~50 Text CSS Properties"
-    , richtext """`color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space word-break word-spacing word-wrap writing-mode`"""
+    [ Content.item
+        (Html.code
+            [ style
+                [ ( "font", "37px/1.3 FiraCode, monospace" )
+                , ( "margin", "0 5px" )
+                , ( "display", "block" )
+                ]
+            ]
+            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space word-break word-spacing word-wrap writing-mode" ]
+        )
     ]
 
 
 solvedProblem : List Content
 solvedProblem =
-    [ spacing 160
-    , align Center [ imageLink ( 802, 430 ) "assets/solved-problems.png" "https://twitter.com/AbletonDev/status/902486487664615428" ]
+    [ Content.item
+        (Html.div
+            [ style
+                [ ( "font", "37px/1.3 FiraCode, monospace" )
+                , ( "margin", "0 5px" )
+                , ( "display", "block" )
+                , ( "color", "#9e9c9d" )
+                ]
+            ]
+            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space word-break word-spacing word-wrap writing-mode" ]
+        )
+    , position
+        ( 250, 145 )
+        [ imageLink ( 802, 430 ) "assets/solved-problems.png" "https://twitter.com/AbletonDev/status/902486487664615428" ]
     ]
 
 
@@ -54,27 +74,6 @@ exploringTheProblem =
         , bullet "WebGL in Elm is a fun way to dive into graphics programming"
         , bullet "Opens possibilities for creative coding"
         ]
-    ]
-
-
-toc : List Content
-toc =
-    [ title "Rendering Text in Elm WebGL"
-    , bullets
-        [ bullet "Font as a program"
-        , bullet "Font as data"
-        , bullet "Glyph metrics"
-        , bullet "Type features"
-        , bullet "Line breaking"
-        ]
-    ]
-
-
-glyphMetrics : List Content
-glyphMetrics =
-    [ title "Sort"
-    , position ( 100, 145 ) [ richtext "(typesetting)" ]
-    , position ( 500, 0 ) [ Custom.sort { width = 720, height = 720 } ]
     ]
 
 
@@ -91,17 +90,70 @@ fontAsAProgram =
     ]
 
 
-openTypeFeatures : List Content
-openTypeFeatures =
-    [ position ( 0, 0 )
-        [ Custom.zoom
-            { width = 1280
-            , height = 720
-            , text = "OpenType Features"
-            , fontSize = 210
+mogeeFont : List Content
+mogeeFont =
+    [ title "MogeeFont"
+    , scale 1.5
+        [ code "elm" """text :
+  (Letter -> List a -> List a)
+  -> String
+  -> List a
+
+-- Base64 data: URI
+fontSrc : String
+"""
+        ]
+    , position ( 900, 200 )
+        [ Custom.pixelfont
+            { text = "ABCDEFGHIJ\nKLMNOPQRS\nTUVWXYZ\nabcdefghijk\nlmnopqrst\nuvwxyz"
+            , pixelSize = 6
+            , width = 300
+            , height = 400
             }
         ]
     ]
+
+
+mogeeFontUsage : List Content
+mogeeFontUsage =
+    [ title "MogeeFont"
+    , split
+        [ imageLink ( 350, 350 ) "assets/elm-mogee.png" "https://unsoundscapes.itch.io/mogee"
+        , richtext """[elm-mogee](https://unsoundscapes.itch.io/mogee)"""
+        ]
+        [ imageLink ( 350, 350 ) "assets/elm-cubik.png" "https://unsoundscapes.itch.io/cubik"
+        , richtext """[elm-cubik](https://unsoundscapes.itch.io/cubik)"""
+        ]
+    ]
+
+
+bulletPoints : List String
+bulletPoints =
+    [ "Parse SVG path with elm-tools/parser"
+    , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
+    , "Find outlines and holes based on winding"
+    , "Triangulate outlines with holes using monotone polygon triangulation algorithm from ianmackenzie/elm-geometry"
+    , "Generate a WebGL mesh"
+    ]
+
+
+steps : Int -> Content
+steps n =
+    bulletPoints
+        |> List.take n
+        |> List.map bullet
+        |> Content.container
+            (Html.ol
+                [ style
+                    [ ( "font", "20px/1.2 FiraCode, monospace" )
+                    , ( "position", "absolute" )
+                    , ( "left", "50%" )
+                    , ( "top", "100px" )
+                    , ( "margin", "0" )
+                    , ( "right", "100px" )
+                    ]
+                ]
+            )
 
 
 lineBreaking : List Content
@@ -117,20 +169,49 @@ lineBreaking =
     ]
 
 
+thankYou : List Content
+thankYou =
+    [ position ( 0, 0 )
+        [ Custom.zoom
+            { width = 1280
+            , height = 720
+            , text = "That’s all. Thank you!"
+            , fontSize = 195
+            }
+        ]
+    ]
+
+
 slides : List Slide
 slides =
     [ [ padded intro ]
-    , [ shout "Text is user interface" ]
-    , [ padded cssProperties ]
+    , [ shout "Web Design is 95% Typography" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
+    , cssProperties
     , solvedProblem
     , [ padded exploringTheProblem ]
-    , [ padded toc ]
-    , [ padded fontAsAProgram ]
+    , fontAsAProgram
+    , [ padded mogeeFont ]
+    , [ shout "MogeeFont usage slide" ]
+    , [ padded mogeeFontUsage ]
     , [ shout "Font as data" ]
-    , [ padded glyphMetrics ]
-    , openTypeFeatures
+    , [ Custom.metrics { width = 1280, height = 720, fontSize = 500 } ]
+    , [ background "assets/letterpress.jpg"
+            [ position ( 990, 600 )
+                [ imageLink ( 216, 68 )
+                    "assets/miat.png"
+                    "http://www.miat.gent.be/"
+                ]
+            ]
+      ]
+    , [ Custom.sort { width = 1280, height = 720 } ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 1 } ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 2 }, steps 1 ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 3 }, steps 2 ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 4 }, steps 3 ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 4 ]
+    , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 5 ]
     , lineBreaking
-    , [ shout "Thank you!" ]
+    , thankYou
     ]
         -- make 16:9 slides
         |> List.map (Slide.slide >> Slide.setDimensions ( 1280, 720 ))

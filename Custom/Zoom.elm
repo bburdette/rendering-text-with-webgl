@@ -88,7 +88,7 @@ view { elapsed, width, height, text } =
                 mesh
                 { projection = projection
                 , color = vec3 1 0 0
-                , center = vec3 (width * (0.5 + 0.5 * sin (elapsed / 2000))) (centerY - 30) 0
+                , center = vec3 (width * (0.5 + 0.5 * sin (elapsed / 2000))) (centerY - 20) 0
                 , transform =
                     transform
                         |> Mat4.mul (Mat4.makeTranslate3 wordCenterX wordCenterY 0)

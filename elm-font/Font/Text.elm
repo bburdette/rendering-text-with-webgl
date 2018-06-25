@@ -262,7 +262,7 @@ textHelp meshFn ctx =
                             glyph.path
                                 |> Parser.run ParsePathCommand.path
                                 |> Result.withDefault []
-                                |> List.map PathCommand.pathToPolygon
+                                |> List.map (PathCommand.pathToPolygon 10)
                                 |> meshFn
 
                 cache =

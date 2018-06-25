@@ -135,29 +135,29 @@ triangulate path =
             )
 
 
-pathToPolygon : List PathCommand -> List Point2d
-pathToPolygon commands =
-    Monotone.removeDuplicates (List.reverse (pathToPolygonHelp commands []))
+pathToPolygon : Int -> List PathCommand -> List Point2d
+pathToPolygon n commands =
+    Monotone.removeDuplicates (List.reverse (pathToPolygonHelp (samples n) commands []))
 
 
-pathToPolygonHelp : List PathCommand -> List Point2d -> List Point2d
-pathToPolygonHelp commands loop =
+pathToPolygonHelp : List Float -> List PathCommand -> List Point2d -> List Point2d
+pathToPolygonHelp samples commands loop =
     case commands of
         [] ->
             loop
 
         (MoveTo x y) :: remaining ->
-            pathToPolygonHelp
+            pathToPolygonHelp samples
                 remaining
                 (Point2d.fromCoordinates ( x, y ) :: loop)
 
         (LineTo x y) :: remaining ->
-            pathToPolygonHelp
+            pathToPolygonHelp samples
                 remaining
                 (Point2d.fromCoordinates ( x, y ) :: loop)
 
         (QuadraticCurveTo x1 y1 x2 y2) :: remaining ->
-            pathToPolygonHelp
+            pathToPolygonHelp samples
                 remaining
                 (case loop of
                     [] ->
@@ -171,12 +171,12 @@ pathToPolygonHelp commands loop =
                                 , endPoint = point
                                 }
                             )
-                            (samples 10)
+                            samples
                             ++ rest
                 )
 
         (BezierCurveTo x1 y1 x2 y2 x3 y3) :: remaining ->
-            pathToPolygonHelp
+            pathToPolygonHelp samples
                 remaining
                 (case loop of
                     [] ->
@@ -191,7 +191,7 @@ pathToPolygonHelp commands loop =
                                 , endPoint = point
                                 }
                             )
-                            (samples 10)
+                            samples
                             ++ rest
                 )
 

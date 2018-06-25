@@ -4,6 +4,8 @@ module Custom
         , Model
         , Msg
         , Slide
+        , metrics
+        , outlines
         , pixelfont
         , sort
         , subscriptions
@@ -13,6 +15,8 @@ module Custom
         , zoom
         )
 
+import Custom.Metrics as Metrics
+import Custom.Outlines as Outlines
 import Custom.Pixelfont as Pixelfont
 import Custom.Sort as Sort
 import Custom.Typewriter as Typewriter
@@ -35,6 +39,8 @@ type Model
     | ZoomModel Zoom.Model
     | TypewriterModel Typewriter.Model
     | PixelfontModel Pixelfont.Model
+    | MetricsModel Metrics.Model
+    | OutlinesModel Outlines.Model
 
 
 type Msg
@@ -42,6 +48,8 @@ type Msg
     | ZoomMsg Zoom.Msg
     | TypewriterMsg Typewriter.Msg
     | PixelfontMsg Pixelfont.Msg
+    | MetricsMsg Metrics.Msg
+    | OutlinesMsg Outlines.Msg
 
 
 sort : { width : Float, height : Float } -> Content
@@ -64,6 +72,16 @@ pixelfont options =
     Content.custom (PixelfontModel (Pixelfont.initial options))
 
 
+metrics : { fontSize : Float, width : Float, height : Float } -> Content
+metrics options =
+    Content.custom (MetricsModel (Metrics.initial options))
+
+
+outlines : { step : Int, width : Float, height : Float } -> Content
+outlines options =
+    Content.custom (OutlinesModel (Outlines.initial options))
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     case model of
@@ -78,6 +96,12 @@ subscriptions model =
 
         PixelfontModel submodel ->
             Sub.map PixelfontMsg (Pixelfont.subscriptions submodel)
+
+        MetricsModel submodel ->
+            Sub.map MetricsMsg (Metrics.subscriptions submodel)
+
+        OutlinesModel submodel ->
+            Sub.map OutlinesMsg (Outlines.subscriptions submodel)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -111,6 +135,20 @@ update action model =
             in
             ( PixelfontModel newModel, Cmd.map PixelfontMsg newCmd )
 
+        ( MetricsMsg a, MetricsModel m ) ->
+            let
+                ( newModel, newCmd ) =
+                    Metrics.update a m
+            in
+            ( MetricsModel newModel, Cmd.map MetricsMsg newCmd )
+
+        ( OutlinesMsg a, OutlinesModel m ) ->
+            let
+                ( newModel, newCmd ) =
+                    Outlines.update a m
+            in
+            ( OutlinesModel newModel, Cmd.map OutlinesMsg newCmd )
+
         _ ->
             ( model, Cmd.none )
 
@@ -129,3 +167,9 @@ view model =
 
         PixelfontModel submodel ->
             Html.map PixelfontMsg (Pixelfont.view submodel)
+
+        MetricsModel submodel ->
+            Html.map MetricsMsg (Metrics.view submodel)
+
+        OutlinesModel submodel ->
+            Html.map OutlinesMsg (Outlines.view submodel)
