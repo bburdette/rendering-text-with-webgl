@@ -123,7 +123,7 @@ iverniFont =
     [ title "Iverni Font"
     , spacing 20
     , bullets
-        [ bullet "Designed in OpenType format"
+        [ bullet "Designed in OpenType® format"
         , bullet "Converted to JSON using opentype.js"
         , bullet "Decoded into Elm"
         , bullet "Rendered with WebGL"
