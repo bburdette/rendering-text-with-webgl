@@ -130,6 +130,18 @@ mogeeFontUsage =
     ]
 
 
+mogeeFontUsage3d : List Content
+mogeeFontUsage3d =
+    [ position ( 0, 0 )
+        [ Custom.cubicglyph
+            { pixelSize = 52
+            , width = 1280
+            , height = 720
+            }
+        ]
+    ]
+
+
 mogeeFontUsageGames : List Content
 mogeeFontUsageGames =
     [ title "MogeeFont Usage"
@@ -208,6 +220,7 @@ slides =
     , fontAsAProgram
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
+    , [ dark mogeeFontUsage3d ]
     , [ shout "Font as data" ]
     , [ Custom.metrics { width = 1280, height = 720, fontSize = 500 } ]
     , [ background "assets/letterpress.jpg"

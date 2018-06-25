@@ -4,6 +4,7 @@ module Custom
         , Model
         , Msg
         , Slide
+        , cubicglyph
         , metrics
         , outlines
         , pixelfont
@@ -16,6 +17,7 @@ module Custom
         , zoom
         )
 
+import Custom.Cubicglyph as Cubicglyph
 import Custom.Metrics as Metrics
 import Custom.Outlines as Outlines
 import Custom.Pixelfont as Pixelfont
@@ -44,6 +46,7 @@ type Model
     | MetricsModel Metrics.Model
     | OutlinesModel Outlines.Model
     | PixelglyphModel Pixelglyph.Model
+    | CubicglyphModel Cubicglyph.Model
 
 
 type Msg
@@ -54,6 +57,7 @@ type Msg
     | MetricsMsg Metrics.Msg
     | OutlinesMsg Outlines.Msg
     | PixelglyphMsg Pixelglyph.Msg
+    | CubicglyphMsg Cubicglyph.Msg
 
 
 sort : Sort.Options -> Content
@@ -91,6 +95,11 @@ pixelglyph options =
     Content.custom (PixelglyphModel (Pixelglyph.initial options))
 
 
+cubicglyph : Cubicglyph.Options -> Content
+cubicglyph options =
+    Content.custom (CubicglyphModel (Cubicglyph.initial options))
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     case model of
@@ -114,6 +123,9 @@ subscriptions model =
 
         PixelglyphModel submodel ->
             Sub.map PixelglyphMsg (Pixelglyph.subscriptions submodel)
+
+        CubicglyphModel submodel ->
+            Sub.map CubicglyphMsg (Cubicglyph.subscriptions submodel)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -168,6 +180,13 @@ update action model =
             in
             ( PixelglyphModel newModel, Cmd.map PixelglyphMsg newCmd )
 
+        ( CubicglyphMsg a, CubicglyphModel m ) ->
+            let
+                ( newModel, newCmd ) =
+                    Cubicglyph.update a m
+            in
+            ( CubicglyphModel newModel, Cmd.map CubicglyphMsg newCmd )
+
         _ ->
             ( model, Cmd.none )
 
@@ -195,3 +214,6 @@ view model =
 
         PixelglyphModel submodel ->
             Html.map PixelglyphMsg (Pixelglyph.view submodel)
+
+        CubicglyphModel submodel ->
+            Html.map CubicglyphMsg (Cubicglyph.view submodel)

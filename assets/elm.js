@@ -22410,6 +22410,400 @@ var _w0rm$rendering_text_with_webgl$CubicSpline2d$arcLengthParameterized = F2(
 			});
 	});
 
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$loadTexture = function (msg) {
+	return A2(
+		_elm_lang$core$Task$attempt,
+		msg,
+		A2(
+			_elm_community$webgl$WebGL_Texture$loadWith,
+			_elm_lang$core$Native_Utils.update(
+				_elm_community$webgl$WebGL_Texture$defaultOptions,
+				{magnify: _elm_community$webgl$WebGL_Texture$nearest, minify: _elm_community$webgl$WebGL_Texture$nearest, flipY: false}),
+			_kuzminadya$mogeefont$MogeeFont$fontSrc));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedFragmentShader = {'src': '\n        precision mediump float;\n        varying vec3 vcolor;\n        void main () {\n            gl_FragColor = vec4(vcolor, 1.0);\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedVertexShader = {'src': '\n        precision mediump float;\n        attribute vec3 color;\n        attribute vec3 position;\n        attribute vec2 texturePosition;\n        uniform sampler2D texture;\n        uniform vec2 textureSize;\n        uniform mat4 projection;\n        uniform mat4 camera;\n        uniform mat4 transform;\n        uniform float depth;\n        varying vec3 vcolor;\n        void main () {\n            vec4 textureColor = texture2D(texture, texturePosition / textureSize);\n            if (dot(textureColor, textureColor) == 4.0) {\n                vec3 pos = vec3(position.xy, position.z + depth);\n                gl_Position = projection * camera * transform * vec4(pos, 1.0);\n                vcolor = color * 0.5;\n            } else {\n                gl_Position = projection * camera * transform * vec4(position, 1.0);\n                vcolor = color;\n            }\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$renderGlyph = F4(
+	function (offsetX, offsetY, texture, _p0) {
+		var _p1 = _p0;
+		var _p3 = _p1.width;
+		var _p2 = _p1.height;
+		var angle = (0 - _elm_lang$core$Basics$pi) / 8;
+		var projection = A4(_elm_community$linear_algebra$Math_Matrix4$makePerspective, 24, _p3 / _p2, 5, 1000);
+		var devicePixelRatio = 2;
+		var camera = A3(
+			_elm_community$linear_algebra$Math_Matrix4$makeLookAt,
+			A3(
+				_elm_community$linear_algebra$Math_Vector3$vec3,
+				-30,
+				-6,
+				_elm_lang$core$Basics$toFloat(0 - _p1.pixelSize) / 1.5),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -10, -6, 0),
+			_elm_community$linear_algebra$Math_Vector3$j);
+		var data = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{textureX: 0, textureY: 0, width: 0, height: 0, x: 0, y: 0},
+			_elm_lang$core$List$head(
+				A2(
+					_kuzminadya$mogeefont$MogeeFont$text,
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						}),
+					_p1.text)));
+		return A2(
+			_elm_community$webgl$WebGL$toHtml,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$width(
+					_elm_lang$core$Basics$round(_p3 * devicePixelRatio)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$height(
+						_elm_lang$core$Basics$round(_p2 * devicePixelRatio)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'width',
+										_1: A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(_p3),
+											'px')
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'height',
+											_1: A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(_p2),
+												'px')
+										},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A4(
+					_elm_community$webgl$WebGL$entity,
+					_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedVertexShader,
+					_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedFragmentShader,
+					_p1.mesh,
+					{
+						projection: projection,
+						transform: _elm_community$linear_algebra$Math_Matrix4$identity,
+						camera: camera,
+						depth: 15 * (1 - _elm_lang$core$Basics$cos(_p1.elapsed / 1000)),
+						texture: texture,
+						textureSize: A2(
+							_elm_community$linear_algebra$Math_Vector2$vec2,
+							_elm_lang$core$Basics$toFloat(
+								_elm_lang$core$Tuple$first(
+									_elm_community$webgl$WebGL_Texture$size(texture))),
+							_elm_lang$core$Basics$toFloat(
+								_elm_lang$core$Tuple$second(
+									_elm_community$webgl$WebGL_Texture$size(texture))))
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$view = function (model) {
+	var _p4 = {
+		ctor: '_Tuple2',
+		_0: model.width / 3,
+		_1: (0 - (model.height - (_elm_lang$core$Basics$toFloat(model.pixelSize) * 11))) / 2
+	};
+	var offsetX = _p4._0;
+	var offsetY = _p4._1;
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		function () {
+			var _p5 = model.maybeTexture;
+			if (_p5.ctor === 'Just') {
+				return {
+					ctor: '::',
+					_0: A4(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$renderGlyph, offsetX, offsetY, _p5._0, model),
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {ctor: '[]'};
+			}
+		}());
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {elapsed: a, pixelSize: b, maybeTexture: c, text: d, mesh: e, width: f, height: g};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Options = F3(
+	function (a, b, c) {
+		return {pixelSize: a, width: b, height: c};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex = F3(
+	function (a, b, c) {
+		return {position: a, texturePosition: b, color: c};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face = F6(
+	function (a, b, c, d, texturePosition, color) {
+		return function (_p6) {
+			return A2(
+				F2(
+					function (x, y) {
+						return {ctor: '::', _0: x, _1: y};
+					}),
+				{
+					ctor: '_Tuple3',
+					_0: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, c, texturePosition, color),
+					_1: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, d, texturePosition, color),
+					_2: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, a, texturePosition, color)
+				},
+				A2(
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						}),
+					{
+						ctor: '_Tuple3',
+						_0: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, a, texturePosition, color),
+						_1: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, b, texturePosition, color),
+						_2: A3(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Vertex, c, texturePosition, color)
+					},
+					_p6));
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addPixel = F4(
+	function (x, y, textureX, textureY) {
+		var grey = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.2, 0.2, 0.2);
+		var white = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1);
+		var s = 0.48;
+		var texturePosition = A2(_elm_community$linear_algebra$Math_Vector2$vec2, textureX, textureY);
+		var offset = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0 - x, 0 - y, 0);
+		var rft = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, s, s, s),
+			offset);
+		var lft = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0 - s, s, s),
+			offset);
+		var lbt = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0 - s, 0 - s, s),
+			offset);
+		var rbt = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, s, 0 - s, s),
+			offset);
+		var rbb = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, s, 0 - s, 0 - s),
+			offset);
+		var rfb = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, s, s, 0 - s),
+			offset);
+		var lfb = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0 - s, s, 0 - s),
+			offset);
+		var lbb = A2(
+			_elm_community$linear_algebra$Math_Vector3$add,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0 - s, 0 - s, 0 - s),
+			offset);
+		return function (_p7) {
+			return A7(
+				_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face,
+				rbb,
+				lbb,
+				lbt,
+				rbt,
+				texturePosition,
+				grey,
+				A7(
+					_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face,
+					lbb,
+					lfb,
+					lft,
+					lbt,
+					texturePosition,
+					grey,
+					A7(
+						_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face,
+						rfb,
+						lfb,
+						lbb,
+						rbb,
+						texturePosition,
+						white,
+						A7(
+							_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face,
+							lbt,
+							lft,
+							rft,
+							rbt,
+							texturePosition,
+							white,
+							A7(
+								_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face,
+								rft,
+								rfb,
+								rbb,
+								rbt,
+								texturePosition,
+								grey,
+								A7(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face, lfb, rfb, rft, lft, texturePosition, grey, _p7))))));
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter = F2(
+	function (_p8, letters) {
+		var _p9 = _p8;
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (dx, l) {
+					return A3(
+						_elm_lang$core$List$foldl,
+						function (dy) {
+							return A4(
+								_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addPixel,
+								_p9.x + _elm_lang$core$Basics$toFloat(dx),
+								_p9.y + _elm_lang$core$Basics$toFloat(dy),
+								_p9.textureX + _elm_lang$core$Basics$toFloat(dx),
+								_p9.textureY + _elm_lang$core$Basics$toFloat(dy));
+						},
+						l,
+						A2(
+							_elm_lang$core$List$range,
+							0,
+							_elm_lang$core$Basics$round(_p9.height)));
+				}),
+			letters,
+			A2(
+				_elm_lang$core$List$range,
+				0,
+				_elm_lang$core$Basics$round(_p9.width)));
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$initial = function (options) {
+	return {
+		elapsed: 0,
+		pixelSize: options.pixelSize,
+		text: 'Cubik',
+		mesh: _elm_community$webgl$WebGL$triangles(
+			A2(_kuzminadya$mogeefont$MogeeFont$text, _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter, 'Cubik')),
+		maybeTexture: _elm_lang$core$Maybe$Nothing,
+		width: options.width,
+		height: options.height
+	};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Uniform = F6(
+	function (a, b, c, d, e, f) {
+		return {texture: a, textureSize: b, camera: c, projection: d, transform: e, depth: f};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Varying = function (a) {
+	return {vcolor: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$KeyPress = function (a) {
+	return {ctor: 'KeyPress', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$LoadTexture = function (a) {
+	return {ctor: 'LoadTexture', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$update = F2(
+	function (action, model) {
+		var _p10 = action;
+		switch (_p10.ctor) {
+			case 'Animate':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{elapsed: model.elapsed + _p10._0}),
+					_1: _elm_lang$core$Native_Utils.eq(model.elapsed, 0) ? _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$loadTexture(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$LoadTexture) : _elm_lang$core$Platform_Cmd$none
+				};
+			case 'KeyDown':
+				var text = function () {
+					var _p11 = _p10._0;
+					if (_p11 === 8) {
+						return A2(_elm_lang$core$String$dropRight, 1, model.text);
+					} else {
+						return model.text;
+					}
+				}();
+				var mesh = _elm_community$webgl$WebGL$triangles(
+					A2(_kuzminadya$mogeefont$MogeeFont$text, _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter, text));
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{text: text, mesh: mesh}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'KeyPress':
+				var text = A2(
+					_elm_lang$core$String$right,
+					5,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						model.text,
+						_elm_lang$core$String$fromChar(
+							_elm_lang$core$Char$fromCode(_p10._0))));
+				var mesh = _elm_community$webgl$WebGL$triangles(
+					A2(_kuzminadya$mogeefont$MogeeFont$text, _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter, text));
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{text: text, mesh: mesh}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							maybeTexture: _elm_lang$core$Result$toMaybe(_p10._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Animate = function (a) {
+	return {ctor: 'Animate', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$subscriptions = function (_p12) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$Animate),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$KeyPress),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$keyboard$Keyboard$downs(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$KeyDown),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+
 var _w0rm$rendering_text_with_webgl$Font_Glyph$empty = {path: '', advanceWidth: 0, leftSideBearing: 0};
 var _w0rm$rendering_text_with_webgl$Font_Glyph$Glyph = F3(
 	function (a, b, c) {
@@ -28088,6 +28482,14 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$subscriptions = function (_p7) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Zoom$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Custom$CubicglyphModel = function (a) {
+	return {ctor: 'CubicglyphModel', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom$cubicglyph = function (options) {
+	return _w0rm$elm_slice_show$SliceShow_Content$custom(
+		_w0rm$rendering_text_with_webgl$Custom$CubicglyphModel(
+			_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$initial(options)));
+};
 var _w0rm$rendering_text_with_webgl$Custom$PixelglyphModel = function (a) {
 	return {ctor: 'PixelglyphModel', _0: a};
 };
@@ -28144,6 +28546,9 @@ var _w0rm$rendering_text_with_webgl$Custom$sort = function (options) {
 		_w0rm$rendering_text_with_webgl$Custom$SortModel(
 			_w0rm$rendering_text_with_webgl$Custom_Sort$initial(options)));
 };
+var _w0rm$rendering_text_with_webgl$Custom$CubicglyphMsg = function (a) {
+	return {ctor: 'CubicglyphMsg', _0: a};
+};
 var _w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg = function (a) {
 	return {ctor: 'PixelglyphMsg', _0: a};
 };
@@ -28198,17 +28603,22 @@ var _w0rm$rendering_text_with_webgl$Custom$subscriptions = function (model) {
 				_elm_lang$core$Platform_Sub$map,
 				_w0rm$rendering_text_with_webgl$Custom$OutlinesMsg,
 				_w0rm$rendering_text_with_webgl$Custom_Outlines$subscriptions(_p0._0));
-		default:
+		case 'PixelglyphModel':
 			return A2(
 				_elm_lang$core$Platform_Sub$map,
 				_w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg,
 				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions(_p0._0));
+		default:
+			return A2(
+				_elm_lang$core$Platform_Sub$map,
+				_w0rm$rendering_text_with_webgl$Custom$CubicglyphMsg,
+				_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$subscriptions(_p0._0));
 	}
 };
 var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 	function (action, model) {
 		var _p1 = {ctor: '_Tuple2', _0: action, _1: model};
-		_v1_7:
+		_v1_8:
 		do {
 			if (_p1.ctor === '_Tuple2') {
 				switch (_p1._0.ctor) {
@@ -28223,7 +28633,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$SortMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
 					case 'ZoomMsg':
 						if (_p1._1.ctor === 'ZoomModel') {
@@ -28236,7 +28646,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$ZoomMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
 					case 'TypewriterMsg':
 						if (_p1._1.ctor === 'TypewriterModel') {
@@ -28249,7 +28659,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$TypewriterMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
 					case 'PixelfontMsg':
 						if (_p1._1.ctor === 'PixelfontModel') {
@@ -28262,7 +28672,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$PixelfontMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
 					case 'MetricsMsg':
 						if (_p1._1.ctor === 'MetricsModel') {
@@ -28275,7 +28685,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$MetricsMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
 					case 'OutlinesMsg':
 						if (_p1._1.ctor === 'OutlinesModel') {
@@ -28288,9 +28698,9 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$OutlinesMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
 						}
-					default:
+					case 'PixelglyphMsg':
 						if (_p1._1.ctor === 'PixelglyphModel') {
 							var _p8 = A2(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update, _p1._0._0, _p1._1._0);
 							var newModel = _p8._0;
@@ -28301,53 +28711,71 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg, newCmd)
 							};
 						} else {
-							break _v1_7;
+							break _v1_8;
+						}
+					default:
+						if (_p1._1.ctor === 'CubicglyphModel') {
+							var _p9 = A2(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$update, _p1._0._0, _p1._1._0);
+							var newModel = _p9._0;
+							var newCmd = _p9._1;
+							return {
+								ctor: '_Tuple2',
+								_0: _w0rm$rendering_text_with_webgl$Custom$CubicglyphModel(newModel),
+								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$CubicglyphMsg, newCmd)
+							};
+						} else {
+							break _v1_8;
 						}
 				}
 			} else {
-				break _v1_7;
+				break _v1_8;
 			}
 		} while(false);
 		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _w0rm$rendering_text_with_webgl$Custom$view = function (model) {
-	var _p9 = model;
-	switch (_p9.ctor) {
+	var _p10 = model;
+	switch (_p10.ctor) {
 		case 'SortModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$SortMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Sort$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Sort$view(_p10._0));
 		case 'ZoomModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$ZoomMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Zoom$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Zoom$view(_p10._0));
 		case 'TypewriterModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$TypewriterMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Typewriter$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Typewriter$view(_p10._0));
 		case 'PixelfontModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$PixelfontMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$view(_p10._0));
 		case 'MetricsModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$MetricsMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Metrics$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Metrics$view(_p10._0));
 		case 'OutlinesModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$OutlinesMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Outlines$view(_p9._0));
-		default:
+				_w0rm$rendering_text_with_webgl$Custom_Outlines$view(_p10._0));
+		case 'PixelglyphModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$view(_p9._0));
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$view(_p10._0));
+		default:
+			return A2(
+				_elm_lang$html$Html$map,
+				_w0rm$rendering_text_with_webgl$Custom$CubicglyphMsg,
+				_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$view(_p10._0));
 	}
 };
 
@@ -29011,6 +29439,19 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsageGames = {
 		_1: {ctor: '[]'}
 	}
 };
+var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d = {
+	ctor: '::',
+	_0: A2(
+		_w0rm$rendering_text_with_webgl$Formatting$position,
+		{ctor: '_Tuple2', _0: 0, _1: 0},
+		{
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Custom$cubicglyph(
+				{pixelSize: 52, width: 1280, height: 720}),
+			_1: {ctor: '[]'}
+		}),
+	_1: {ctor: '[]'}
+};
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
 	ctor: '::',
 	_0: A2(
@@ -29300,56 +29741,55 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 										ctor: '::',
 										_0: {
 											ctor: '::',
-											_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Font as data'),
+											_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d),
 											_1: {ctor: '[]'}
 										},
 										_1: {
 											ctor: '::',
 											_0: {
 												ctor: '::',
-												_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
-													{width: 1280, height: 720, fontSize: 500}),
+												_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Font as data'),
 												_1: {ctor: '[]'}
 											},
 											_1: {
 												ctor: '::',
 												_0: {
 													ctor: '::',
-													_0: A2(
-														_w0rm$rendering_text_with_webgl$Formatting$background,
-														'assets/letterpress.jpg',
-														{
-															ctor: '::',
-															_0: A2(
-																_w0rm$rendering_text_with_webgl$Formatting$position,
-																{ctor: '_Tuple2', _0: 990, _1: 600},
-																{
-																	ctor: '::',
-																	_0: A3(
-																		_w0rm$rendering_text_with_webgl$Formatting$imageLink,
-																		{ctor: '_Tuple2', _0: 216, _1: 68},
-																		'assets/miat.png',
-																		'http://www.miat.gent.be/'),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
-														}),
+													_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
+														{width: 1280, height: 720, fontSize: 500}),
 													_1: {ctor: '[]'}
 												},
 												_1: {
 													ctor: '::',
 													_0: {
 														ctor: '::',
-														_0: _w0rm$rendering_text_with_webgl$Custom$sort(
-															{width: 1280, height: 720}),
+														_0: A2(
+															_w0rm$rendering_text_with_webgl$Formatting$background,
+															'assets/letterpress.jpg',
+															{
+																ctor: '::',
+																_0: A2(
+																	_w0rm$rendering_text_with_webgl$Formatting$position,
+																	{ctor: '_Tuple2', _0: 990, _1: 600},
+																	{
+																		ctor: '::',
+																		_0: A3(
+																			_w0rm$rendering_text_with_webgl$Formatting$imageLink,
+																			{ctor: '_Tuple2', _0: 216, _1: 68},
+																			'assets/miat.png',
+																			'http://www.miat.gent.be/'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}),
 														_1: {ctor: '[]'}
 													},
 													_1: {
 														ctor: '::',
 														_0: {
 															ctor: '::',
-															_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																{width: 1280, height: 720, step: 1}),
+															_0: _w0rm$rendering_text_with_webgl$Custom$sort(
+																{width: 1280, height: 720}),
 															_1: {ctor: '[]'}
 														},
 														_1: {
@@ -29357,22 +29797,18 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 															_0: {
 																ctor: '::',
 																_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																	{width: 1280, height: 720, step: 2}),
-																_1: {
-																	ctor: '::',
-																	_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
-																	_1: {ctor: '[]'}
-																}
+																	{width: 1280, height: 720, step: 1}),
+																_1: {ctor: '[]'}
 															},
 															_1: {
 																ctor: '::',
 																_0: {
 																	ctor: '::',
 																	_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																		{width: 1280, height: 720, step: 3}),
+																		{width: 1280, height: 720, step: 2}),
 																	_1: {
 																		ctor: '::',
-																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
+																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
 																		_1: {ctor: '[]'}
 																	}
 																},
@@ -29381,10 +29817,10 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																	_0: {
 																		ctor: '::',
 																		_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																			{width: 1280, height: 720, step: 4}),
+																			{width: 1280, height: 720, step: 3}),
 																		_1: {
 																			ctor: '::',
-																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
+																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
 																			_1: {ctor: '[]'}
 																		}
 																	},
@@ -29393,10 +29829,10 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																		_0: {
 																			ctor: '::',
 																			_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																				{width: 1280, height: 720, step: 5}),
+																				{width: 1280, height: 720, step: 4}),
 																			_1: {
 																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
+																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
 																				_1: {ctor: '[]'}
 																			}
 																		},
@@ -29408,17 +29844,30 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																					{width: 1280, height: 720, step: 5}),
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
+																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
 																					_1: {ctor: '[]'}
 																				}
 																			},
 																			_1: {
 																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
+																				_0: {
+																					ctor: '::',
+																					_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
+																						{width: 1280, height: 720, step: 5}),
+																					_1: {
+																						ctor: '::',
+																						_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
+																						_1: {ctor: '[]'}
+																					}
+																				},
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
-																					_1: {ctor: '[]'}
+																					_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
+																					_1: {
+																						ctor: '::',
+																						_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
+																						_1: {ctor: '[]'}
+																					}
 																				}
 																			}
 																		}
