@@ -27,10 +27,10 @@ html, body {
   margin: 0;
 }
 body {
-  font-family: FiraSans-Regular, sans-serif;
   background: black;
   color: #111;
-  font-size: 32px;
+  font-size: 24px;
+  font-family: FiraCode, monospace;
 }
 h1, h2, h3 {
   font-family: FiraSans-Book, sans-serif;

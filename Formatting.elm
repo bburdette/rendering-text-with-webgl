@@ -193,7 +193,7 @@ demo url =
 -}
 bullets : List (Content a b) -> Content a b
 bullets =
-    container (li [])
+    container (ol [])
 
 
 {-| List item

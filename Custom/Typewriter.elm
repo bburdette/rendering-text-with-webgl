@@ -23,6 +23,7 @@ type alias Model =
     , text : List (GlyphInfo Attributes3d)
     , width : Float
     , height : Float
+    , start : Int
     }
 
 
@@ -31,6 +32,7 @@ type alias Options =
     , fontSize : Float
     , width : Float
     , height : Float
+    , start : Int
     }
 
 
@@ -54,6 +56,7 @@ initial options =
     , fontSize = options.fontSize
     , width = options.width
     , height = options.height
+    , start = options.start
     }
 
 
@@ -72,7 +75,7 @@ update action model =
 
 
 view : Model -> Html msg
-view { elapsed, width, height, text, fontSize } =
+view { elapsed, width, height, text, start, fontSize } =
     let
         eyeX =
             width / 2
@@ -83,8 +86,8 @@ view { elapsed, width, height, text, fontSize } =
         camera =
             Mat4.makeLookAt
                 -- Zoom out by moving camera away from the scene
-                (Vec3.vec3 eyeX (eyeY - 1000) (font.unitsPerEm * 1.87))
-                (Vec3.vec3 eyeX eyeY 0)
+                (Vec3.vec3 (eyeX - 1000) (eyeY + 20) (font.unitsPerEm * 1.87))
+                (Vec3.vec3 (eyeX - 50) (eyeY + 20) 0)
                 Vec3.j
 
         devicePixelRatio =
@@ -103,6 +106,7 @@ view { elapsed, width, height, text, fontSize } =
                 mesh
                 { camera = camera
                 , index = index
+                , start = start
                 , elapsed = elapsed
                 , color = vec3 1 0 0
                 , projection = projection
@@ -130,6 +134,7 @@ type alias Uniforms3d =
     , color : Vec3
     , elapsed : Float
     , index : Int
+    , start : Int
     }
 
 
@@ -141,27 +146,34 @@ vertex3d =
         attribute vec3 normal;
         uniform float elapsed;
         uniform int index;
+        uniform int start;
         uniform vec3 color;
         uniform mat4 camera;
         uniform mat4 projection;
         uniform mat4 transform;
         varying vec3 vcolor;
 
-        float ambientLight = 0.4;
-        float directionalLight = 0.6;
+        float ambientLight = 0.6;
+        float directionalLight = 0.4;
         vec3 directionalVector = normalize(vec3(0.3, 0.1, 1.0));
         void main () {
             vec4 newPosition = transform * vec4(position, 1.0);
             float n = 5.0;
-            float k = (elapsed / 1000.0 * n - float(index)) / n;
+            float k = (elapsed / 1000.0 * n - float(index - start)) / n;
             float clampedK = max(min(k, 1.0), -1.0);
             float distance = 2000.0 * (0.5 - 0.5 * sin(3.145926 / 2.0 * clampedK));
-            newPosition.z += distance;
+            if (index > start) {
+                newPosition.z += distance;
+            }
             gl_Position = projection * camera * newPosition;
             vec4 transformedNormal = normalize(transform * vec4(normal, 0.0));
             float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
             float vlighting = ambientLight + directional * directionalLight;
-            vcolor = vlighting * color;
+            if (index > start) {
+                vcolor = vlighting * vec3(0.5, 0.5, 0.5);
+            } else {
+                vcolor = vlighting * color;
+            }
         }
     |]
 

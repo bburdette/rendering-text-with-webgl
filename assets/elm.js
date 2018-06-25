@@ -28329,7 +28329,7 @@ var _w0rm$rendering_text_with_webgl$Font_Text$text2d = _w0rm$rendering_text_with
 var _w0rm$rendering_text_with_webgl$Font_Text$text3d = _w0rm$rendering_text_with_webgl$Font_Text$text(_w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d);
 
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$fragment3d = {'src': '\n        precision mediump float;\n        varying vec3 vcolor;\n        void main () {\n            gl_FragColor = vec4(vcolor, 1.0);\n        }\n    '};
-var _w0rm$rendering_text_with_webgl$Custom_Typewriter$vertex3d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        attribute vec3 normal;\n        uniform float elapsed;\n        uniform int index;\n        uniform vec3 color;\n        uniform mat4 camera;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        varying vec3 vcolor;\n\n        float ambientLight = 0.4;\n        float directionalLight = 0.6;\n        vec3 directionalVector = normalize(vec3(0.3, 0.1, 1.0));\n        void main () {\n            vec4 newPosition = transform * vec4(position, 1.0);\n            float n = 5.0;\n            float k = (elapsed / 1000.0 * n - float(index)) / n;\n            float clampedK = max(min(k, 1.0), -1.0);\n            float distance = 2000.0 * (0.5 - 0.5 * sin(3.145926 / 2.0 * clampedK));\n            newPosition.z += distance;\n            gl_Position = projection * camera * newPosition;\n            vec4 transformedNormal = normalize(transform * vec4(normal, 0.0));\n            float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);\n            float vlighting = ambientLight + directional * directionalLight;\n            vcolor = vlighting * color;\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Typewriter$vertex3d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        attribute vec3 normal;\n        uniform float elapsed;\n        uniform int index;\n        uniform int start;\n        uniform vec3 color;\n        uniform mat4 camera;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        varying vec3 vcolor;\n\n        float ambientLight = 0.6;\n        float directionalLight = 0.4;\n        vec3 directionalVector = normalize(vec3(0.3, 0.1, 1.0));\n        void main () {\n            vec4 newPosition = transform * vec4(position, 1.0);\n            float n = 5.0;\n            float k = (elapsed / 1000.0 * n - float(index - start)) / n;\n            float clampedK = max(min(k, 1.0), -1.0);\n            float distance = 2000.0 * (0.5 - 0.5 * sin(3.145926 / 2.0 * clampedK));\n            if (index > start) {\n                newPosition.z += distance;\n            }\n            gl_Position = projection * camera * newPosition;\n            vec4 transformedNormal = normalize(transform * vec4(normal, 0.0));\n            float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);\n            float vlighting = ambientLight + directional * directionalLight;\n            if (index > start) {\n                vcolor = vlighting * vec3(0.5, 0.5, 0.5);\n            } else {\n                vcolor = vlighting * color;\n            }\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$view = function (_p0) {
 	var _p1 = _p0;
 	var _p6 = _p1.width;
@@ -28342,8 +28342,8 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$view = function (_p0) {
 	var eyeX = _p6 / 2;
 	var camera = A3(
 		_elm_community$linear_algebra$Math_Matrix4$makeLookAt,
-		A3(_elm_community$linear_algebra$Math_Vector3$vec3, eyeX, eyeY - 1000, _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm * 1.87),
-		A3(_elm_community$linear_algebra$Math_Vector3$vec3, eyeX, eyeY, 0),
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, eyeX - 1000, eyeY + 20, _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm * 1.87),
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, eyeX - 50, eyeY + 20, 0),
 		_elm_community$linear_algebra$Math_Vector3$j);
 	var glyphToEntity = F2(
 		function (index, _p2) {
@@ -28356,6 +28356,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$view = function (_p0) {
 				{
 					camera: camera,
 					index: index,
+					start: _p1.start,
 					elapsed: _p4,
 					color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
 					projection: projection,
@@ -28441,19 +28442,19 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$initial = function (option
 	};
 	var text = _elm_lang$core$Tuple$first(
 		A2(_w0rm$rendering_text_with_webgl$Font_Text$text3d, style, options.text));
-	return {elapsed: 0, text: text, fontSize: options.fontSize, width: options.width, height: options.height};
+	return {elapsed: 0, text: text, fontSize: options.fontSize, width: options.width, height: options.height, start: options.start};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Model = F5(
-	function (a, b, c, d, e) {
-		return {elapsed: a, fontSize: b, text: c, width: d, height: e};
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Options = F4(
-	function (a, b, c, d) {
-		return {text: a, fontSize: b, width: c, height: d};
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Uniforms3d = F6(
+var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Model = F6(
 	function (a, b, c, d, e, f) {
-		return {camera: a, projection: b, transform: c, color: d, elapsed: e, index: f};
+		return {elapsed: a, fontSize: b, text: c, width: d, height: e, start: f};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Options = F5(
+	function (a, b, c, d, e) {
+		return {text: a, fontSize: b, width: c, height: d, start: e};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Uniforms3d = F7(
+	function (a, b, c, d, e, f, g) {
+		return {camera: a, projection: b, transform: c, color: d, elapsed: e, index: f, start: g};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -29049,7 +29050,7 @@ var _w0rm$rendering_text_with_webgl$Formatting$bullet = function (str) {
 			}));
 };
 var _w0rm$rendering_text_with_webgl$Formatting$bullets = _w0rm$elm_slice_show$SliceShow_Content$container(
-	_elm_lang$html$Html$li(
+	_elm_lang$html$Html$ol(
 		{ctor: '[]'}));
 var _w0rm$rendering_text_with_webgl$Formatting$demo = function (url) {
 	return _w0rm$elm_slice_show$SliceShow_Content$item(
@@ -29461,7 +29462,7 @@ var _w0rm$rendering_text_with_webgl$Slides$lineBreaking = {
 		{
 			ctor: '::',
 			_0: _w0rm$rendering_text_with_webgl$Custom$typewriter(
-				{width: 1280, height: 720, fontSize: 150, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
+				{width: 1280, height: 720, fontSize: 150, start: 13, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
 			_1: {ctor: '[]'}
 		}),
 	_1: {ctor: '[]'}
@@ -29526,42 +29527,6 @@ var _w0rm$rendering_text_with_webgl$Slides$steps = function (n) {
 			_w0rm$rendering_text_with_webgl$Formatting$bullet,
 			A2(_elm_lang$core$List$take, n, _w0rm$rendering_text_with_webgl$Slides$bulletPoints)));
 };
-var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsageGames = {
-	ctor: '::',
-	_0: _w0rm$rendering_text_with_webgl$Formatting$title('MogeeFont Usage'),
-	_1: {
-		ctor: '::',
-		_0: A2(
-			_w0rm$rendering_text_with_webgl$Formatting$split,
-			{
-				ctor: '::',
-				_0: A3(
-					_w0rm$rendering_text_with_webgl$Formatting$imageLink,
-					{ctor: '_Tuple2', _0: 350, _1: 350},
-					'assets/elm-mogee.png',
-					'https://unsoundscapes.itch.io/mogee'),
-				_1: {
-					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Formatting$richtext('[elm-mogee](https://unsoundscapes.itch.io/mogee)'),
-					_1: {ctor: '[]'}
-				}
-			},
-			{
-				ctor: '::',
-				_0: A3(
-					_w0rm$rendering_text_with_webgl$Formatting$imageLink,
-					{ctor: '_Tuple2', _0: 350, _1: 350},
-					'assets/elm-cubik.png',
-					'https://unsoundscapes.itch.io/cubik'),
-				_1: {
-					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Formatting$richtext('[elm-cubik](https://unsoundscapes.itch.io/cubik)'),
-					_1: {ctor: '[]'}
-				}
-			}),
-		_1: {ctor: '[]'}
-	}
-};
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d = {
 	ctor: '::',
 	_0: A2(
@@ -29587,6 +29552,36 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
 			_1: {ctor: '[]'}
 		}),
 	_1: {ctor: '[]'}
+};
+var _w0rm$rendering_text_with_webgl$Slides$iverniFont = {
+	ctor: '::',
+	_0: _w0rm$rendering_text_with_webgl$Formatting$title('Iverni Font'),
+	_1: {
+		ctor: '::',
+		_0: _w0rm$rendering_text_with_webgl$Formatting$spacing(20),
+		_1: {
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Formatting$bullets(
+				{
+					ctor: '::',
+					_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Designed in OpenType format'),
+					_1: {
+						ctor: '::',
+						_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Converted to JSON using opentype.js'),
+						_1: {
+							ctor: '::',
+							_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Decoded into Elm'),
+							_1: {
+								ctor: '::',
+								_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Rendered with WebGL'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}
+	}
 };
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFont = {
 	ctor: '::',
@@ -29749,15 +29744,11 @@ var _w0rm$rendering_text_with_webgl$Slides$intro = {
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'font', _1: '100px/1.2 FiraSans-Light, sans-serif'},
+						_0: {ctor: '_Tuple2', _0: 'font', _1: '100px/1.2 FiraCode-Bold, monotone'},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'letter-spacing', _1: '-3px'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'margin', _1: '30px 0 150px'},
-								_1: {ctor: '[]'}
-							}
+							_0: {ctor: '_Tuple2', _0: 'margin', _1: '30px 0 150px'},
+							_1: {ctor: '[]'}
 						}
 					}),
 				_1: {ctor: '[]'}
@@ -29771,12 +29762,12 @@ var _w0rm$rendering_text_with_webgl$Slides$intro = {
 		ctor: '::',
 		_0: A2(
 			_w0rm$rendering_text_with_webgl$Formatting$position,
-			{ctor: '_Tuple2', _0: 120, _1: 445},
+			{ctor: '_Tuple2', _0: 120, _1: 500},
 			{
 				ctor: '::',
 				_0: A2(
 					_w0rm$rendering_text_with_webgl$Formatting$image,
-					{ctor: '_Tuple2', _0: 160, _1: 160},
+					{ctor: '_Tuple2', _0: 110, _1: 110},
 					'assets/mogee.png'),
 				_1: {ctor: '[]'}
 			}),
@@ -29784,7 +29775,7 @@ var _w0rm$rendering_text_with_webgl$Slides$intro = {
 			ctor: '::',
 			_0: A2(
 				_w0rm$rendering_text_with_webgl$Formatting$position,
-				{ctor: '_Tuple2', _0: 320, _1: 435},
+				{ctor: '_Tuple2', _0: 250, _1: 490},
 				{
 					ctor: '::',
 					_0: _w0rm$rendering_text_with_webgl$Formatting$richtext('Andrey Kuzmin\n\nTwitter: [@unsoundscapes](https://twitter.com/unsoundscapes)\n\nGitHub: [@w0rm](https://github.com/w0rm)'),
@@ -29794,12 +29785,16 @@ var _w0rm$rendering_text_with_webgl$Slides$intro = {
 				ctor: '::',
 				_0: A2(
 					_w0rm$rendering_text_with_webgl$Formatting$position,
-					{ctor: '_Tuple2', _0: 840, _1: 465},
+					{ctor: '_Tuple2', _0: 840, _1: 500},
 					{
 						ctor: '::',
 						_0: A2(
 							_w0rm$rendering_text_with_webgl$Formatting$image,
-							{ctor: '_Tuple2', _0: 230, _1: 145},
+							{
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Basics$round((460 / 290) * 110),
+								_1: 110
+							},
 							'assets/soundcloud.png'),
 						_1: {ctor: '[]'}
 					}),
@@ -29827,7 +29822,7 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 			ctor: '::',
 			_0: {
 				ctor: '::',
-				_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Web Design is 95% Typography'),
+				_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Web Design is 95% Typography>'),
 				_1: {ctor: '[]'}
 			},
 			_1: {
@@ -29847,120 +29842,110 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 							ctor: '::',
 							_0: {
 								ctor: '::',
-								_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$fontAsAProgram),
+								_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Nadya Kuzmina>'),
 								_1: {ctor: '[]'}
 							},
 							_1: {
 								ctor: '::',
 								_0: {
 									ctor: '::',
-									_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFont),
+									_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$fontAsAProgram),
 									_1: {ctor: '[]'}
 								},
 								_1: {
 									ctor: '::',
 									_0: {
 										ctor: '::',
-										_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage),
+										_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFont),
 										_1: {ctor: '[]'}
 									},
 									_1: {
 										ctor: '::',
 										_0: {
 											ctor: '::',
-											_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d),
+											_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage),
 											_1: {ctor: '[]'}
 										},
 										_1: {
 											ctor: '::',
 											_0: {
 												ctor: '::',
-												_0: _w0rm$rendering_text_with_webgl$Custom$outline(
-													{width: 1280, height: 720, fontSize: 220, left: 100, top: 330, text: 'Font as Data'}),
+												_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d),
 												_1: {ctor: '[]'}
 											},
 											_1: {
 												ctor: '::',
 												_0: {
 													ctor: '::',
-													_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
-														{width: 1280, height: 720, fontSize: 500}),
+													_0: _w0rm$rendering_text_with_webgl$Custom$outline(
+														{width: 1280, height: 720, fontSize: 220, left: 100, top: 330, text: 'Font as Data'}),
 													_1: {ctor: '[]'}
 												},
 												_1: {
 													ctor: '::',
 													_0: {
 														ctor: '::',
-														_0: A2(
-															_w0rm$rendering_text_with_webgl$Formatting$background,
-															'assets/letterpress.jpg',
-															{
-																ctor: '::',
-																_0: A2(
-																	_w0rm$rendering_text_with_webgl$Formatting$position,
-																	{ctor: '_Tuple2', _0: 990, _1: 600},
-																	{
-																		ctor: '::',
-																		_0: A3(
-																			_w0rm$rendering_text_with_webgl$Formatting$imageLink,
-																			{ctor: '_Tuple2', _0: 216, _1: 68},
-																			'assets/miat.png',
-																			'http://www.miat.gent.be/'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}),
+														_0: _w0rm$rendering_text_with_webgl$Formatting$padded(_w0rm$rendering_text_with_webgl$Slides$iverniFont),
 														_1: {ctor: '[]'}
 													},
 													_1: {
 														ctor: '::',
 														_0: {
 															ctor: '::',
-															_0: _w0rm$rendering_text_with_webgl$Custom$sort(
-																{width: 1280, height: 720}),
+															_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
+																{width: 1280, height: 720, fontSize: 500}),
 															_1: {ctor: '[]'}
 														},
 														_1: {
 															ctor: '::',
 															_0: {
 																ctor: '::',
-																_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																	{width: 1280, height: 720, step: 1}),
+																_0: A2(
+																	_w0rm$rendering_text_with_webgl$Formatting$background,
+																	'assets/letterpress.jpg',
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_w0rm$rendering_text_with_webgl$Formatting$position,
+																			{ctor: '_Tuple2', _0: 990, _1: 600},
+																			{
+																				ctor: '::',
+																				_0: A3(
+																					_w0rm$rendering_text_with_webgl$Formatting$imageLink,
+																					{ctor: '_Tuple2', _0: 216, _1: 68},
+																					'assets/miat.png',
+																					'http://www.miat.gent.be/'),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}),
 																_1: {ctor: '[]'}
 															},
 															_1: {
 																ctor: '::',
 																_0: {
 																	ctor: '::',
-																	_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																		{width: 1280, height: 720, step: 2}),
-																	_1: {
-																		ctor: '::',
-																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
-																		_1: {ctor: '[]'}
-																	}
+																	_0: _w0rm$rendering_text_with_webgl$Custom$sort(
+																		{width: 1280, height: 720}),
+																	_1: {ctor: '[]'}
 																},
 																_1: {
 																	ctor: '::',
 																	_0: {
 																		ctor: '::',
 																		_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																			{width: 1280, height: 720, step: 3}),
-																		_1: {
-																			ctor: '::',
-																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
-																			_1: {ctor: '[]'}
-																		}
+																			{width: 1280, height: 720, step: 1}),
+																		_1: {ctor: '[]'}
 																	},
 																	_1: {
 																		ctor: '::',
 																		_0: {
 																			ctor: '::',
 																			_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																				{width: 1280, height: 720, step: 4}),
+																				{width: 1280, height: 720, step: 2}),
 																			_1: {
 																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
+																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
 																				_1: {ctor: '[]'}
 																			}
 																		},
@@ -29969,10 +29954,10 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																			_0: {
 																				ctor: '::',
 																				_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																					{width: 1280, height: 720, step: 5}),
+																					{width: 1280, height: 720, step: 3}),
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
+																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
 																					_1: {ctor: '[]'}
 																				}
 																			},
@@ -29981,20 +29966,70 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																				_0: {
 																					ctor: '::',
 																					_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																						{width: 1280, height: 720, step: 5}),
+																						{width: 1280, height: 720, step: 4}),
 																					_1: {
 																						ctor: '::',
-																						_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
+																						_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
 																						_1: {ctor: '[]'}
 																					}
 																				},
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
+																					_0: {
+																						ctor: '::',
+																						_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
+																							{width: 1280, height: 720, step: 5}),
+																						_1: {
+																							ctor: '::',
+																							_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
+																							_1: {ctor: '[]'}
+																						}
+																					},
 																					_1: {
 																						ctor: '::',
-																						_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
-																						_1: {ctor: '[]'}
+																						_0: {
+																							ctor: '::',
+																							_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
+																								{width: 1280, height: 720, step: 5}),
+																							_1: {
+																								ctor: '::',
+																								_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
+																								_1: {ctor: '[]'}
+																							}
+																						},
+																						_1: {
+																							ctor: '::',
+																							_0: {
+																								ctor: '::',
+																								_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Smart Font Features>'),
+																								_1: {ctor: '[]'}
+																							},
+																							_1: {
+																								ctor: '::',
+																								_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
+																								_1: {
+																									ctor: '::',
+																									_0: {
+																										ctor: '::',
+																										_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Word Wrapping Algorithm>'),
+																										_1: {ctor: '[]'}
+																									},
+																									_1: {
+																										ctor: '::',
+																										_0: {
+																											ctor: '::',
+																											_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Recap>'),
+																											_1: {ctor: '[]'}
+																										},
+																										_1: {
+																											ctor: '::',
+																											_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
+																											_1: {ctor: '[]'}
+																										}
+																									}
+																								}
+																							}
+																						}
 																					}
 																				}
 																			}

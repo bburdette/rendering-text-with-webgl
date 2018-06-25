@@ -14,22 +14,22 @@ intro =
     [ Content.item
         (h1
             [ style
-                [ ( "font", "100px/1.2 FiraSans-Light, sans-serif" )
+                [ ( "font", "130px/1.2 FiraSans-Light, sans-serif" )
                 , ( "letter-spacing", "-3px" )
                 , ( "margin", "30px 0 150px" )
                 ]
             ]
             [ text "Rendering Text with WebGL" ]
         )
-    , position ( 120, 445 ) [ image ( 160, 160 ) "assets/mogee.png" ]
-    , position ( 320, 435 )
+    , position ( 120, 500 ) [ image ( 110, 110 ) "assets/mogee.png" ]
+    , position ( 250, 490 )
         [ richtext """Andrey Kuzmin
 
 Twitter: [@unsoundscapes](https://twitter.com/unsoundscapes)
 
 GitHub: [@w0rm](https://github.com/w0rm)"""
         ]
-    , position ( 840, 465 ) [ image ( 230, 145 ) "assets/soundcloud.png" ]
+    , position ( 840, 500 ) [ image ( round (460 / 290 * 110), 110 ) "assets/soundcloud.png" ]
     ]
 
 
@@ -118,6 +118,19 @@ fontSrc : String
     ]
 
 
+iverniFont : List Content
+iverniFont =
+    [ title "Iverni Font"
+    , spacing 20
+    , bullets
+        [ bullet "Designed in OpenType format"
+        , bullet "Converted to JSON using opentype.js"
+        , bullet "Decoded into Elm"
+        , bullet "Rendered with WebGL"
+        ]
+    ]
+
+
 mogeeFontUsage : List Content
 mogeeFontUsage =
     [ position ( 0, 0 )
@@ -138,19 +151,6 @@ mogeeFontUsage3d =
             , width = 1280
             , height = 720
             }
-        ]
-    ]
-
-
-mogeeFontUsageGames : List Content
-mogeeFontUsageGames =
-    [ title "MogeeFont Usage"
-    , split
-        [ imageLink ( 350, 350 ) "assets/elm-mogee.png" "https://unsoundscapes.itch.io/mogee"
-        , richtext """[elm-mogee](https://unsoundscapes.itch.io/mogee)"""
-        ]
-        [ imageLink ( 350, 350 ) "assets/elm-cubik.png" "https://unsoundscapes.itch.io/cubik"
-        , richtext """[elm-cubik](https://unsoundscapes.itch.io/cubik)"""
         ]
     ]
 
@@ -191,6 +191,7 @@ lineBreaking =
             { width = 1280
             , height = 720
             , fontSize = 150
+            , start = 13
             , text = "Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area."
             }
         ]
@@ -213,15 +214,17 @@ thankYou =
 slides : List Slide
 slides =
     [ [ padded intro ]
-    , [ shout "Web Design is 95% Typography" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
+    , [ shout "<Web Design is 95% Typography>" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
     , cssProperties
     , solvedProblem
     , [ padded exploringTheProblem ]
+    , [ shout "<Nadya Kuzmina>" ]
     , [ dark fontAsAProgram ]
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
     , [ dark mogeeFontUsage3d ]
     , [ Custom.outline { width = 1280, height = 720, fontSize = 220, left = 100, top = 330, text = "Font as Data" } ]
+    , [ padded iverniFont ]
     , [ Custom.metrics { width = 1280, height = 720, fontSize = 500 } ]
     , [ background "assets/letterpress.jpg"
             [ position ( 990, 600 )
@@ -238,7 +241,10 @@ slides =
     , [ Custom.outlines { width = 1280, height = 720, step = 4 }, steps 3 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 4 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 5 ]
+    , [ shout "<Smart Font Features>" ]
     , lineBreaking
+    , [ shout "<Word Wrapping Algorithm>" ]
+    , [ shout "<Recap>" ]
     , thankYou
     ]
         -- make 16:9 slides
