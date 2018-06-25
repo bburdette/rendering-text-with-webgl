@@ -1,4 +1,4 @@
-module Custom.Zoom exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Zoom exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
 import Dict
@@ -25,7 +25,15 @@ type alias Model =
     }
 
 
-initial : { text : String, fontSize : Float, width : Float, height : Float } -> Model
+type alias Options =
+    { text : String
+    , fontSize : Float
+    , width : Float
+    , height : Float
+    }
+
+
+initial : Options -> Model
 initial options =
     { elapsed = 0
     , text = Tuple.first (Text.text2d (style options.fontSize) options.text)

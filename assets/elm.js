@@ -23212,6 +23212,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Metrics$Model = F4(
 	function (a, b, c, d) {
 		return {glyph: a, fontSize: b, width: c, height: d};
 	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$Options = F3(
+	function (a, b, c) {
+		return {fontSize: a, width: b, height: c};
+	});
 var _w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress = function (a) {
 	return {ctor: 'KeyPress', _0: a};
 };
@@ -25829,6 +25833,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$Model = F5(
 	function (a, b, c, d, e) {
 		return {elapsed: a, glyph: b, step: c, width: d, height: e};
 	});
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$Options = F3(
+	function (a, b, c) {
+		return {step: a, width: b, height: c};
+	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$KeyPress = function (a) {
 	return {ctor: 'KeyPress', _0: a};
 };
@@ -25926,7 +25934,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$view = function (_p0) {
 							projection: A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0, _p5, 0 - _p4, 0),
 							pixelSize: _p1.pixelSize,
 							texture: _p3,
-							color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
+							color: _p1.color,
 							textureSize: A2(
 								_elm_community$linear_algebra$Math_Vector2$vec2,
 								_elm_lang$core$Basics$toFloat(
@@ -25943,9 +25951,13 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$view = function (_p0) {
 			}
 		}());
 };
-var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {elapsed: a, pixelSize: b, maybeTexture: c, mesh: d, width: e, height: f};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {elapsed: a, pixelSize: b, color: c, maybeTexture: d, mesh: e, width: f, height: g};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Options = F5(
+	function (a, b, c, d, e) {
+		return {text: a, pixelSize: b, color: c, width: d, height: e};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex = F2(
 	function (a, b) {
@@ -26011,7 +26023,8 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$initial = function (options
 			A2(_kuzminadya$mogeefont$MogeeFont$text, _w0rm$rendering_text_with_webgl$Custom_Pixelfont$addLetter, options.text)),
 		maybeTexture: _elm_lang$core$Maybe$Nothing,
 		width: options.width,
-		height: options.height
+		height: options.height,
+		color: options.color
 	};
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Uniform = F5(
@@ -26053,6 +26066,874 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Animate = function (a) {
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$subscriptions = function (_p16) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Animate);
+};
+
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$crispyEdges = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'image-rendering', _1: 'optimizeSpeed'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'image-rendering', _1: '-moz-crisp-edges'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'image-rendering', _1: '-webkit-optimize-contrast'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'image-rendering', _1: 'crisp-edges'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'image-rendering', _1: 'pixelated'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: '-ms-interpolation-mode', _1: 'nearest-neighbor'},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$loadTexture = function (msg) {
+	return A2(
+		_elm_lang$core$Task$attempt,
+		msg,
+		A2(
+			_elm_community$webgl$WebGL_Texture$loadWith,
+			_elm_lang$core$Native_Utils.update(
+				_elm_community$webgl$WebGL_Texture$defaultOptions,
+				{magnify: _elm_community$webgl$WebGL_Texture$nearest, minify: _elm_community$webgl$WebGL_Texture$nearest, flipY: false}),
+			_kuzminadya$mogeefont$MogeeFont$fontSrc));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$label = F2(
+	function (_p0, str) {
+		var _p1 = _p0;
+		var _p2 = _p1._0;
+		return A2(
+			_elm_lang$svg$Svg$text_,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(_p2)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$y(
+						_elm_lang$core$Basics$toString(_p1._1)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$fill('white'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (text) {
+					return A2(
+						_elm_lang$svg$Svg$tspan,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$dy('1.3em'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x(
+									_elm_lang$core$Basics$toString(_p2)),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg$text(text),
+							_1: {ctor: '[]'}
+						});
+				},
+				str));
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$texturedFragmentShader = {'src': '\n        precision mediump float;\n        uniform sampler2D texture;\n        uniform vec3 color;\n        uniform vec2 textureSize;\n        varying vec2 texturePos;\n        varying vec2 pixelPos;\n        void main () {\n            vec4 textureColor = texture2D(texture, texturePos / textureSize);\n            gl_FragColor = vec4(color, 1.0);\n\n            // Don\'t draw grid gaps:\n            float gapSize = 0.07;\n            float xDist = pixelPos.x - float(int(pixelPos.x));\n            float yDist = pixelPos.y - float(int(pixelPos.y));\n            if (abs(xDist) < gapSize || abs(yDist) < gapSize ) discard;\n\n            // Don\'t draw transparent pixels:\n            if (dot(textureColor, textureColor) == 4.0) discard;\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$texturedVertexShader = {'src': '\n        precision mediump float;\n        attribute vec2 position;\n        attribute vec2 texPosition;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        uniform int pixelSize;\n        varying vec2 texturePos;\n        varying vec2 pixelPos;\n        void main () {\n            gl_Position = projection * transform * vec4(position * float(pixelSize), 0.0, 1.0);\n            texturePos = texPosition;\n            pixelPos = position;\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderGlyph = F4(
+	function (offsetX, offsetY, texture, _p3) {
+		var _p4 = _p3;
+		var _p6 = _p4.width;
+		var _p5 = _p4.height;
+		return A2(
+			_elm_community$webgl$WebGL$toHtml,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$width(
+					_elm_lang$core$Basics$round(_p6)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$height(
+						_elm_lang$core$Basics$round(_p5)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$crispyEdges),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A4(
+					_elm_community$webgl$WebGL$entity,
+					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$texturedVertexShader,
+					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$texturedFragmentShader,
+					_p4.mesh,
+					{
+						projection: A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0, _p6, 0 - _p5, 0),
+						transform: A3(_elm_community$linear_algebra$Math_Matrix4$makeTranslate3, offsetX, offsetY, 0),
+						pixelSize: _p4.pixelSize,
+						texture: texture,
+						color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
+						textureSize: A2(
+							_elm_community$linear_algebra$Math_Vector2$vec2,
+							_elm_lang$core$Basics$toFloat(
+								_elm_lang$core$Tuple$first(
+									_elm_community$webgl$WebGL_Texture$size(texture))),
+							_elm_lang$core$Basics$toFloat(
+								_elm_lang$core$Tuple$second(
+									_elm_community$webgl$WebGL_Texture$size(texture))))
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderFront = F4(
+	function (offsetX, offsetY, textureSize, _p7) {
+		var _p8 = _p7;
+		var _p14 = _p8.width;
+		var _p13 = _p8.pixelSize;
+		var _p12 = _p8.height;
+		var textureK = 3;
+		var _p9 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Tuple$first(textureSize)) * textureK,
+			_1: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Tuple$second(textureSize)) * textureK
+		};
+		var textureWidth = _p9._0;
+		var textureHeight = _p9._1;
+		var _p10 = {ctor: '_Tuple2', _0: ((_p14 * 3) / 4) - (textureWidth / 2), _1: (_p12 / 2) - (textureHeight / 2)};
+		var textureLeft = _p10._0;
+		var textureTop = _p10._1;
+		var data = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{textureX: 0, textureY: 0, width: 0, height: 0, x: 0, y: 0},
+			_elm_lang$core$List$head(
+				A2(
+					_kuzminadya$mogeefont$MogeeFont$text,
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						}),
+					_elm_lang$core$String$fromChar(_p8.glyph))));
+		var _p11 = {
+			ctor: '_Tuple2',
+			_0: (data.width * _elm_lang$core$Basics$toFloat(_p13)) + 5,
+			_1: (data.height * _elm_lang$core$Basics$toFloat(_p13)) + 5
+		};
+		var glyphWidth = _p11._0;
+		var glyphHeight = _p11._1;
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'left', _1: '0'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'top', _1: '0'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$width(
+						_elm_lang$core$Basics$toString(_p14)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$height(
+							_elm_lang$core$Basics$toString(_p12)),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$rect,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$width(
+							_elm_lang$core$Basics$toString(glyphWidth)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$height(
+								_elm_lang$core$Basics$toString(glyphHeight)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x(
+									_elm_lang$core$Basics$toString(offsetX)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y(
+										_elm_lang$core$Basics$toString(0 - offsetY)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$line,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x1(
+								_elm_lang$core$Basics$toString(offsetX)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y1(
+									_elm_lang$core$Basics$toString(0 - offsetY)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x2(
+										_elm_lang$core$Basics$toString(offsetX + glyphWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y2(
+											_elm_lang$core$Basics$toString((0 - offsetY) + glyphHeight)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$line,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x1(
+									_elm_lang$core$Basics$toString(offsetX + glyphWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y1(
+										_elm_lang$core$Basics$toString(0 - offsetY)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x2(
+											_elm_lang$core$Basics$toString(((data.textureX + data.width) * textureK) + textureLeft)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y2(
+												_elm_lang$core$Basics$toString((data.textureY * textureK) + textureTop)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$line,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x1(
+										_elm_lang$core$Basics$toString(offsetX + glyphWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y1(
+											_elm_lang$core$Basics$toString((0 - offsetY) + glyphHeight)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$x2(
+												_elm_lang$core$Basics$toString(((data.textureX + data.width) * textureK) + textureLeft)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$y2(
+													_elm_lang$core$Basics$toString(((data.textureY + data.height) * textureK) + textureTop)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$rect,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$width(
+											_elm_lang$core$Basics$toString(data.width * textureK)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$height(
+												_elm_lang$core$Basics$toString(data.height * textureK)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$x(
+													_elm_lang$core$Basics$toString((data.textureX * textureK) + textureLeft)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$y(
+														_elm_lang$core$Basics$toString((data.textureY * textureK) + textureTop)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$label,
+										{ctor: '_Tuple2', _0: offsetX - 300, _1: 0 - offsetY},
+										{
+											ctor: '::',
+											_0: 'letter',
+											_1: {
+												ctor: '::',
+												_0: ' { x = x',
+												_1: {
+													ctor: '::',
+													_0: ' , y = y',
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$core$Basics_ops['++'],
+															' , textureX = ',
+															_elm_lang$core$Basics$toString(data.textureX)),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$core$Basics_ops['++'],
+																' , textureY = ',
+																_elm_lang$core$Basics$toString(data.textureY)),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	' , width = ',
+																	_elm_lang$core$Basics$toString(data.width)),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		' , height = ',
+																		_elm_lang$core$Basics$toString(data.height)),
+																	_1: {
+																		ctor: '::',
+																		_0: ' }',
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderBack = F4(
+	function (offsetX, offsetY, textureSize, _p15) {
+		var _p16 = _p15;
+		var _p22 = _p16.width;
+		var _p21 = _p16.pixelSize;
+		var _p20 = _p16.height;
+		var textureK = 3;
+		var _p17 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Tuple$first(textureSize)) * textureK,
+			_1: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Tuple$second(textureSize)) * textureK
+		};
+		var textureWidth = _p17._0;
+		var textureHeight = _p17._1;
+		var _p18 = {ctor: '_Tuple2', _0: ((_p22 * 3) / 4) - (textureWidth / 2), _1: (_p20 / 2) - (textureHeight / 2)};
+		var textureLeft = _p18._0;
+		var textureTop = _p18._1;
+		var data = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{textureX: 0, textureY: 0, width: 0, height: 0, x: 0, y: 0},
+			_elm_lang$core$List$head(
+				A2(
+					_kuzminadya$mogeefont$MogeeFont$text,
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						}),
+					_elm_lang$core$String$fromChar(_p16.glyph))));
+		var _p19 = {
+			ctor: '_Tuple2',
+			_0: (data.width * _elm_lang$core$Basics$toFloat(_p21)) + 5,
+			_1: (data.height * _elm_lang$core$Basics$toFloat(_p21)) + 5
+		};
+		var glyphWidth = _p19._0;
+		var glyphHeight = _p19._1;
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'left', _1: '0'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'top', _1: '0'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$width(
+						_elm_lang$core$Basics$toString(_p22)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$height(
+							_elm_lang$core$Basics$toString(_p20)),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$image,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$crispyEdges),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$xlinkHref(_kuzminadya$mogeefont$MogeeFont$fontSrc),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(textureWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(textureHeight)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x(
+											_elm_lang$core$Basics$toString(textureLeft)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y(
+												_elm_lang$core$Basics$toString(textureTop)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$circle,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$r('5'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('red'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$cx(
+										_elm_lang$core$Basics$toString(offsetX)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$cy(
+											_elm_lang$core$Basics$toString(0 - offsetY)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$line,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x1(
+									_elm_lang$core$Basics$toString(offsetX)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y1(
+										_elm_lang$core$Basics$toString(0 - offsetY)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x2(
+											_elm_lang$core$Basics$toString((data.textureX * textureK) + textureLeft)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y2(
+												_elm_lang$core$Basics$toString((data.textureY * textureK) + textureTop)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$line,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x1(
+										_elm_lang$core$Basics$toString(offsetX)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y1(
+											_elm_lang$core$Basics$toString((0 - offsetY) + glyphHeight)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$x2(
+												_elm_lang$core$Basics$toString((data.textureX * textureK) + textureLeft)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$y2(
+													_elm_lang$core$Basics$toString(((data.textureY + data.height) * textureK) + textureTop)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$view = function (model) {
+	var _p23 = {
+		ctor: '_Tuple2',
+		_0: model.width / 3,
+		_1: (0 - (model.height - (_elm_lang$core$Basics$toFloat(model.pixelSize) * 11))) / 2
+	};
+	var offsetX = _p23._0;
+	var offsetY = _p23._1;
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		function () {
+			var _p24 = model.maybeTexture;
+			if (_p24.ctor === 'Just') {
+				var _p25 = _p24._0;
+				return {
+					ctor: '::',
+					_0: A4(
+						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderBack,
+						offsetX,
+						offsetY,
+						_elm_community$webgl$WebGL_Texture$size(_p25),
+						model),
+					_1: {
+						ctor: '::',
+						_0: A4(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderGlyph, offsetX, offsetY, _p25, model),
+						_1: {
+							ctor: '::',
+							_0: A4(
+								_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderFront,
+								offsetX,
+								offsetY,
+								_elm_community$webgl$WebGL_Texture$size(_p25),
+								model),
+							_1: {ctor: '[]'}
+						}
+					}
+				};
+			} else {
+				return {ctor: '[]'};
+			}
+		}());
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {elapsed: a, pixelSize: b, maybeTexture: c, glyph: d, mesh: e, width: f, height: g};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Options = F3(
+	function (a, b, c) {
+		return {pixelSize: a, width: b, height: c};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex = F2(
+	function (a, b) {
+		return {position: a, texPosition: b};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$addLetter = function (_p26) {
+	var _p27 = _p26;
+	var _p33 = _p27.width;
+	var _p32 = _p27.textureY;
+	var _p31 = _p27.textureX;
+	var _p30 = _p27.height;
+	var _p28 = {ctor: '_Tuple2', _0: 0, _1: 0};
+	var x = _p28._0;
+	var y = _p28._1;
+	return function (_p29) {
+		return A2(
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			{
+				ctor: '_Tuple3',
+				_0: A2(
+					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, 0 - y),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32)),
+				_1: A2(
+					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, (0 - y) - _p30),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32 + _p30)),
+				_2: A2(
+					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, (0 - y) - _p30),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32 + _p30))
+			},
+			A2(
+				F2(
+					function (x, y) {
+						return {ctor: '::', _0: x, _1: y};
+					}),
+				{
+					ctor: '_Tuple3',
+					_0: A2(
+						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, 0 - y),
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32)),
+					_1: A2(
+						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, (0 - y) - _p30),
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32 + _p30)),
+					_2: A2(
+						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, 0 - y),
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32))
+				},
+				_p29));
+	};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$initial = function (options) {
+	return {
+		elapsed: 0,
+		pixelSize: options.pixelSize,
+		glyph: _elm_lang$core$Native_Utils.chr('A'),
+		mesh: _elm_community$webgl$WebGL$triangles(
+			A2(
+				_kuzminadya$mogeefont$MogeeFont$text,
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$addLetter,
+				_elm_lang$core$String$fromChar(
+					_elm_lang$core$Native_Utils.chr('A')))),
+		maybeTexture: _elm_lang$core$Maybe$Nothing,
+		width: options.width,
+		height: options.height
+	};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Uniform = F6(
+	function (a, b, c, d, e, f) {
+		return {projection: a, color: b, pixelSize: c, texture: d, textureSize: e, transform: f};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Varying = F2(
+	function (a, b) {
+		return {texturePos: a, pixelPos: b};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$KeyPress = function (a) {
+	return {ctor: 'KeyPress', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$LoadTexture = function (a) {
+	return {ctor: 'LoadTexture', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update = F2(
+	function (action, model) {
+		var _p34 = action;
+		switch (_p34.ctor) {
+			case 'Animate':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{elapsed: model.elapsed + _p34._0}),
+					_1: _elm_lang$core$Native_Utils.eq(model.elapsed, 0) ? _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$loadTexture(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$LoadTexture) : _elm_lang$core$Platform_Cmd$none
+				};
+			case 'KeyPress':
+				var _p35 = _p34._0;
+				var mesh = _elm_community$webgl$WebGL$triangles(
+					A2(
+						_kuzminadya$mogeefont$MogeeFont$text,
+						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$addLetter,
+						_elm_lang$core$String$fromChar(
+							_elm_lang$core$Char$fromCode(_p35))));
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							glyph: _elm_lang$core$Char$fromCode(_p35),
+							mesh: mesh
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							maybeTexture: _elm_lang$core$Result$toMaybe(_p34._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Animate = function (a) {
+	return {ctor: 'Animate', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions = function (_p36) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Animate),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$KeyPress),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 
 var _w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal = F3(
@@ -26532,17 +27413,21 @@ var _w0rm$rendering_text_with_webgl$Custom_Sort$update = F2(
 			};
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Custom_Sort$initial = function (size) {
+var _w0rm$rendering_text_with_webgl$Custom_Sort$initial = function (options) {
 	var _p7 = _w0rm$rendering_text_with_webgl$Custom_Sort$getGlyphAndMesh(
 		_elm_lang$core$Char$toCode(
 			_elm_lang$core$Native_Utils.chr('H')));
 	var glyph = _p7._0;
 	var mesh = _p7._1;
-	return {elapsed: 0, glyph: glyph, mesh: mesh, width: size.width, height: size.height};
+	return {elapsed: 0, glyph: glyph, mesh: mesh, width: options.width, height: options.height};
 };
 var _w0rm$rendering_text_with_webgl$Custom_Sort$Model = F5(
 	function (a, b, c, d, e) {
 		return {elapsed: a, glyph: b, mesh: c, width: d, height: e};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Sort$Options = F2(
+	function (a, b) {
+		return {width: a, height: b};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Sort$Uniforms3d = F4(
 	function (a, b, c, d) {
@@ -27049,6 +27934,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Model = F5(
 	function (a, b, c, d, e) {
 		return {elapsed: a, fontSize: b, text: c, width: d, height: e};
 	});
+var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Options = F4(
+	function (a, b, c, d) {
+		return {text: a, fontSize: b, width: c, height: d};
+	});
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$Uniforms3d = F6(
 	function (a, b, c, d, e, f) {
 		return {camera: a, projection: b, transform: c, color: d, elapsed: e, index: f};
@@ -27184,6 +28073,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$Model = F4(
 	function (a, b, c, d) {
 		return {elapsed: a, text: b, width: c, height: d};
 	});
+var _w0rm$rendering_text_with_webgl$Custom_Zoom$Options = F4(
+	function (a, b, c, d) {
+		return {text: a, fontSize: b, width: c, height: d};
+	});
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$Uniforms2d = F4(
 	function (a, b, c, d) {
 		return {projection: a, transform: b, color: c, center: d};
@@ -27195,6 +28088,14 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$subscriptions = function (_p7) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Zoom$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Custom$PixelglyphModel = function (a) {
+	return {ctor: 'PixelglyphModel', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom$pixelglyph = function (options) {
+	return _w0rm$elm_slice_show$SliceShow_Content$custom(
+		_w0rm$rendering_text_with_webgl$Custom$PixelglyphModel(
+			_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$initial(options)));
+};
 var _w0rm$rendering_text_with_webgl$Custom$OutlinesModel = function (a) {
 	return {ctor: 'OutlinesModel', _0: a};
 };
@@ -27238,10 +28139,13 @@ var _w0rm$rendering_text_with_webgl$Custom$zoom = function (options) {
 var _w0rm$rendering_text_with_webgl$Custom$SortModel = function (a) {
 	return {ctor: 'SortModel', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Custom$sort = function (size) {
+var _w0rm$rendering_text_with_webgl$Custom$sort = function (options) {
 	return _w0rm$elm_slice_show$SliceShow_Content$custom(
 		_w0rm$rendering_text_with_webgl$Custom$SortModel(
-			_w0rm$rendering_text_with_webgl$Custom_Sort$initial(size)));
+			_w0rm$rendering_text_with_webgl$Custom_Sort$initial(options)));
+};
+var _w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg = function (a) {
+	return {ctor: 'PixelglyphMsg', _0: a};
 };
 var _w0rm$rendering_text_with_webgl$Custom$OutlinesMsg = function (a) {
 	return {ctor: 'OutlinesMsg', _0: a};
@@ -27289,17 +28193,22 @@ var _w0rm$rendering_text_with_webgl$Custom$subscriptions = function (model) {
 				_elm_lang$core$Platform_Sub$map,
 				_w0rm$rendering_text_with_webgl$Custom$MetricsMsg,
 				_w0rm$rendering_text_with_webgl$Custom_Metrics$subscriptions(_p0._0));
-		default:
+		case 'OutlinesModel':
 			return A2(
 				_elm_lang$core$Platform_Sub$map,
 				_w0rm$rendering_text_with_webgl$Custom$OutlinesMsg,
 				_w0rm$rendering_text_with_webgl$Custom_Outlines$subscriptions(_p0._0));
+		default:
+			return A2(
+				_elm_lang$core$Platform_Sub$map,
+				_w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg,
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions(_p0._0));
 	}
 };
 var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 	function (action, model) {
 		var _p1 = {ctor: '_Tuple2', _0: action, _1: model};
-		_v1_6:
+		_v1_7:
 		do {
 			if (_p1.ctor === '_Tuple2') {
 				switch (_p1._0.ctor) {
@@ -27314,7 +28223,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$SortMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
 						}
 					case 'ZoomMsg':
 						if (_p1._1.ctor === 'ZoomModel') {
@@ -27327,7 +28236,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$ZoomMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
 						}
 					case 'TypewriterMsg':
 						if (_p1._1.ctor === 'TypewriterModel') {
@@ -27340,7 +28249,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$TypewriterMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
 						}
 					case 'PixelfontMsg':
 						if (_p1._1.ctor === 'PixelfontModel') {
@@ -27353,7 +28262,7 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$PixelfontMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
 						}
 					case 'MetricsMsg':
 						if (_p1._1.ctor === 'MetricsModel') {
@@ -27366,9 +28275,9 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$MetricsMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
 						}
-					default:
+					case 'OutlinesMsg':
 						if (_p1._1.ctor === 'OutlinesModel') {
 							var _p7 = A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$update, _p1._0._0, _p1._1._0);
 							var newModel = _p7._0;
@@ -27379,48 +28288,66 @@ var _w0rm$rendering_text_with_webgl$Custom$update = F2(
 								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$OutlinesMsg, newCmd)
 							};
 						} else {
-							break _v1_6;
+							break _v1_7;
+						}
+					default:
+						if (_p1._1.ctor === 'PixelglyphModel') {
+							var _p8 = A2(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update, _p1._0._0, _p1._1._0);
+							var newModel = _p8._0;
+							var newCmd = _p8._1;
+							return {
+								ctor: '_Tuple2',
+								_0: _w0rm$rendering_text_with_webgl$Custom$PixelglyphModel(newModel),
+								_1: A2(_elm_lang$core$Platform_Cmd$map, _w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg, newCmd)
+							};
+						} else {
+							break _v1_7;
 						}
 				}
 			} else {
-				break _v1_6;
+				break _v1_7;
 			}
 		} while(false);
 		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _w0rm$rendering_text_with_webgl$Custom$view = function (model) {
-	var _p8 = model;
-	switch (_p8.ctor) {
+	var _p9 = model;
+	switch (_p9.ctor) {
 		case 'SortModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$SortMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Sort$view(_p8._0));
+				_w0rm$rendering_text_with_webgl$Custom_Sort$view(_p9._0));
 		case 'ZoomModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$ZoomMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Zoom$view(_p8._0));
+				_w0rm$rendering_text_with_webgl$Custom_Zoom$view(_p9._0));
 		case 'TypewriterModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$TypewriterMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Typewriter$view(_p8._0));
+				_w0rm$rendering_text_with_webgl$Custom_Typewriter$view(_p9._0));
 		case 'PixelfontModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$PixelfontMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$view(_p8._0));
+				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$view(_p9._0));
 		case 'MetricsModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$MetricsMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Metrics$view(_p8._0));
-		default:
+				_w0rm$rendering_text_with_webgl$Custom_Metrics$view(_p9._0));
+		case 'OutlinesModel':
 			return A2(
 				_elm_lang$html$Html$map,
 				_w0rm$rendering_text_with_webgl$Custom$OutlinesMsg,
-				_w0rm$rendering_text_with_webgl$Custom_Outlines$view(_p8._0));
+				_w0rm$rendering_text_with_webgl$Custom_Outlines$view(_p9._0));
+		default:
+			return A2(
+				_elm_lang$html$Html$map,
+				_w0rm$rendering_text_with_webgl$Custom$PixelglyphMsg,
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$view(_p9._0));
 	}
 };
 
@@ -27863,6 +28790,34 @@ var _w0rm$rendering_text_with_webgl$Formatting$background = function (url) {
 				_1: {ctor: '[]'}
 			}));
 };
+var _w0rm$rendering_text_with_webgl$Formatting$dark = _w0rm$elm_slice_show$SliceShow_Content$container(
+	_elm_lang$html$Html$div(
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'box-sizing', _1: 'border-box'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'background', _1: 'rgb(22,17,22)'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'padding', _1: _w0rm$rendering_text_with_webgl$Formatting$slidePadding},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}));
 var _w0rm$rendering_text_with_webgl$Formatting$shout = function (str) {
 	return _w0rm$elm_slice_show$SliceShow_Content$item(
 		A2(
@@ -28020,9 +28975,9 @@ var _w0rm$rendering_text_with_webgl$Slides$steps = function (n) {
 			_w0rm$rendering_text_with_webgl$Formatting$bullet,
 			A2(_elm_lang$core$List$take, n, _w0rm$rendering_text_with_webgl$Slides$bulletPoints)));
 };
-var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
+var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsageGames = {
 	ctor: '::',
-	_0: _w0rm$rendering_text_with_webgl$Formatting$title('MogeeFont'),
+	_0: _w0rm$rendering_text_with_webgl$Formatting$title('MogeeFont Usage'),
 	_1: {
 		ctor: '::',
 		_0: A2(
@@ -28056,31 +29011,47 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
 		_1: {ctor: '[]'}
 	}
 };
+var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
+	ctor: '::',
+	_0: A2(
+		_w0rm$rendering_text_with_webgl$Formatting$position,
+		{ctor: '_Tuple2', _0: 0, _1: 0},
+		{
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Custom$pixelglyph(
+				{pixelSize: 52, width: 1280, height: 720}),
+			_1: {ctor: '[]'}
+		}),
+	_1: {ctor: '[]'}
+};
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFont = {
 	ctor: '::',
 	_0: _w0rm$rendering_text_with_webgl$Formatting$title('MogeeFont'),
 	_1: {
 		ctor: '::',
-		_0: A2(
-			_w0rm$rendering_text_with_webgl$Formatting$scale,
-			1.5,
-			{
-				ctor: '::',
-				_0: A2(_w0rm$rendering_text_with_webgl$Formatting$code, 'elm', 'text :\n  (Letter -> List a -> List a)\n  -> String\n  -> List a\n\n-- Base64 data: URI\nfontSrc : String\n'),
-				_1: {ctor: '[]'}
-			}),
+		_0: _w0rm$rendering_text_with_webgl$Formatting$spacing(20),
 		_1: {
 			ctor: '::',
-			_0: A2(
-				_w0rm$rendering_text_with_webgl$Formatting$position,
-				{ctor: '_Tuple2', _0: 900, _1: 200},
-				{
-					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Custom$pixelfont(
-						{text: 'ABCDEFGHIJ\nKLMNOPQRS\nTUVWXYZ\nabcdefghijk\nlmnopqrst\nuvwxyz', pixelSize: 6, width: 300, height: 400}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
+			_0: A2(_w0rm$rendering_text_with_webgl$Formatting$code, 'elm', '-- Prints the text\ntext :\n  (Letter -> List a -> List a) -- print a glyph\n  -> String                    -- text to print\n  -> List a                    -- printed result\n\n\n-- Base64 data: URI\nfontSrc : String\n'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_w0rm$rendering_text_with_webgl$Formatting$position,
+					{ctor: '_Tuple2', _0: 920, _1: 20},
+					{
+						ctor: '::',
+						_0: _w0rm$rendering_text_with_webgl$Custom$pixelfont(
+							{
+								text: 'ABCDEFGH\nIJKLMNOP\nQRSTUVW\nXYZabcde\nfghijklmnop\nqrstuvwxy\nz0123456',
+								pixelSize: 9,
+								color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.7, 0.7, 0.7),
+								width: 350,
+								height: 700
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		}
 	}
 };
@@ -28092,7 +29063,13 @@ var _w0rm$rendering_text_with_webgl$Slides$fontAsAProgram = {
 		{
 			ctor: '::',
 			_0: _w0rm$rendering_text_with_webgl$Custom$pixelfont(
-				{text: 'Font as\na Program', pixelSize: 25, width: 1180, height: 640}),
+				{
+					text: 'Font as\na Program',
+					color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
+					pixelSize: 25,
+					width: 1180,
+					height: 640
+				}),
 			_1: {ctor: '[]'}
 		}),
 	_1: {ctor: '[]'}
@@ -28309,69 +29286,70 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 								ctor: '::',
 								_0: {
 									ctor: '::',
-									_0: _w0rm$rendering_text_with_webgl$Formatting$padded(_w0rm$rendering_text_with_webgl$Slides$mogeeFont),
+									_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFont),
 									_1: {ctor: '[]'}
 								},
 								_1: {
 									ctor: '::',
 									_0: {
 										ctor: '::',
-										_0: _w0rm$rendering_text_with_webgl$Formatting$shout('MogeeFont usage slide'),
+										_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage),
 										_1: {ctor: '[]'}
 									},
 									_1: {
 										ctor: '::',
 										_0: {
 											ctor: '::',
-											_0: _w0rm$rendering_text_with_webgl$Formatting$padded(_w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage),
+											_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Font as data'),
 											_1: {ctor: '[]'}
 										},
 										_1: {
 											ctor: '::',
 											_0: {
 												ctor: '::',
-												_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Font as data'),
+												_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
+													{width: 1280, height: 720, fontSize: 500}),
 												_1: {ctor: '[]'}
 											},
 											_1: {
 												ctor: '::',
 												_0: {
 													ctor: '::',
-													_0: _w0rm$rendering_text_with_webgl$Custom$metrics(
-														{width: 1280, height: 720, fontSize: 500}),
+													_0: A2(
+														_w0rm$rendering_text_with_webgl$Formatting$background,
+														'assets/letterpress.jpg',
+														{
+															ctor: '::',
+															_0: A2(
+																_w0rm$rendering_text_with_webgl$Formatting$position,
+																{ctor: '_Tuple2', _0: 990, _1: 600},
+																{
+																	ctor: '::',
+																	_0: A3(
+																		_w0rm$rendering_text_with_webgl$Formatting$imageLink,
+																		{ctor: '_Tuple2', _0: 216, _1: 68},
+																		'assets/miat.png',
+																		'http://www.miat.gent.be/'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}),
 													_1: {ctor: '[]'}
 												},
 												_1: {
 													ctor: '::',
 													_0: {
 														ctor: '::',
-														_0: A2(
-															_w0rm$rendering_text_with_webgl$Formatting$background,
-															'assets/letterpress.jpg',
-															{
-																ctor: '::',
-																_0: A2(
-																	_w0rm$rendering_text_with_webgl$Formatting$position,
-																	{ctor: '_Tuple2', _0: 990, _1: 600},
-																	{
-																		ctor: '::',
-																		_0: A3(
-																			_w0rm$rendering_text_with_webgl$Formatting$imageLink,
-																			{ctor: '_Tuple2', _0: 216, _1: 68},
-																			'assets/miat.png',
-																			'http://www.miat.gent.be/'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}),
+														_0: _w0rm$rendering_text_with_webgl$Custom$sort(
+															{width: 1280, height: 720}),
 														_1: {ctor: '[]'}
 													},
 													_1: {
 														ctor: '::',
 														_0: {
 															ctor: '::',
-															_0: _w0rm$rendering_text_with_webgl$Custom$sort(
-																{width: 1280, height: 720}),
+															_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
+																{width: 1280, height: 720, step: 1}),
 															_1: {ctor: '[]'}
 														},
 														_1: {
@@ -28379,18 +29357,22 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 															_0: {
 																ctor: '::',
 																_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																	{width: 1280, height: 720, step: 1}),
-																_1: {ctor: '[]'}
+																	{width: 1280, height: 720, step: 2}),
+																_1: {
+																	ctor: '::',
+																	_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
+																	_1: {ctor: '[]'}
+																}
 															},
 															_1: {
 																ctor: '::',
 																_0: {
 																	ctor: '::',
 																	_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																		{width: 1280, height: 720, step: 2}),
+																		{width: 1280, height: 720, step: 3}),
 																	_1: {
 																		ctor: '::',
-																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
+																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
 																		_1: {ctor: '[]'}
 																	}
 																},
@@ -28399,10 +29381,10 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																	_0: {
 																		ctor: '::',
 																		_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																			{width: 1280, height: 720, step: 3}),
+																			{width: 1280, height: 720, step: 4}),
 																		_1: {
 																			ctor: '::',
-																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
+																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
 																			_1: {ctor: '[]'}
 																		}
 																	},
@@ -28411,10 +29393,10 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																		_0: {
 																			ctor: '::',
 																			_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																				{width: 1280, height: 720, step: 4}),
+																				{width: 1280, height: 720, step: 5}),
 																			_1: {
 																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
+																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
 																				_1: {ctor: '[]'}
 																			}
 																		},
@@ -28426,30 +29408,17 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																					{width: 1280, height: 720, step: 5}),
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
+																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
 																					_1: {ctor: '[]'}
 																				}
 																			},
 																			_1: {
 																				ctor: '::',
-																				_0: {
-																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																						{width: 1280, height: 720, step: 5}),
-																					_1: {
-																						ctor: '::',
-																						_0: _w0rm$rendering_text_with_webgl$Slides$steps(5),
-																						_1: {ctor: '[]'}
-																					}
-																				},
+																				_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
 																				_1: {
 																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$lineBreaking,
-																					_1: {
-																						ctor: '::',
-																						_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
-																						_1: {ctor: '[]'}
-																					}
+																					_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
+																					_1: {ctor: '[]'}
 																				}
 																			}
 																		}

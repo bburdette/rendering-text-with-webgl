@@ -17,7 +17,7 @@ for (let i = 0; i < font.glyphs.length; i++) {
   });
 }
 
-const kerningPairs = Array.prototype.concat.apply(
+const kerningTables = Array.prototype.concat.apply(
   [],
   font.position
     .getKerningTables()
@@ -33,7 +33,7 @@ const fontData = JSON.stringify({
   capHeight: font.tables.os2.sCapHeight,
   unitsPerEm: font.unitsPerEm,
   ligatures: font.substitution.getLigatures('liga'),
-  kerning: kerningPairs
+  kerning: kerningTables
 });
 
 const result =

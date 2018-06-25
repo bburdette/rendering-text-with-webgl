@@ -1,4 +1,4 @@
-module Custom.Metrics exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Metrics exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import Char
 import Font.Font as Font
@@ -23,7 +23,11 @@ type alias Model =
     }
 
 
-initial : { fontSize : Float, width : Float, height : Float } -> Model
+type alias Options =
+    { fontSize : Float, width : Float, height : Float }
+
+
+initial : Options -> Model
 initial options =
     let
         glyph =

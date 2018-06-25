@@ -1,4 +1,4 @@
-module Custom.Typewriter exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Typewriter exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
 import Dict
@@ -26,7 +26,15 @@ type alias Model =
     }
 
 
-initial : { text : String, fontSize : Float, width : Float, height : Float } -> Model
+type alias Options =
+    { text : String
+    , fontSize : Float
+    , width : Float
+    , height : Float
+    }
+
+
+initial : Options -> Model
 initial options =
     let
         style =

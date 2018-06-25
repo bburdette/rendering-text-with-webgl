@@ -8,6 +8,7 @@ module Formatting
         , bullets
         , char
         , code
+        , dark
         , demo
         , group
         , icon
@@ -58,6 +59,22 @@ background url =
             , ( "box-sizing", "border-box" )
             , ( "background-image", "url(" ++ url ++ ")" )
             , ( "background-size", "cover" )
+            , ( "padding", slidePadding )
+            ]
+        ]
+        |> container
+
+
+{-| Custom slide with the background
+-}
+dark : List (Content a b) -> Content a b
+dark =
+    div
+        [ style
+            [ ( "height", "100%" )
+            , ( "box-sizing", "border-box" )
+            , ( "background", "rgb(22,17,22)" )
+            , ( "color", "white" )
             , ( "padding", slidePadding )
             ]
         ]

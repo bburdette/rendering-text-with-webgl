@@ -1,4 +1,4 @@
-module Custom.Pixelfont exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Pixelfont exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
 import Html exposing (Html)
@@ -21,6 +21,7 @@ type Msg
 type alias Model =
     { elapsed : Time
     , pixelSize : Int
+    , color : Vec3
     , maybeTexture : Maybe Texture
     , mesh : Mesh Vertex
     , width : Float
@@ -28,7 +29,16 @@ type alias Model =
     }
 
 
-initial : { text : String, pixelSize : Int, width : Float, height : Float } -> Model
+type alias Options =
+    { text : String
+    , pixelSize : Int
+    , color : Vec3
+    , width : Float
+    , height : Float
+    }
+
+
+initial : Options -> Model
 initial options =
     { elapsed = 0
     , pixelSize = options.pixelSize
@@ -39,6 +49,7 @@ initial options =
     , maybeTexture = Nothing
     , width = options.width
     , height = options.height
+    , color = options.color
     }
 
 
@@ -66,7 +77,7 @@ update action model =
 
 
 view : Model -> Html Msg
-view { width, height, maybeTexture, mesh, pixelSize } =
+view { width, height, maybeTexture, mesh, color, pixelSize } =
     WebGL.toHtml
         [ HtmlAttributes.width (round width)
         , HtmlAttributes.height (round height)
@@ -89,7 +100,7 @@ view { width, height, maybeTexture, mesh, pixelSize } =
                     { projection = Mat4.makeOrtho2D 0 width -height 0
                     , pixelSize = pixelSize
                     , texture = texture
-                    , color = vec3 1 0 0
+                    , color = color
                     , textureSize =
                         vec2
                             (toFloat (Tuple.first (Texture.size texture)))

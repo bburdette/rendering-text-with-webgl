@@ -7,6 +7,7 @@ module Custom
         , metrics
         , outlines
         , pixelfont
+        , pixelglyph
         , sort
         , subscriptions
         , typewriter
@@ -18,6 +19,7 @@ module Custom
 import Custom.Metrics as Metrics
 import Custom.Outlines as Outlines
 import Custom.Pixelfont as Pixelfont
+import Custom.Pixelglyph as Pixelglyph
 import Custom.Sort as Sort
 import Custom.Typewriter as Typewriter
 import Custom.Zoom as Zoom
@@ -41,6 +43,7 @@ type Model
     | PixelfontModel Pixelfont.Model
     | MetricsModel Metrics.Model
     | OutlinesModel Outlines.Model
+    | PixelglyphModel Pixelglyph.Model
 
 
 type Msg
@@ -50,36 +53,42 @@ type Msg
     | PixelfontMsg Pixelfont.Msg
     | MetricsMsg Metrics.Msg
     | OutlinesMsg Outlines.Msg
+    | PixelglyphMsg Pixelglyph.Msg
 
 
-sort : { width : Float, height : Float } -> Content
-sort size =
-    Content.custom (SortModel (Sort.initial size))
+sort : Sort.Options -> Content
+sort options =
+    Content.custom (SortModel (Sort.initial options))
 
 
-zoom : { text : String, fontSize : Float, width : Float, height : Float } -> Content
+zoom : Zoom.Options -> Content
 zoom options =
     Content.custom (ZoomModel (Zoom.initial options))
 
 
-typewriter : { text : String, fontSize : Float, width : Float, height : Float } -> Content
+typewriter : Typewriter.Options -> Content
 typewriter options =
     Content.custom (TypewriterModel (Typewriter.initial options))
 
 
-pixelfont : { pixelSize : Int, text : String, width : Float, height : Float } -> Content
+pixelfont : Pixelfont.Options -> Content
 pixelfont options =
     Content.custom (PixelfontModel (Pixelfont.initial options))
 
 
-metrics : { fontSize : Float, width : Float, height : Float } -> Content
+metrics : Metrics.Options -> Content
 metrics options =
     Content.custom (MetricsModel (Metrics.initial options))
 
 
-outlines : { step : Int, width : Float, height : Float } -> Content
+outlines : Outlines.Options -> Content
 outlines options =
     Content.custom (OutlinesModel (Outlines.initial options))
+
+
+pixelglyph : Pixelglyph.Options -> Content
+pixelglyph options =
+    Content.custom (PixelglyphModel (Pixelglyph.initial options))
 
 
 subscriptions : Model -> Sub Msg
@@ -102,6 +111,9 @@ subscriptions model =
 
         OutlinesModel submodel ->
             Sub.map OutlinesMsg (Outlines.subscriptions submodel)
+
+        PixelglyphModel submodel ->
+            Sub.map PixelglyphMsg (Pixelglyph.subscriptions submodel)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -149,6 +161,13 @@ update action model =
             in
             ( OutlinesModel newModel, Cmd.map OutlinesMsg newCmd )
 
+        ( PixelglyphMsg a, PixelglyphModel m ) ->
+            let
+                ( newModel, newCmd ) =
+                    Pixelglyph.update a m
+            in
+            ( PixelglyphModel newModel, Cmd.map PixelglyphMsg newCmd )
+
         _ ->
             ( model, Cmd.none )
 
@@ -173,3 +192,6 @@ view model =
 
         OutlinesModel submodel ->
             Html.map OutlinesMsg (Outlines.view submodel)
+
+        PixelglyphModel submodel ->
+            Html.map PixelglyphMsg (Pixelglyph.view submodel)

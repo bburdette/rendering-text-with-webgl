@@ -1,4 +1,4 @@
-module Custom.Outlines exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Outlines exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
 import Char
@@ -31,7 +31,14 @@ type alias Model =
     }
 
 
-initial : { step : Int, width : Float, height : Float } -> Model
+type alias Options =
+    { step : Int
+    , width : Float
+    , height : Float
+    }
+
+
+initial : Options -> Model
 initial options =
     let
         glyph =

@@ -4,6 +4,7 @@ import Custom exposing (Content, Slide)
 import Formatting exposing (..)
 import Html exposing (h1, text)
 import Html.Attributes exposing (style)
+import Math.Vector3 as Vec3 exposing (vec3)
 import SliceShow.Content as Content
 import SliceShow.Slide as Slide
 
@@ -82,6 +83,7 @@ fontAsAProgram =
     [ position ( 100, 80 )
         [ Custom.pixelfont
             { text = "Font as\na Program"
+            , color = vec3 1 0 0
             , pixelSize = 25
             , width = 1180
             , height = 640
@@ -93,22 +95,24 @@ fontAsAProgram =
 mogeeFont : List Content
 mogeeFont =
     [ title "MogeeFont"
-    , scale 1.5
-        [ code "elm" """text :
-  (Letter -> List a -> List a)
-  -> String
-  -> List a
+    , spacing 20
+    , code "elm" """-- Prints the text
+text :
+  (Letter -> List a -> List a) -- print a glyph
+  -> String                    -- text to print
+  -> List a                    -- printed result
+
 
 -- Base64 data: URI
 fontSrc : String
 """
-        ]
-    , position ( 900, 200 )
+    , position ( 920, 20 )
         [ Custom.pixelfont
-            { text = "ABCDEFGHIJ\nKLMNOPQRS\nTUVWXYZ\nabcdefghijk\nlmnopqrst\nuvwxyz"
-            , pixelSize = 6
-            , width = 300
-            , height = 400
+            { text = "ABCDEFGH\nIJKLMNOP\nQRSTUVW\nXYZabcde\nfghijklmnop\nqrstuvwxy\nz0123456"
+            , pixelSize = 9
+            , color = vec3 0.7 0.7 0.7
+            , width = 350
+            , height = 700
             }
         ]
     ]
@@ -116,7 +120,19 @@ fontSrc : String
 
 mogeeFontUsage : List Content
 mogeeFontUsage =
-    [ title "MogeeFont"
+    [ position ( 0, 0 )
+        [ Custom.pixelglyph
+            { pixelSize = 52
+            , width = 1280
+            , height = 720
+            }
+        ]
+    ]
+
+
+mogeeFontUsageGames : List Content
+mogeeFontUsageGames =
+    [ title "MogeeFont Usage"
     , split
         [ imageLink ( 350, 350 ) "assets/elm-mogee.png" "https://unsoundscapes.itch.io/mogee"
         , richtext """[elm-mogee](https://unsoundscapes.itch.io/mogee)"""
@@ -190,9 +206,8 @@ slides =
     , solvedProblem
     , [ padded exploringTheProblem ]
     , fontAsAProgram
-    , [ padded mogeeFont ]
-    , [ shout "MogeeFont usage slide" ]
-    , [ padded mogeeFontUsage ]
+    , [ dark mogeeFont ]
+    , [ dark mogeeFontUsage ]
     , [ shout "Font as data" ]
     , [ Custom.metrics { width = 1280, height = 720, fontSize = 500 } ]
     , [ background "assets/letterpress.jpg"

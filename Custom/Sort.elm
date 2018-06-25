@@ -1,4 +1,4 @@
-module Custom.Sort exposing (Model, Msg, initial, subscriptions, update, view)
+module Custom.Sort exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
 import Char
@@ -32,8 +32,12 @@ type alias Model =
     }
 
 
-initial : { width : Float, height : Float } -> Model
-initial size =
+type alias Options =
+    { width : Float, height : Float }
+
+
+initial : Options -> Model
+initial options =
     let
         ( glyph, mesh ) =
             getGlyphAndMesh (Char.toCode 'H')
@@ -41,8 +45,8 @@ initial size =
     { elapsed = 0
     , glyph = glyph
     , mesh = mesh
-    , width = size.width
-    , height = size.height
+    , width = options.width
+    , height = options.height
     }
 
 
