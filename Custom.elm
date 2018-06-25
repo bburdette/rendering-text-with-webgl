@@ -6,6 +6,7 @@ module Custom
         , Slide
         , cubicglyph
         , metrics
+        , outline
         , outlines
         , pixelfont
         , pixelglyph
@@ -19,6 +20,7 @@ module Custom
 
 import Custom.Cubicglyph as Cubicglyph
 import Custom.Metrics as Metrics
+import Custom.Outline as Outline
 import Custom.Outlines as Outlines
 import Custom.Pixelfont as Pixelfont
 import Custom.Pixelglyph as Pixelglyph
@@ -83,6 +85,11 @@ pixelfont options =
 metrics : Metrics.Options -> Content
 metrics options =
     Content.custom (MetricsModel (Metrics.initial options))
+
+
+outline : Outline.Options -> Content
+outline options =
+    Content.item (Outline.view options)
 
 
 outlines : Outlines.Options -> Content

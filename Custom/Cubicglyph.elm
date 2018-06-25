@@ -190,7 +190,7 @@ addLetter { x, y, width, height, textureX, textureY } letters =
             List.foldl
                 (\dy -> addPixel (x + toFloat dx) (y + toFloat dy) (textureX + toFloat dx) (textureY + toFloat dy))
                 l
-                (List.range 0 (round height))
+                (List.range 0 (round height - 1))
         )
         letters
         (List.range 0 (round width))

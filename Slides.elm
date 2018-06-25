@@ -80,13 +80,13 @@ exploringTheProblem =
 
 fontAsAProgram : List Content
 fontAsAProgram =
-    [ position ( 100, 80 )
+    [ position ( 100, 110 )
         [ Custom.pixelfont
             { text = "Font as\na Program"
-            , color = vec3 1 0 0
-            , pixelSize = 25
+            , color = vec3 1 1 1
+            , pixelSize = 20
             , width = 1180
-            , height = 640
+            , height = 610
             }
         ]
     ]
@@ -217,11 +217,11 @@ slides =
     , cssProperties
     , solvedProblem
     , [ padded exploringTheProblem ]
-    , fontAsAProgram
+    , [ dark fontAsAProgram ]
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
     , [ dark mogeeFontUsage3d ]
-    , [ shout "Font as data" ]
+    , [ Custom.outline { width = 1280, height = 720, fontSize = 220, left = 100, top = 330, text = "Font as Data" } ]
     , [ Custom.metrics { width = 1280, height = 720, fontSize = 500 } ]
     , [ background "assets/letterpress.jpg"
             [ position ( 990, 600 )

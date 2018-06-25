@@ -22688,7 +22688,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter = F2(
 						A2(
 							_elm_lang$core$List$range,
 							0,
-							_elm_lang$core$Basics$round(_p9.height)));
+							_elm_lang$core$Basics$round(_p9.height) - 1));
 				}),
 			letters,
 			A2(
@@ -23616,6 +23616,125 @@ var _w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress = function (a) {
 var _w0rm$rendering_text_with_webgl$Custom_Metrics$subscriptions = function (_p15) {
 	return _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress);
 };
+
+var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
+	function (x, y, k, _p0) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$transform(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'translate(',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(x),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								',',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString(y),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										') scale(',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(k),
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												',',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(0 - k),
+													')'))))))))),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$path,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+										_elm_lang$core$Basics$toString(2 / k)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p2) {
+	var _p3 = _p2;
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(_p3.width)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height(
+						_elm_lang$core$Basics$toString(_p3.height)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		function (_) {
+			return _.paths;
+		}(
+			A3(
+				_elm_lang$core$List$foldl,
+				F2(
+					function ($char, _p4) {
+						var _p5 = _p4;
+						var _p6 = _p5.advance;
+						var glyph = A2(
+							_elm_lang$core$Maybe$withDefault,
+							_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+							A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyph, _w0rm$rendering_text_with_webgl$Iverni$font, $char));
+						var k = _p3.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
+						return {
+							advance: _p6 + (glyph.advanceWidth * k),
+							paths: {
+								ctor: '::',
+								_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph, _p6, _p3.top + (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k), k, glyph),
+								_1: _p5.paths
+							}
+						};
+					}),
+				{
+					advance: _p3.left,
+					paths: {ctor: '[]'}
+				},
+				_elm_lang$core$String$toList(_p3.text))));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Outline$Options = F6(
+	function (a, b, c, d, e, f) {
+		return {fontSize: a, text: b, width: c, height: d, left: e, top: f};
+	});
 
 var _w0rm$rendering_text_with_webgl$LineSegment2d$endpoints = function (_p0) {
 	var _p1 = _p0;
@@ -28482,6 +28601,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$subscriptions = function (_p7) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Zoom$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Custom$outline = function (options) {
+	return _w0rm$elm_slice_show$SliceShow_Content$item(
+		_w0rm$rendering_text_with_webgl$Custom_Outline$view(options));
+};
 var _w0rm$rendering_text_with_webgl$Custom$CubicglyphModel = function (a) {
 	return {ctor: 'CubicglyphModel', _0: a};
 };
@@ -29500,16 +29623,16 @@ var _w0rm$rendering_text_with_webgl$Slides$fontAsAProgram = {
 	ctor: '::',
 	_0: A2(
 		_w0rm$rendering_text_with_webgl$Formatting$position,
-		{ctor: '_Tuple2', _0: 100, _1: 80},
+		{ctor: '_Tuple2', _0: 100, _1: 110},
 		{
 			ctor: '::',
 			_0: _w0rm$rendering_text_with_webgl$Custom$pixelfont(
 				{
 					text: 'Font as\na Program',
-					color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
-					pixelSize: 25,
+					color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
+					pixelSize: 20,
 					width: 1180,
-					height: 640
+					height: 610
 				}),
 			_1: {ctor: '[]'}
 		}),
@@ -29722,7 +29845,11 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 						},
 						_1: {
 							ctor: '::',
-							_0: _w0rm$rendering_text_with_webgl$Slides$fontAsAProgram,
+							_0: {
+								ctor: '::',
+								_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$fontAsAProgram),
+								_1: {ctor: '[]'}
+							},
 							_1: {
 								ctor: '::',
 								_0: {
@@ -29748,7 +29875,8 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 											ctor: '::',
 											_0: {
 												ctor: '::',
-												_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Font as data'),
+												_0: _w0rm$rendering_text_with_webgl$Custom$outline(
+													{width: 1280, height: 720, fontSize: 220, left: 100, top: 330, text: 'Font as Data'}),
 												_1: {ctor: '[]'}
 											},
 											_1: {
