@@ -22804,938 +22804,6 @@ var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$subscriptions = function (
 		});
 };
 
-var _w0rm$rendering_text_with_webgl$Font_Glyph$empty = {path: '', advanceWidth: 0, leftSideBearing: 0};
-var _w0rm$rendering_text_with_webgl$Font_Glyph$Glyph = F3(
-	function (a, b, c) {
-		return {path: a, advanceWidth: b, leftSideBearing: c};
-	});
-
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeGlyph = A4(
-	_elm_lang$core$Json_Decode$map3,
-	_w0rm$rendering_text_with_webgl$Font_Glyph$Glyph,
-	A2(_elm_lang$core$Json_Decode$field, 'path', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'advanceWidth', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'leftSideBearing', _elm_lang$core$Json_Decode$float));
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'value1',
-		_1: {
-			ctor: '::',
-			_0: 'xAdvance',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$float);
-var _w0rm$rendering_text_with_webgl$Font_Font$empty = {
-	glyphs: _Skinney$elm_array_exploration$Array_Hamt$empty,
-	cmap: _elm_lang$core$Dict$empty,
-	ligatures: {ctor: '[]'},
-	kerning: {ctor: '[]'},
-	ascender: 0,
-	descender: 0,
-	unitsPerEm: 0
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$getGlyph = F2(
-	function (_p0, $char) {
-		var _p1 = _p0;
-		return A2(
-			_elm_lang$core$Maybe$andThen,
-			function (index) {
-				return A2(_Skinney$elm_array_exploration$Array_Hamt$get, index, _p1.glyphs);
-			},
-			A2(
-				_elm_lang$core$Dict$get,
-				_elm_lang$core$Char$toCode($char),
-				_p1.cmap));
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$searchRangeHelp = F3(
-	function (list, glyphIndex, currentIndex) {
-		searchRangeHelp:
-		while (true) {
-			var _p2 = list;
-			if (_p2.ctor === '[]') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				var _p3 = _p2._0;
-				if ((_elm_lang$core$Native_Utils.cmp(_p3.start, glyphIndex) > -1) && (_elm_lang$core$Native_Utils.cmp(_p3.end, glyphIndex) < 1)) {
-					return _elm_lang$core$Maybe$Just((_p3.index + glyphIndex) - _p3.start);
-				} else {
-					var _v2 = _p2._1,
-						_v3 = glyphIndex,
-						_v4 = currentIndex + 1;
-					list = _v2;
-					glyphIndex = _v3;
-					currentIndex = _v4;
-					continue searchRangeHelp;
-				}
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$searchIndexHelp = F3(
-	function (list, glyphIndex, currentIndex) {
-		searchIndexHelp:
-		while (true) {
-			var _p4 = list;
-			if (_p4.ctor === '[]') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				if (_elm_lang$core$Native_Utils.eq(_p4._0, glyphIndex)) {
-					return _elm_lang$core$Maybe$Just(currentIndex);
-				} else {
-					var _v6 = _p4._1,
-						_v7 = glyphIndex,
-						_v8 = currentIndex + 1;
-					list = _v6;
-					glyphIndex = _v7;
-					currentIndex = _v8;
-					continue searchIndexHelp;
-				}
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex = F2(
-	function (coverage, glyphIndex) {
-		var _p5 = coverage;
-		if (_p5.ctor === 'CoverageList') {
-			return A3(_w0rm$rendering_text_with_webgl$Font_Font$searchIndexHelp, _p5._0, glyphIndex, 0);
-		} else {
-			return A3(_w0rm$rendering_text_with_webgl$Font_Font$searchRangeHelp, _p5._0, glyphIndex, 0);
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$searchClassDefRangeHelp = F2(
-	function (list, glyphIndex) {
-		searchClassDefRangeHelp:
-		while (true) {
-			var _p6 = list;
-			if (_p6.ctor === '[]') {
-				return _elm_lang$core$Maybe$Nothing;
-			} else {
-				var _p7 = _p6._0;
-				if ((_elm_lang$core$Native_Utils.cmp(_p7.start, glyphIndex) > -1) && (_elm_lang$core$Native_Utils.cmp(_p7.end, glyphIndex) < 1)) {
-					return _elm_lang$core$Maybe$Just(_p7.classId);
-				} else {
-					var _v11 = _p6._1,
-						_v12 = glyphIndex;
-					list = _v11;
-					glyphIndex = _v12;
-					continue searchClassDefRangeHelp;
-				}
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass = F2(
-	function (classDef, glyphIndex) {
-		var _p8 = classDef;
-		if (_p8.ctor === 'ClassDefFormat1') {
-			return A2(
-				_elm_lang$core$Maybe$withDefault,
-				0,
-				A2(_Skinney$elm_array_exploration$Array_Hamt$get, glyphIndex - _p8._0.startGlyph, _p8._0.classes));
-		} else {
-			return A2(
-				_elm_lang$core$Maybe$withDefault,
-				0,
-				A2(_w0rm$rendering_text_with_webgl$Font_Font$searchClassDefRangeHelp, _p8._0, glyphIndex));
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$Font = F7(
-	function (a, b, c, d, e, f, g) {
-		return {glyphs: a, cmap: b, ligatures: c, kerning: d, ascender: e, descender: f, unitsPerEm: g};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1Pair = F2(
-	function (a, b) {
-		return {secondGlyph: a, xAdvance: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1Pair = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1Pair,
-	A2(_elm_lang$core$Json_Decode$field, 'secondGlyph', _elm_lang$core$Json_Decode$int),
-	_w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance);
-var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefRange = F3(
-	function (a, b, c) {
-		return {start: a, end: b, classId: c};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDefRange = A4(
-	_elm_lang$core$Json_Decode$map3,
-	_w0rm$rendering_text_with_webgl$Font_Font$ClassDefRange,
-	A2(_elm_lang$core$Json_Decode$field, 'start', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'end', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'classId', _elm_lang$core$Json_Decode$int));
-var _w0rm$rendering_text_with_webgl$Font_Font$Ligature = F2(
-	function (a, b) {
-		return {sub: a, by: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeLigature = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_w0rm$rendering_text_with_webgl$Font_Font$Ligature,
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'sub',
-		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)),
-	A2(_elm_lang$core$Json_Decode$field, 'by', _elm_lang$core$Json_Decode$int));
-var _w0rm$rendering_text_with_webgl$Font_Font$CoverageRangeRecord = F3(
-	function (a, b, c) {
-		return {start: a, end: b, index: c};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverageRangeRecord = A4(
-	_elm_lang$core$Json_Decode$map3,
-	_w0rm$rendering_text_with_webgl$Font_Font$CoverageRangeRecord,
-	A2(_elm_lang$core$Json_Decode$field, 'start', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'end', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'index', _elm_lang$core$Json_Decode$int));
-var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat2 = function (a) {
-	return {ctor: 'KerningPairPosFormat2', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1 = function (a) {
-	return {ctor: 'KerningPairPosFormat1', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat2 = function (a) {
-	return {ctor: 'ClassDefFormat2', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat1 = function (a) {
-	return {ctor: 'ClassDefFormat1', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef = _elm_lang$core$Json_Decode$oneOf(
-	{
-		ctor: '::',
-		_0: A3(
-			_elm_lang$core$Json_Decode$map2,
-			F2(
-				function (startGlyph, classes) {
-					return _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat1(
-						{
-							startGlyph: startGlyph,
-							classes: _Skinney$elm_array_exploration$Array_Hamt$fromList(classes)
-						});
-				}),
-			A2(_elm_lang$core$Json_Decode$field, 'startGlyph', _elm_lang$core$Json_Decode$int),
-			A2(
-				_elm_lang$core$Json_Decode$field,
-				'classes',
-				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$core$Json_Decode$map,
-				_w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat2,
-				A2(
-					_elm_lang$core$Json_Decode$field,
-					'ranges',
-					_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeClassDefRange))),
-			_1: {ctor: '[]'}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$CoverageRanges = function (a) {
-	return {ctor: 'CoverageRanges', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$CoverageList = function (a) {
-	return {ctor: 'CoverageList', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage = _elm_lang$core$Json_Decode$oneOf(
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$core$Json_Decode$map,
-			_w0rm$rendering_text_with_webgl$Font_Font$CoverageList,
-			A2(
-				_elm_lang$core$Json_Decode$field,
-				'glyphs',
-				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$core$Json_Decode$map,
-				_w0rm$rendering_text_with_webgl$Font_Font$CoverageRanges,
-				A2(
-					_elm_lang$core$Json_Decode$field,
-					'ranges',
-					_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeCoverageRangeRecord))),
-			_1: {ctor: '[]'}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1 = A2(
-	_elm_lang$core$Json_Decode$map,
-	_w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1,
-	A3(
-		_elm_lang$core$Json_Decode$map2,
-		F2(
-			function (coverage, pairSets) {
-				return {
-					coverage: coverage,
-					pairSets: _Skinney$elm_array_exploration$Array_Hamt$fromList(pairSets)
-				};
-			}),
-		A2(_elm_lang$core$Json_Decode$field, 'coverage', _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage),
-		A2(
-			_elm_lang$core$Json_Decode$field,
-			'pairSets',
-			_elm_lang$core$Json_Decode$list(
-				_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1Pair)))));
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat2 = A5(
-	_elm_lang$core$Json_Decode$map4,
-	F4(
-		function (coverage, classDef1, classDef2, classRecords) {
-			return _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat2(
-				{
-					coverage: coverage,
-					classDef1: classDef1,
-					classDef2: classDef2,
-					classRecords: _Skinney$elm_array_exploration$Array_Hamt$fromList(classRecords)
-				});
-		}),
-	A2(_elm_lang$core$Json_Decode$field, 'coverage', _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage),
-	A2(_elm_lang$core$Json_Decode$field, 'classDef1', _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef),
-	A2(_elm_lang$core$Json_Decode$field, 'classDef2', _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'classRecords',
-		_elm_lang$core$Json_Decode$list(
-			A2(
-				_elm_lang$core$Json_Decode$map,
-				_Skinney$elm_array_exploration$Array_Hamt$fromList,
-				_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance)))));
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerning = _elm_lang$core$Json_Decode$oneOf(
-	{
-		ctor: '::',
-		_0: _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat2,
-		_1: {
-			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1,
-			_1: {ctor: '[]'}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Font$decodeFont = A8(
-	_elm_lang$core$Json_Decode$map7,
-	_w0rm$rendering_text_with_webgl$Font_Font$Font,
-	A2(
-		_elm_lang$core$Json_Decode$map,
-		_Skinney$elm_array_exploration$Array_Hamt$fromList,
-		A2(
-			_elm_lang$core$Json_Decode$field,
-			'glyphs',
-			_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeGlyph))),
-	A2(
-		_elm_lang$core$Json_Decode$map,
-		function (_p9) {
-			return _elm_lang$core$Dict$fromList(
-				A2(
-					_elm_lang$core$List$filterMap,
-					function (_p10) {
-						var _p11 = _p10;
-						return A2(
-							_elm_lang$core$Maybe$map,
-							function (code) {
-								return {ctor: '_Tuple2', _0: code, _1: _p11._1};
-							},
-							_elm_lang$core$Result$toMaybe(
-								_elm_lang$core$String$toInt(_p11._0)));
-					},
-					_p9));
-		},
-		A2(
-			_elm_lang$core$Json_Decode$field,
-			'cmap',
-			_elm_lang$core$Json_Decode$keyValuePairs(_elm_lang$core$Json_Decode$int))),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'ligatures',
-		_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeLigature)),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'kerning',
-		_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeKerning)),
-	A2(_elm_lang$core$Json_Decode$field, 'ascender', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'descender', _elm_lang$core$Json_Decode$float),
-	A2(_elm_lang$core$Json_Decode$field, 'unitsPerEm', _elm_lang$core$Json_Decode$float));
-
-var _w0rm$rendering_text_with_webgl$Iverni$font = A2(
-	_elm_lang$core$Result$withDefault,
-	_w0rm$rendering_text_with_webgl$Font_Font$empty,
-	A2(_elm_lang$core$Json_Decode$decodeString, _w0rm$rendering_text_with_webgl$Font_Font$decodeFont, '\n{\"cmap\":{\"32\":3,\"33\":166,\"34\":173,\"35\":185,\"39\":172,\"40\":177,\"41\":178,\"42\":192,\"43\":67,\"44\":37,\"45\":39,\"46\":36,\"47\":187,\"48\":26,\"49\":27,\"50\":28,\"51\":29,\"52\":30,\"53\":31,\"54\":32,\"55\":33,\"56\":34,\"57\":35,\"58\":168,\"59\":167,\"60\":271,\"61\":68,\"62\":270,\"63\":266,\"64\":203,\"65\":40,\"66\":76,\"67\":63,\"68\":66,\"69\":46,\"70\":48,\"71\":38,\"72\":44,\"73\":47,\"74\":112,\"75\":128,\"76\":45,\"77\":49,\"78\":138,\"79\":50,\"80\":113,\"81\":51,\"82\":124,\"83\":152,\"84\":56,\"85\":111,\"86\":130,\"87\":131,\"88\":153,\"89\":142,\"90\":141,\"91\":179,\"92\":189,\"93\":180,\"95\":181,\"96\":82,\"97\":41,\"98\":42,\"99\":55,\"100\":54,\"101\":4,\"102\":5,\"103\":6,\"104\":7,\"105\":8,\"106\":9,\"107\":10,\"108\":11,\"109\":12,\"110\":13,\"111\":14,\"112\":15,\"113\":16,\"114\":17,\"115\":18,\"116\":19,\"117\":20,\"118\":21,\"119\":22,\"120\":23,\"121\":24,\"122\":25,\"124\":182,\"126\":169,\"166\":186,\"168\":99,\"169\":53,\"170\":264,\"171\":267,\"172\":272,\"174\":274,\"176\":275,\"177\":204,\"180\":70,\"181\":273,\"184\":277,\"187\":268,\"192\":170,\"194\":194,\"195\":160,\"196\":171,\"198\":188,\"200\":120,\"201\":105,\"202\":195,\"203\":106,\"204\":121,\"205\":107,\"206\":196,\"207\":114,\"209\":161,\"210\":122,\"211\":108,\"212\":197,\"213\":159,\"214\":115,\"215\":202,\"217\":123,\"218\":119,\"219\":198,\"220\":110,\"221\":199,\"222\":109,\"224\":71,\"225\":72,\"226\":84,\"227\":162,\"228\":101,\"230\":85,\"231\":245,\"232\":86,\"233\":73,\"234\":87,\"235\":98,\"236\":88,\"237\":89,\"238\":90,\"239\":104,\"241\":163,\"242\":81,\"243\":74,\"244\":91,\"245\":164,\"246\":100,\"247\":269,\"249\":92,\"250\":75,\"251\":93,\"252\":102,\"253\":78,\"255\":103,\"260\":242,\"261\":244,\"281\":246,\"305\":97,\"338\":190,\"339\":191,\"351\":247,\"353\":95,\"371\":248,\"375\":249,\"376\":200,\"377\":243,\"378\":251,\"381\":165,\"382\":96,\"710\":83,\"711\":94,\"728\":276,\"731\":278,\"732\":158,\"1025\":143,\"1040\":134,\"1041\":125,\"1042\":117,\"1043\":137,\"1044\":133,\"1045\":60,\"1046\":214,\"1047\":126,\"1048\":139,\"1049\":140,\"1051\":132,\"1052\":136,\"1053\":61,\"1054\":62,\"1055\":145,\"1056\":116,\"1057\":64,\"1058\":65,\"1059\":228,\"1060\":52,\"1061\":205,\"1062\":147,\"1063\":216,\"1064\":148,\"1065\":149,\"1066\":127,\"1067\":151,\"1068\":150,\"1069\":211,\"1070\":146,\"1071\":236,\"1072\":43,\"1073\":230,\"1074\":217,\"1075\":206,\"1076\":218,\"1077\":57,\"1078\":234,\"1079\":220,\"1080\":227,\"1081\":229,\"1082\":232,\"1083\":225,\"1084\":235,\"1085\":208,\"1086\":58,\"1087\":209,\"1088\":135,\"1089\":59,\"1090\":207,\"1091\":231,\"1092\":233,\"1093\":215,\"1094\":213,\"1095\":219,\"1096\":210,\"1097\":212,\"1098\":221,\"1099\":223,\"1100\":222,\"1101\":226,\"1102\":224,\"1103\":237,\"1105\":144,\"7923\":250,\"8216\":183,\"8217\":184,\"8220\":174,\"8221\":175,\"8222\":176,\"8722\":69,\"64257\":253},\"glyphs\":[{\"path\":\"M50 721L51 1C51 1 58 0 72 0L332 0C355 0 358 1 361 4C364 7 365 12 365 26L364 746C350 748 327 748 209 748C64 748 60 746 56 742C51 737 50 731 50 721ZM124 689C161 692 200 695 208 694L290 689L291 294C272 325 252 356 239 379C212 425 154 520 124 572ZM124 450L189 344C213 305 261 224 291 174L291 59C254 56 216 53 208 54C173 56 146 58 125 60Z\",\"advanceWidth\":415,\"leftSideBearing\":50},{\"path\":\"\",\"advanceWidth\":0,\"leftSideBearing\":0},{\"path\":\"\",\"advanceWidth\":154,\"leftSideBearing\":0},{\"path\":\"\",\"advanceWidth\":160,\"leftSideBearing\":0},{\"path\":\"M76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M51 0L80 0C116 0 120 3 120 26C120 44 120 149 119 257L119 470C127 471 164 470 168 470C175 470 176 526 175 528C161 527 127 527 119 527C117 641 119 693 126 718C134 722 147 724 162 724C174 724 181 723 186 722C194 720 197 721 203 742C207 756 211 773 211 775C204 778 186 781 167 781C113 781 91 774 79 762C52 735 53 668 53 527L21 527C11 527 10 525 10 480L10 469C13 469 52 472 54 470C56 468 54 341 54 258Z\",\"advanceWidth\":178,\"leftSideBearing\":10},{\"path\":\"M162-221C200-221 240-218 259-199C282-176 285-168 285-20C285 9 281 20 212 84C181 113 151 139 148 143C150 146 214 209 230 225C251 246 260 284 259 313L259 387C259 452 252 490 231 517L264 620C264 621 257 624 241 627C199 635 195 630 192 622C190 617 172 542 171 533L143 533C113 533 75 528 59 512C43 496 30 452 30 367C30 298 45 261 61 245C79 228 133 220 157 229C146 217 116 189 101 173C74 145 72 111 99 88C212-9 215-13 216-44C216-44 217-139 213-155C202-162 190-165 167-165C137-165 123-162 113-152C101-140 102-35 107-4C103-3 91-2 83-2C40-2 37-6 36-28C32-112 43-190 62-209C69-216 102-221 162-221ZM189 284C181 278 167 276 152 276C139 276 118 278 111 285C99 297 99 319 99 379C99 394 100 427 106 469C114 475 127 476 139 476C148 476 161 475 172 464C188 447 193 415 193 381C193 341 195 309 189 284Z\",\"advanceWidth\":300,\"leftSideBearing\":30},{\"path\":\"M205 2C208 0 229 0 244 0C274 0 276 2 276 26C276 187 275 126 275 268C275 466 252 512 242 522C236 528 189 533 156 533C136 533 116 529 112 529C113 572 108 743 111 780L88 780C43 780 40 776 40 757C40 750 42 20 41 0L78 0C110 0 111 2 111 26C111 51 110 420 111 470C118 475 135 477 149 477C170 477 180 473 188 464C200 450 206 387 206 236C206 188 206 12 205 2Z\",\"advanceWidth\":311,\"leftSideBearing\":40},{\"path\":\"M40 610L76 610C108 610 111 614 111 625C111 633 111 625 111 689L88 689C44 689 41 685 41 663C41 641 40 610 40 610ZM78 0C106 0 111 6 111 26L110 527C108 528 103 530 87 530C42 530 39 526 39 504C39 327 40 187 40 2C43 1 47 0 78 0Z\",\"advanceWidth\":154,\"leftSideBearing\":39},{\"path\":\"M40 610L76 610C108 610 111 614 111 625C111 633 111 625 111 689L88 689C44 689 41 685 41 663C41 641 40 610 40 610ZM-59-195L-61-218C-48-219-31-220-8-220C30-220 63-209 82-188C110-157 113-100 112 204L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 468 44 302 44 197C44 169 43-78 38-142C34-152 30-159-33-159C-53-159-56-162-59-195Z\",\"advanceWidth\":153,\"leftSideBearing\":-61},{\"path\":\"M41 2C46 1 50 0 76 0C108 0 113 3 113 23C113 68 109 222 109 380C108 560 110 745 114 779C110 780 97 780 84 780C43 780 40 776 40 754C40 693 43 538 44 377C44 238 42 95 41 2ZM294 3C295 4 295 6 290 18C262 85 183 281 184 298C184 303 269 500 274 509C273 511 259 519 242 527C223 536 214 535 208 529C205 526 193 491 184 465C162 401 131 306 116 306C115 306 114 290 117 290C117 290 215 8 216 4C218 1 224 0 262 0C280 0 293 2 294 3Z\",\"advanceWidth\":306,\"leftSideBearing\":40},{\"path\":\"M106 0C134 0 148 2 154 4C155 55 141 59 137 59C130 59 125 60 120 66C107 81 108 252 108 394C108 580 111 771 111 777C109 778 104 780 88 780C43 780 40 776 40 754C40 712 42 544 42 387C42 108 49 48 66 8C72 3 84 0 106 0Z\",\"advanceWidth\":159,\"leftSideBearing\":40},{\"path\":\"M40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C166 477 175 473 183 464C196 449 201 386 201 262C201 200 203 12 202 2C205 1 209 0 240 0C268 0 271 3 271 26L269 266C268 370 267 433 259 470C269 474 295 477 308 477C321 477 330 473 338 464C351 449 356 386 356 262C356 142 357 12 356 2C359 0 364 0 395 0C425 0 427 2 427 26L426 266C426 466 403 512 393 522C387 528 346 533 314 533C281 533 249 528 228 520C224 526 204 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":466,\"leftSideBearing\":40},{\"path\":\"M40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C170 477 179 473 187 464C200 449 205 386 205 262C205 142 206 12 205 2C208 0 213 0 244 0C274 0 276 2 276 26L275 266C275 466 252 512 242 522C236 528 195 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":315,\"leftSideBearing\":40},{\"path\":\"M76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M40-196L40-219C40-218 47-220 63-220C108-220 111-216 111-194L108 1C117-1 127-3 169-3C210-3 237 3 254 20C274 40 282 61 281 270C280 470 257 511 246 522C239 527 219 533 168 533C104 533 82 529 68 514C42 487 38 406 38 268C38 268 40-102 40-196ZM209 65C201 59 183 56 166 56C150 56 133 58 126 66C115 78 107 182 107 270C107 304 108 445 115 469C126 475 141 476 153 476C166 476 187 473 195 464C213 442 213 308 213 268C213 241 212 86 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":38},{\"path\":\"M274-194L274 270C274 442 250 511 239 522C212 533 175 533 158 533C122 533 76 529 60 513C34 487 31 420 31 268C31 86 58 15 69 9C96-3 112-3 156-3C185-3 200-2 204 1C202-7 203-201 203-218C203-218 210-220 226-220C271-220 274-216 274-194ZM202 65C190 58 174 55 159 55C140 55 127 59 120 66C108 78 100 180 100 268C100 286 101 445 108 472C117 475 136 476 152 476C167 476 177 474 185 465C204 445 204 394 205 264C205 220 208 83 202 65Z\",\"advanceWidth\":314,\"leftSideBearing\":31},{\"path\":\"M36 2C38 0 41 0 58 0C103 0 105 2 105 26C105 68 101 161 100 261C99 331 97 445 102 470C110 474 116 475 126 475C141 475 149 473 155 465C164 454 169 405 165 330C169 330 185 329 201 329C229 329 231 332 231 374C231 471 219 512 209 522C203 528 160 530 115 530C48 530 44 529 39 524C35 520 37 341 37 261C37 254 38 10 36 2Z\",\"advanceWidth\":232,\"leftSideBearing\":36},{\"path\":\"M52 10C59 4 80-4 134-3C177-2 208 1 227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10Z\",\"advanceWidth\":284,\"leftSideBearing\":25},{\"path\":\"M90 9C117-3 141-3 172-3C210-3 243 0 262 19C274 31 290 61 285 323L258 323C225 323 216 318 216 290C216 245 221 81 212 61C212 61 208 56 177 56C158 56 148 58 140 66C131 75 125 117 125 266C125 331 124 405 127 466L262 465C269 465 275 465 275 477C275 495 277 526 276 530C230 526 125 527 127 529C127 529 126 615 129 630L95 630C57 630 55 629 55 618C55 612 54 529 54 528L42 528C23 528 20 526 20 497L20 466C20 466 54 469 54 467L52 268C52 67 83 15 90 9Z\",\"advanceWidth\":310,\"leftSideBearing\":20},{\"path\":\"M275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M108-2C151-2 181 9 202 33C248 85 272 156 272 385C272 532 264 527 264 527C260 528 246 530 232 530C198 530 195 526 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M137-3C158-3 176 5 190 18C226 49 244 113 250 178C251 163 251 42 251 29C251 20 254 14 258 9C272-4 302-1 326-2C350-3 371 7 388 26C437 82 456 216 456 387C456 472 453 516 448 527C443 529 431 530 401 530C377 530 375 529 378 504C381 479 383 435 385 370C390 173 374 61 338 54L321 54C310 55 302 58 302 70C302 150 276 405 261 523C257 526 241 530 222 530C189 530 185 525 190 504C199 465 209 400 212 330C219 152 187 60 149 53L136 53C128 54 123 57 123 69C123 170 99 437 82 526C73 528 58 530 44 530C13 530 8 527 14 495C33 391 55 170 55 28C55 19 58 13 62 9C78-6 113-3 137-3Z\",\"advanceWidth\":491,\"leftSideBearing\":11},{\"path\":\"M0 3C1 1 7 0 32 0C53 0 57 2 63 8C72 16 128 185 134 201L135 205L136 201C156 132 198 6 199 3C201 1 223 0 242 0C260 0 271 2 272 3C273 4 272 6 268 18C246 83 181 259 176 276C179 284 253 499 258 508C257 510 243 519 229 525C218 530 207 531 202 524C198 519 161 395 145 350L143 343L141 350C133 375 80 527 79 530C73 531 64 530 47 523C17 511 19 501 28 477C52 413 97 285 100 277C93 256 8 23 0 3Z\",\"advanceWidth\":275,\"leftSideBearing\":0},{\"path\":\"M15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M0 0L158 0C184 0 190 9 190 32C190 44 190 58 190 63L78 62C70 62 73 68 75 74L184 468C187 476 184 529 184 529L31 530C10 530 4 527 4 506C4 497 4 484 4 467L106 467C114 467 117 465 115 460C112 453 0 44 0 44Z\",\"advanceWidth\":192,\"leftSideBearing\":0},{\"path\":\"M79 9C86 3 109-3 169-3C207-3 251 0 271 19C293 40 298 94 298 284C298 319 295 393 295 404C295 491 274 527 263 538C256 543 249 549 171 549C143 549 87 546 71 530C44 503 41 426 41 301C41 100 64 21 79 9ZM177 62C155 62 135 64 128 71C117 82 108 215 108 303C108 337 109 456 115 480C124 485 152 487 166 487C183 487 200 489 212 475C231 453 231 341 231 293C231 253 234 107 227 70C219 64 194 62 177 62Z\",\"advanceWidth\":340,\"leftSideBearing\":41},{\"path\":\"M87 3C91 1 98 0 132 0C155 0 157 2 157 27L157 544C157 544 95 544 87 541C82 539 17 492 8 486C8 479 8 420 11 419C13 418 74 463 86 471C87 472 92 470 92 469C92 448 91 427 91 404C91 250 89 55 87 3Z\",\"advanceWidth\":198,\"leftSideBearing\":8},{\"path\":\"M38 0L265 0L265 47C265 60 258 67 245 67L139 67C113 67 100 67 100 67L100 102L100 127C100 197 257 279 255 408C254 477 246 513 228 532C211 550 177 551 158 551C127 551 87 546 69 528C52 511 50 485 50 357L66 357C110 357 111 360 111 371C111 378 107 466 111 479C127 486 141 487 149 487C157 487 166 486 175 477C188 464 193 453 193 400C193 305 38 239 38 114Z\",\"advanceWidth\":280,\"leftSideBearing\":38},{\"path\":\"M140-126C177-126 211-123 230-104C252-82 257-62 257 120C257 214 245 257 229 282C205 299 187 304 143 305C165 339 200 400 222 442C235 467 244 480 244 496L244 547L55 547C40 547 33 540 33 521C33 507 33 485 33 480L175 480C171 474 79 317 61 287C54 276 60 240 60 240C121 242 165 245 177 233C185 225 190 212 190 113C190 88 194-15 185-52C175-58 162-60 149-60C124-60 114-58 107-51C95-39 96 94 99 102C89 103 78 103 70 103C48 103 33 94 33 76C33-22 44-72 56-103C70-116 99-126 140-126Z\",\"advanceWidth\":286,\"leftSideBearing\":33},{\"path\":\"M248-128C248-128 246 384 247 390C244 392 240 392 199 392C190 392 185 387 185 372C185 270 185 168 185 66L100 66C88 66 87 68 91 84C111 166 179 455 194 522C197 536 195 538 181 542C166 546 140 550 138 550L125 500C124 496 123 493 123 489C97 383 46 166 29 91C24 69 21 46 21 38C21 25 21 13 21 0L173 0C184 0 186-1 186-15L186-127Z\",\"advanceWidth\":288,\"leftSideBearing\":21},{\"path\":\"M51-109C58-115 91-126 140-126C177-126 218-119 232-103C253-79 247-54 247 218C247 260 103 327 103 350L103 476L219 476C241 476 246 482 246 520C246 532 246 544 246 547L44 547C42 431 41 319 41 314C41 290 183 222 184 187C186 116 191-14 182-51C172-57 158-59 149-59C124-59 109-58 103-51C95-42 95 21 95 104L66 104C43 104 32 94 32 76C32-42 44-103 51-109Z\",\"advanceWidth\":287,\"leftSideBearing\":32},{\"path\":\"M165-129C204-128 233-124 253-106C271-89 282-44 281 100C280 230 272 256 250 279C237 290 204 298 165 298C155 298 124 296 112 293C111 298 110 455 117 480C125 484 141 486 161 486C179 486 192 485 199 477C210 465 209 440 209 400C212 398 229 399 231 399C266 399 271 403 271 428C271 483 255 526 246 537C236 544 213 550 166 550C131 550 89 546 74 531C55 512 43 473 44 294L45 91C46-95 75-111 82-117C89-123 105-131 165-129ZM170-69C158-69 140-70 129-59C120-50 111-35 111 90C111 168 111 212 114 230C126 235 142 236 158 236C184 236 194 233 201 225C211 213 216 179 216 89C216 19 213-54 210-64C206-65 183-69 170-69Z\",\"advanceWidth\":308,\"leftSideBearing\":44},{\"path\":\"M-2 538C-2 520-3 480-3 480L133 480L133 432C133 333 41 209 41 82L41-126L81-125C101-124 103-123 103-105L103 95C103 183 195 323 195 440L195 480L195 547L9 547C2 547-2 544-2 538Z\",\"advanceWidth\":197,\"leftSideBearing\":-3},{\"path\":\"M164-3C215-3 235 3 255 23C273 41 283 65 283 211C283 267 283 312 273 346C261 368 238 390 213 402C248 422 277 459 277 535C277 590 261 650 246 660C225 675 193 679 162 679C122 679 92 674 74 656C57 639 53 584 53 533C53 463 76 420 111 399C94 392 67 371 58 354C46 331 43 294 41 207C39 92 54 44 77 20C91 8 114-3 164-3ZM165 434C142 446 116 473 116 532C116 563 117 601 121 614C134 621 154 624 162 624C182 624 193 621 201 613C211 603 214 573 214 530C214 475 193 448 165 434ZM170 60C151 60 135 59 124 72C115 82 111 106 110 211C109 298 111 317 119 332C123 341 148 363 160 368C173 366 189 351 200 340C211 329 216 301 216 206C216 137 216 97 211 70C200 64 188 60 170 60Z\",\"advanceWidth\":323,\"leftSideBearing\":41},{\"path\":\"M148 551C109 550 78 547 58 529C40 512 33 509 33 326C33 184 54 155 65 145C72 140 92 134 149 134L199 134C201 134 203-33 196-58C188-62 172-64 152-64C134-64 121-63 114-55C103-43 104 6 104 46C101 48 82 47 80 47C45 47 40 43 40 18C40-53 55-98 65-115C78-125 87-128 147-128C182-128 228-124 243-109C262-90 274-31 273 138L272 335C271 521 242 533 235 539C228 545 208 553 148 551ZM143 491C155 491 173 492 184 481C193 472 202 428 202 336C202 258 202 220 199 202C187 197 171 196 155 196C129 196 121 201 114 207C103 217 102 246 102 336C102 406 100 448 104 486C108 487 130 491 143 491Z\",\"advanceWidth\":310,\"leftSideBearing\":33},{\"path\":\"M42 13C58 10 102 14 107 18C113 23 115 95 111 102C108 106 93 114 87 115C67 115 36 110 33 105C28 97 37 26 42 13Z\",\"advanceWidth\":152,\"leftSideBearing\":31},{\"path\":\"M35-115C37-117 48-117 53-117C67-117 77-117 79-115C82-112 83-111 99-60C111-23 120 17 122 26C124 37 124 72 120 112C119 114 100 126 95 125C81 126 41 120 38 114C39 103 49 47 53 14C48-28 43-55 35-115Z\",\"advanceWidth\":152,\"leftSideBearing\":35},{\"path\":\"M233 379C197 379 196 377 196 355C196 338 197 316 200 309C215 313 246 313 281 312C281 122 279 108 267 76C258 68 239 64 202 64C166 64 150 71 140 83C127 99 124 118 124 383C124 590 128 649 142 675C151 683 166 686 201 686C235 686 248 681 258 671C274 655 279 631 279 534C285 533 286 533 342 533C353 533 354 535 354 556C354 651 349 677 320 724C297 744 272 753 202 753C122 753 100 743 82 720C52 682 44 657 44 382C44 151 52 72 69 40C87 16 134-1 201-2C265-3 314 16 329 36C352 67 357 126 357 182C357 253 357 335 360 380C356 380 279 379 233 379ZM360 380C360 380 360 380 360 380Z\",\"advanceWidth\":403,\"leftSideBearing\":44},{\"path\":\"M218 265C218 285 218 287 217 290C214 291 167 291 116 291C58 291 19 290 16 287C14 285 13 279 13 265C13 246 14 237 15 234C18 233 21 233 115 233C190 233 215 234 216 235C218 237 218 248 218 265Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":373,\"leftSideBearing\":39},{\"path\":\"M152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M39 754L39 260C39 88 63 19 74 8C101-3 138-3 155-3C191-3 237 1 253 17C279 43 282 110 282 262C282 444 255 515 244 521C217 533 201 533 157 533C120 533 112 532 106 530C110 535 110 540 110 778C110 778 103 780 87 780C42 780 39 776 39 754ZM111 465C123 472 139 475 154 475C173 475 186 471 193 464C205 452 213 350 213 262C213 244 212 85 205 58C196 55 177 54 161 54C146 54 136 56 128 65C110 86 108 136 108 266C108 310 105 447 111 465Z\",\"advanceWidth\":317,\"leftSideBearing\":39},{\"path\":\"M152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M50 723C50 636 52 505 52 373C53 236 51 98 51 4C54 3 61 2 92 2C120 2 125 8 125 28C125 41 123 199 123 363C148 364 177 364 206 364L285 362C286 229 284 96 284 4C287 3 294 2 325 2C353 2 358 8 358 28C358 41 356 208 356 377C355 553 357 732 357 746C355 747 350 749 334 749C289 749 283 748 283 723C283 648 285 539 285 425C257 424 227 423 207 423C179 423 148 424 123 425C122 584 124 733 124 746C122 747 117 749 101 749C56 749 50 748 50 723Z\",\"advanceWidth\":408,\"leftSideBearing\":50},{\"path\":\"M50 724C50 610 52 495 52 381C52 256 52 19 51 5C54 4 58 3 124 3C281 3 279 3 283 7C285 9 286 13 286 29C286 60 285 71 285 71C275 69 187 63 145 61C128 60 124 63 124 76C124 128 123 293 123 387C123 507 124 627 124 747C122 748 117 750 101 750C56 750 50 749 50 724Z\",\"advanceWidth\":277,\"leftSideBearing\":50},{\"path\":\"M49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":51},{\"path\":\"M50 724C50 610 52 495 52 381C52 256 52 19 51 5C54 4 59 3 102 3C124 3 126 5 126 56C126 101 126 196 125 325L173 324C254 323 259 324 263 328C266 331 268 353 268 364C268 382 267 387 266 389L124 389C123 487 124 587 125 687L164 686C214 685 265 682 267 684C269 686 270 691 268 725C267 743 267 746 266 750C260 751 191 750 71 750C59 750 56 749 53 746C51 744 50 740 50 724Z\",\"advanceWidth\":299,\"leftSideBearing\":50},{\"path\":\"M43 10C46 7 50 6 91 6C107 6 113 14 112 41C111 74 107 163 114 357C121 549 130 659 138 679C144 684 148 686 158 686C166 686 169 685 171 683C185 592 187 541 201 334C208 231 211 130 211 49C211 12 243 3 298 3C359 3 371 4 377 6C407 57 448 329 448 545C448 611 447 654 446 685C452 688 459 689 471 689C479 689 504 689 508 685C511 682 512 646 513 627C517 547 517 433 517 322C517 160 514 16 515 8C520 6 523 6 572 6C590 6 592 9 592 34C592 80 596 192 594 329C592 452 587 613 586 741C569 748 533 753 481 753C377 753 371 747 373 719C376 684 378 609 379 522C381 311 344 100 324 71C321 70 318 70 308 70C295 70 286 74 286 90C286 231 262 621 243 746C235 750 206 753 169 753C113 753 101 749 87 736C60 711 52 558 45 351C38 146 41 12 43 10Z\",\"advanceWidth\":648,\"leftSideBearing\":40},{\"path\":\"M73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":412,\"leftSideBearing\":46},{\"path\":\"M43 381C45 152 51 72 69 39C87 17 134-2 197-3C219-3 239-2 257 2L293-34C303-43 312-42 325-33C338-24 344-18 353-10L318 24C324 28 328 32 331 36C355 69 361 106 361 380C361 608 352 678 319 724C299 741 272 753 202 753C121 753 100 742 83 721C53 684 41 657 43 381ZM123 383C121 591 126 652 142 676C152 683 167 686 200 686C235 686 248 681 258 671C273 655 281 604 281 375C281 153 279 109 268 78L267 77C258 87 251 95 242 104C232 114 223 114 216 108L180 78L202 59C172 60 155 65 141 82C127 98 125 117 123 383Z\",\"advanceWidth\":400,\"leftSideBearing\":42},{\"path\":\"M601 374C601 606 520 679 349 689C349 720 349 747 352 760C338 760 275 758 275 752L275 688C153 688 28 595 28 326C28 158 141 56 279 56L279-16C294-16 355-18 355-9C355-9 354 34 354 55C528 55 601 219 601 374ZM524 371C524 219 472 113 354 113L350 631C457 618 524 544 524 371ZM105 338C105 546 181 630 275 630C276 490 279 263 279 118C201 118 105 209 105 338Z\",\"advanceWidth\":625,\"leftSideBearing\":28},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M276 756L276 779C276 778 269 780 253 780C208 780 205 776 205 754L206 522C196 530 180 534 147 534C106 534 79 528 62 511C42 491 34 470 35 261C36 61 59 20 70 9C77 4 97-2 148-2C212-2 234 2 248 17C274 44 278 125 278 263C278 263 276 662 276 756ZM107 466C115 472 133 475 150 475C166 475 183 473 190 465C201 453 209 349 209 261C209 227 208 86 201 62C190 56 175 55 163 55C150 55 129 58 121 67C102 88 103 223 103 263C103 290 104 445 107 466Z\",\"advanceWidth\":316,\"leftSideBearing\":35},{\"path\":\"M155-3C193-3 215-1 235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C89 0 115-3 155-3Z\",\"advanceWidth\":288,\"leftSideBearing\":41},{\"path\":\"M-9 723C-9 692-8 681-8 681C-6 680 61 686 107 689L108 4C111 3 118 2 149 2C177 2 182 8 182 28L181 689C288 681 295 680 298 683C300 685 300 687 300 723C300 741 300 744 299 748L148 749C-5 749-2 749-6 745C-8 743-9 739-9 723Z\",\"advanceWidth\":291,\"leftSideBearing\":-9},{\"path\":\"M76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M155-3C193-3 215-1 235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C89 0 115-3 155-3Z\",\"advanceWidth\":300,\"leftSideBearing\":41},{\"path\":\"M49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":277,\"leftSideBearing\":49},{\"path\":\"M50 723C50 636 52 505 52 373C53 236 51 98 51 4C54 3 61 2 92 2C120 2 125 8 125 28C125 41 123 199 123 363C148 364 177 364 206 364L285 362C286 229 284 96 284 4C287 3 294 2 325 2C353 2 358 8 358 28C358 41 356 208 356 377C355 553 357 732 357 746C355 747 350 749 334 749C289 749 283 748 283 723C283 648 285 539 285 425C257 424 227 423 207 423C179 423 148 424 123 425C122 584 124 733 124 746C122 747 117 749 101 749C56 749 50 748 50 723Z\",\"advanceWidth\":408,\"leftSideBearing\":50},{\"path\":\"M73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M348 272C330 271 315 270 297 267C274 263 268 257 268 221C268 130 263 99 255 78C244 67 225 64 200 64C163 64 158 69 148 82C135 99 133 117 130 383C128 591 133 652 149 676C159 683 164 686 197 686C222 686 235 681 245 671C256 660 263 629 266 531C275 529 299 527 315 529C335 531 345 536 343 573C339 651 326 695 306 724C286 741 259 753 199 753C118 753 107 742 90 721C60 684 48 657 50 381C52 152 58 72 76 39C94 17 131-2 194-3C254-4 303 15 318 36C338 64 346 95 348 272Z\",\"advanceWidth\":400,\"leftSideBearing\":49},{\"path\":\"M348 272C330 271 315 270 297 267C274 263 268 257 268 221C268 130 263 99 255 78C244 67 225 64 200 64C163 64 158 69 148 82C135 99 133 117 130 383C128 591 133 652 149 676C159 683 164 686 197 686C222 686 235 681 245 671C256 660 263 629 266 531C275 529 299 527 315 529C335 531 345 536 343 573C339 651 326 695 306 724C286 741 259 753 199 753C118 753 107 742 90 721C60 684 48 657 50 381C52 152 58 72 76 39C94 17 131-2 194-3C254-4 303 15 318 36C338 64 346 95 348 272Z\",\"advanceWidth\":400,\"leftSideBearing\":49},{\"path\":\"M-31 750C-39 750-37 694-37 681C-26 683 25 685 79 685C80 536 81 43 79 0C94 0 156 0 156 5C156 77 151 491 153 685C214 684 267 681 270 681C270 681 276 726 273 751C245 744-8 750-31 750Z\",\"advanceWidth\":239,\"leftSideBearing\":-38},{\"path\":\"M49 723C49 636 51 505 51 373C51 236 50 101 50 7C54 4 81 3 174 3C255 3 281 13 303 35C326 58 338 87 338 380C338 608 327 678 298 724C278 741 249 750 179 750C54 750 49 747 49 723ZM127 377L127 679C134 682 134 683 177 683C212 683 226 679 236 669C249 656 258 604 258 375C258 153 256 122 246 88C238 79 224 71 180 71C150 71 136 74 129 80C128 144 127 258 127 377Z\",\"advanceWidth\":386,\"leftSideBearing\":49},{\"path\":\"M19 271C19 252 20 243 21 240C24 239 26 239 107 239C107 158 107 151 108 148C111 147 116 147 136 147C153 147 168 147 170 149C171 150 172 154 172 239C257 239 261 240 262 241C264 243 264 254 264 271C264 291 264 293 263 296C260 297 253 297 172 297C172 385 172 387 171 390C168 391 155 392 136 392C122 392 113 391 111 389C108 386 107 382 107 297C29 297 25 296 22 293C20 291 19 285 19 271Z\",\"advanceWidth\":285,\"leftSideBearing\":19},{\"path\":\"M263 335C263 355 263 357 262 360C259 361 252 361 141 361C33 361 24 360 21 357C19 355 18 349 18 335C18 316 19 307 20 304C23 303 28 303 140 303C255 303 260 304 261 305C262 306 263 318 263 335ZM265 215C265 235 265 237 264 240C261 241 254 241 143 241C35 241 26 240 23 237C21 235 20 229 20 215C20 196 21 187 22 184C25 183 30 183 142 183C257 183 262 184 263 185C264 186 265 198 265 215Z\",\"advanceWidth\":277,\"leftSideBearing\":18},{\"path\":\"M265 269C265 289 265 291 264 294C261 295 254 295 143 295C35 295 26 294 23 291C21 289 20 283 20 269C20 251 21 242 22 239C25 238 30 238 142 238C257 238 262 239 263 240C264 241 265 253 265 269Z\",\"advanceWidth\":280,\"leftSideBearing\":20},{\"path\":\"M152 598C166 625 205 705 216 727L190 737C168 745 150 753 147 751C143 748 143 744 124 674C115 641 107 610 105 604L122 597C144 589 148 590 152 598Z\",\"advanceWidth\":320,\"leftSideBearing\":105},{\"path\":\"M139 592C141 592 154 597 162 600C178 606 181 610 179 617L146 747C144 747 137 745 116 737C94 729 82 723 79 720C77 718 78 714 102 666C122 626 130 611 139 592ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M182 595C196 622 235 702 246 724L220 734C198 742 180 750 177 748C173 745 173 741 154 671C145 638 137 607 135 601L152 594C174 586 178 587 182 595ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M164 595C178 622 217 702 228 724L202 734C180 742 162 750 159 748C155 745 155 741 136 671C127 638 119 607 117 601L134 594C156 586 160 587 164 595ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M179 595C193 622 232 702 243 724L217 734C195 742 177 750 174 748C170 745 170 741 151 671C142 638 134 607 132 601L149 594C171 586 175 587 179 595ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M184 595C198 622 237 702 248 724L222 734C200 742 182 750 179 748C175 745 175 741 156 671C147 638 139 607 137 601L154 594C176 586 180 587 184 595ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M172 3C253 3 279 13 301 35C324 58 336 99 336 202C336 293 326 353 302 391C297 400 286 410 279 414C304 438 314 468 314 586C314 645 304 688 282 722C253 745 224 754 176 753C92 751 52 751 48 748C43 745 49 633 49 560C50 333 51 24 50 10C56 6 79 3 172 3ZM214 431C204 429 132 428 127 429C126 447 126 522 126 568C126 609 127 641 127 677C134 682 144 684 170 684C198 684 210 681 220 671C231 660 234 645 234 563C234 464 225 438 214 431ZM127 80C120 89 125 346 127 357C134 361 144 363 166 363C210 362 224 358 234 348C248 334 257 307 257 199C257 150 255 121 244 88C236 77 222 72 175 70C149 69 133 72 127 80Z\",\"advanceWidth\":371,\"leftSideBearing\":46},{\"path\":\"M218 355C218 375 218 377 217 380C214 381 167 381 116 381C58 381 19 380 16 377C14 375 13 369 13 355C13 336 14 327 15 324C18 323 21 323 115 323C190 323 215 324 216 325C218 327 218 338 218 355Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M162 598C176 625 215 705 226 727L200 737C178 745 160 753 157 751C153 748 153 744 134 674C125 641 117 610 115 604L132 597C154 589 158 590 162 598ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M142 768C167 784 231 824 252 838L234 859C219 877 207 893 204 893C199 892 198 888 145 838C131 824 109 801 104 797C105 795 112 786 115 782C129 763 134 763 142 768Z\",\"advanceWidth\":320,\"leftSideBearing\":104},{\"path\":\"M190 768C215 784 279 824 300 838L282 859C267 877 255 893 252 893C247 892 246 888 193 838C179 824 157 801 152 797C153 795 160 786 163 782C177 763 182 763 190 768ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M138 595C140 595 153 600 161 603C177 609 180 613 178 620L145 750C143 750 136 748 115 740C93 732 81 726 78 723C76 721 77 717 101 669C121 629 129 614 138 595ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M98 593C100 593 113 598 121 601C137 607 140 611 138 618L105 748C103 748 96 746 75 738C53 730 41 724 38 721C36 719 37 715 61 667C81 627 89 612 98 593Z\",\"advanceWidth\":180,\"leftSideBearing\":37},{\"path\":\"M25 609L41 600C61 590 66 589 71 599C77 610 93 647 100 665C102 670 102 671 102 671L104 671C104 671 104 670 106 665C117 640 136 601 142 589L164 600C180 608 182 612 179 619C167 653 134 750 134 750L113 750C82 750 80 750 78 748C76 746 68 726 53 686Z\",\"advanceWidth\":211,\"leftSideBearing\":25},{\"path\":\"M75 599L91 590C111 580 116 579 121 589C127 600 143 637 150 655C152 660 152 661 152 661L154 661C154 661 154 660 156 655C167 630 186 591 192 579L214 590C230 598 232 602 229 609C217 643 184 740 184 740L163 740C132 740 130 740 128 738C126 736 118 716 103 676ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M438 185L408 185C373 185 371 183 371 159C371 147 373 96 368 65C357 59 343 57 331 57C310 57 297 59 290 66C283 73 277 123 273 171C273 193 273 220 272 251C284 249 309 246 330 246C350 246 388 249 408 269C426 287 438 304 438 387C438 456 420 511 409 522C403 528 382 533 319 532C301 532 262 530 241 520C240 520 240 521 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C194 463 200 444 203 380C202 357 202 330 202 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3C187-3 217-1 236 13C237 11 238 10 239 9C246 3 276-3 326-3C363-3 394 0 413 19C435 41 439 61 438 185ZM278 470C287 472 334 485 357 463C374 446 370 331 364 308C350 302 288 297 274 311C265 320 272 446 278 470ZM205 162C205 123 204 92 200 62C188 58 169 56 159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C199 234 201 229 203 215C203 200 204 186 205 174Z\",\"advanceWidth\":473,\"leftSideBearing\":37},{\"path\":\"M141 592C143 592 156 597 164 600C180 606 183 610 181 617L148 747C146 747 139 745 118 737C96 729 84 723 81 720C79 718 80 714 104 666C124 626 132 611 141 592ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M76 605L92 596C112 586 117 585 122 595C128 606 144 643 151 661C153 666 153 667 153 667L155 667C155 667 155 666 157 661C168 636 187 597 193 585L215 596C231 604 233 608 230 615C218 649 185 746 185 746L164 746C133 746 131 746 129 744C127 742 119 722 104 682ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M66 593C68 593 81 598 89 601C105 607 108 611 106 618L73 748C71 748 64 746 43 738C21 730 9 724 6 721C4 719 5 715 29 667C49 627 57 612 66 593ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":5},{\"path\":\"M101 598C115 625 154 705 165 727L139 737C117 745 99 753 96 751C92 748 92 744 73 674C64 641 56 610 54 604L71 597C93 589 97 590 101 598ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":40},{\"path\":\"M-2 609L14 600C34 590 39 589 44 599C50 610 66 647 73 665C75 670 75 671 75 671L77 671C77 671 77 670 79 665C90 640 109 601 115 589L137 600C153 608 155 612 152 619C140 653 107 750 107 750L86 750C55 750 53 750 51 748C49 746 41 726 26 686ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":-2},{\"path\":\"M80 608L96 599C116 589 121 588 126 598C132 609 148 646 155 664C157 669 157 670 157 670L159 670C159 670 159 669 161 664C172 639 191 600 197 588L219 599C235 607 237 611 234 618C222 652 189 749 189 749L168 749C137 749 135 749 133 747C131 745 123 725 108 685ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M134 593C136 593 149 598 157 601C173 607 176 611 174 618L141 748C139 748 132 746 111 738C89 730 77 724 74 721C72 719 73 715 97 667C117 627 125 612 134 593ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M78 608L94 599C114 589 119 588 124 598C130 609 146 646 153 664C155 669 155 670 155 670L157 670C157 670 157 669 159 664C170 639 189 600 195 588L217 599C233 607 235 611 232 618C220 652 187 749 187 749L166 749C135 749 133 749 131 747C129 745 121 725 106 685ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M181 729L165 738C145 748 140 749 135 739C129 728 113 691 106 673C104 668 104 667 104 667L102 667C102 667 102 668 100 673C89 698 70 737 64 749L42 738C26 730 24 726 27 719C39 685 72 588 72 588L93 588C124 588 126 588 128 590C130 592 138 612 153 652Z\",\"advanceWidth\":216,\"leftSideBearing\":25},{\"path\":\"M225 722L209 731C189 741 184 742 179 732C173 721 157 684 150 666C148 661 148 660 148 660L146 660C146 660 146 661 144 666C133 691 114 730 108 742L86 731C70 723 68 719 71 712C83 678 116 581 116 581L137 581C168 581 170 581 172 583C174 585 182 605 197 645ZM52 10C59 4 80-4 134-3C177-2 208 1 227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10Z\",\"advanceWidth\":296,\"leftSideBearing\":25},{\"path\":\"M175 729L159 738C139 748 134 749 129 739C123 728 107 691 100 673C98 668 98 667 98 667L96 667C96 667 96 668 94 673C83 698 64 737 58 749L36 738C20 730 18 726 21 719C33 685 66 588 66 588L87 588C118 588 120 588 122 590C124 592 132 612 147 652ZM0 0L158 0C184 0 190 9 190 32C190 44 190 58 190 63L78 62C70 62 73 68 75 74L184 468C187 476 184 529 184 529L31 530C10 530 4 527 4 506C4 497 4 484 4 467L106 467C114 467 117 465 115 460C112 453 0 44 0 44Z\",\"advanceWidth\":192,\"leftSideBearing\":0},{\"path\":\"M112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":40},{\"path\":\"M178 614C184 614 195 614 208 615C236 617 237 618 241 622C244 625 245 648 245 678C245 694 244 724 243 729C238 729 230 729 217 728C183 725 178 724 175 721C172 718 171 712 173 671C174 650 177 618 178 614ZM70 614C86 611 130 611 133 614C135 616 136 639 136 671L135 725C130 725 125 725 110 724C73 722 73 721 69 717C65 713 64 706 66 670C67 646 69 618 70 614ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M178 615C184 615 195 615 208 616C236 618 237 619 241 623C244 626 245 649 245 679C245 695 244 725 243 730C238 730 230 730 217 729C183 726 178 725 175 722C172 719 171 713 173 672C174 651 177 619 178 615ZM70 615C86 612 130 612 133 615C135 617 136 640 136 672L135 726C130 726 125 726 110 725C73 723 73 722 69 718C65 714 64 707 66 671C67 647 69 619 70 615Z\",\"advanceWidth\":331,\"leftSideBearing\":65},{\"path\":\"M178 615C184 615 195 615 208 616C236 618 237 619 241 623C244 626 245 649 245 679C245 695 244 725 243 730C238 730 230 730 217 729C183 726 178 725 175 722C172 719 171 713 173 672C174 651 177 619 178 615ZM70 615C86 612 130 612 133 615C135 617 136 640 136 672L135 726C130 726 125 726 110 725C73 723 73 722 69 718C65 714 64 707 66 671C67 647 69 619 70 615ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M172 615C178 615 189 615 202 616C230 618 231 619 235 623C238 626 239 649 239 679C239 695 238 725 237 730C232 730 224 730 211 729C177 726 172 725 169 722C166 719 165 713 167 672C168 651 171 619 172 615ZM64 615C80 612 124 612 127 615C129 617 130 640 130 672L129 726C124 726 119 726 104 725C67 723 67 722 63 718C59 714 58 707 60 671C61 647 63 619 64 615ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M176 615C182 615 193 615 206 616C234 618 235 619 239 623C242 626 243 649 243 679C243 695 242 725 241 730C236 730 228 730 215 729C181 726 176 725 173 722C170 719 169 713 171 672C172 651 175 619 176 615ZM68 615C84 612 128 612 131 615C133 617 134 640 134 672L133 726C128 726 123 726 108 725C71 723 71 722 67 718C63 714 62 707 64 671C65 647 67 619 68 615ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M163 615C169 615 180 615 193 616C221 618 222 619 226 623C229 626 230 649 230 679C230 695 229 725 228 730C223 730 215 730 202 729C168 726 163 725 160 722C157 719 156 713 158 672C159 651 162 619 163 615ZM55 615C71 612 115 612 118 615C120 617 121 640 121 672L120 726C115 726 110 726 95 725C58 723 58 722 54 718C50 714 49 707 51 671C52 647 54 619 55 615ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M123 615C129 615 140 615 153 616C181 618 182 619 186 623C189 626 190 649 190 679C190 695 189 725 188 730C183 730 175 730 162 729C128 726 123 725 120 722C117 719 116 713 118 672C119 651 122 619 123 615ZM15 615C31 612 75 612 78 615C80 617 81 640 81 672L80 726C75 726 70 726 55 725C18 723 18 722 14 718C10 714 9 707 11 671C12 647 14 619 15 615ZM138 26L137 527C135 528 130 530 114 530C69 530 66 526 66 504C66 327 67 187 67 2C70 1 74 0 105 0C133 0 138 6 138 26Z\",\"advanceWidth\":200,\"leftSideBearing\":10},{\"path\":\"M123 768C148 784 212 824 233 838L215 859C200 877 188 893 185 893C180 892 179 888 126 838C112 824 90 801 85 797C86 795 93 786 96 782C110 763 115 763 123 768ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M181 779C187 779 198 779 211 780C239 782 240 783 244 787C247 790 248 813 248 843C248 859 247 889 246 894C241 894 233 894 220 893C186 890 181 889 178 886C175 883 174 877 176 836C177 815 180 783 181 779ZM73 779C89 776 133 776 136 779C138 781 139 804 139 836L138 890C133 890 128 890 113 889C76 887 76 886 72 882C68 878 67 871 69 835C70 811 72 783 73 779ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M77 768C102 784 166 824 187 838L169 859C154 877 142 893 139 893C134 892 133 888 80 838C66 824 44 801 39 797C40 795 47 786 50 782C64 763 69 763 77 768ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":39},{\"path\":\"M189 768C214 784 278 824 299 838L281 859C266 877 254 893 251 893C246 892 245 888 192 838C178 824 156 801 151 797C152 795 159 786 162 782C176 763 181 763 189 768ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M219 783C225 783 236 783 249 784C277 786 278 787 282 791C285 794 286 817 286 847C286 863 285 893 284 898C279 898 271 898 258 897C224 894 219 893 216 890C213 887 212 881 214 840C215 819 218 787 219 783ZM111 783C127 780 171 780 174 783C176 785 177 808 177 840L176 894C171 894 166 894 151 893C114 891 114 890 110 886C106 882 105 875 107 839C108 815 110 787 111 783ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M30 67C18 70 13 67 9 54C6 38 3 22 3 6C21-1 31-3 61-3C131-4 180 15 195 36C219 69 221 106 221 380C221 579 225 738 225 747L169 747C150 747 145 745 145 714C145 625 148 574 148 375C148 153 143 109 132 78C121 67 102 64 67 64C51 64 39 65 30 67Z\",\"advanceWidth\":270,\"leftSideBearing\":3},{\"path\":\"M281 720C259 742 237 752 175 750C138 749 119 749 99 749C54 749 48 744 48 723C48 481 47 445 47 374C47 453 49 67 49 4C52 3 59 2 90 2C118 2 123 8 123 28C123 40 120 176 119 326L166 326C217 326 256 335 276 352C305 398 316 432 316 565C316 598 304 697 281 720ZM221 400C215 393 199 390 164 390C138 390 128 394 121 397L121 568C121 597 122 651 123 675C130 681 138 684 169 684C203 684 216 676 224 667C234 643 239 591 239 559C239 427 231 412 221 400ZM47 374C47 369 47 362 47 353Z\",\"advanceWidth\":332,\"leftSideBearing\":47},{\"path\":\"M110 778C116 778 127 778 140 779C168 781 169 782 173 786C176 789 177 812 177 842C177 858 176 888 175 893C170 893 162 893 149 892C115 889 110 888 107 885C104 882 103 876 105 835C106 814 109 782 110 778ZM2 778C18 775 62 775 65 778C67 780 68 803 68 835L67 889C62 889 57 889 42 888C5 886 5 885 1 881C-3 877-4 870-2 834C-1 810 1 782 2 778ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":-3},{\"path\":\"M223 786C229 786 240 786 253 787C281 789 282 790 286 794C289 797 290 820 290 850C290 866 289 896 288 901C283 901 275 901 262 900C228 897 223 896 220 893C217 890 216 884 218 843C219 822 222 790 223 786ZM115 786C131 783 175 783 178 786C180 788 181 811 181 843L180 897C175 897 170 897 155 896C118 894 118 893 114 889C110 885 109 878 111 842C112 818 114 790 115 786ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M281 720C259 742 237 752 175 750C138 749 119 749 99 749C54 749 48 744 48 723C48 481 47 445 47 374C47 453 49 67 49 4C52 3 59 2 90 2C118 2 123 8 123 28C123 40 120 176 119 326L166 326C217 326 256 335 276 352C305 398 316 432 316 565C316 598 304 697 281 720ZM221 400C215 393 199 390 164 390C138 390 128 394 121 397L121 568C121 597 122 651 123 675C130 681 138 684 169 684C203 684 216 676 224 667C234 643 239 591 239 559C239 427 231 412 221 400ZM47 374C47 369 47 362 47 353Z\",\"advanceWidth\":332,\"leftSideBearing\":47},{\"path\":\"M172 3C253 3 279 13 301 35C324 58 336 99 336 202C336 293 326 353 302 391C297 400 286 410 279 414C304 438 314 468 314 586C314 645 304 688 282 722C253 745 224 754 176 753C92 751 52 751 48 748C43 745 49 633 49 560C50 333 51 24 50 10C56 6 79 3 172 3ZM214 431C204 429 132 428 127 429C126 447 126 522 126 568C126 609 127 641 127 677C134 682 144 684 170 684C198 684 210 681 220 671C231 660 234 645 234 563C234 464 225 438 214 431ZM127 80C120 89 125 346 127 357C134 361 144 363 166 363C210 362 224 358 234 348C248 334 257 307 257 199C257 150 255 121 244 88C236 77 222 72 175 70C149 69 133 72 127 80Z\",\"advanceWidth\":371,\"leftSideBearing\":46},{\"path\":\"M107 770C109 771 117 779 123 786C135 800 134 804 129 810L45 896L24 872C8 854 2 843 1 839C0 834 4 830 50 803C77 787 104 771 107 770Z\",\"advanceWidth\":180,\"leftSideBearing\":1},{\"path\":\"M183 768C208 784 272 824 293 838L275 859C260 877 248 893 245 893C240 892 239 888 186 838C172 824 150 801 145 797C146 795 153 786 156 782C170 763 175 763 183 768ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M183 770C185 771 193 779 199 786C211 800 210 804 205 810L121 896L100 872C84 854 78 843 77 839C76 834 80 830 126 803C153 787 180 771 183 770ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M97 770C99 771 107 779 113 786C125 800 124 804 119 810L35 896L14 872C-2 854-8 843-9 839C-10 834-6 830 40 803C67 787 94 771 97 770ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":-9},{\"path\":\"M207 769C209 770 217 778 223 785C235 799 234 803 229 809L145 895L124 871C108 853 102 842 101 838C100 833 104 829 150 802C177 786 204 770 207 769ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M215 770C217 771 225 779 231 786C243 800 242 804 237 810L153 896L132 872C116 854 110 843 109 839C108 834 112 830 158 803C185 787 212 771 215 770ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M288 3C292 0 307 0 333 0C345 0 363 1 377 5C344 83 276 294 262 356C303 390 319 443 319 561C319 637 301 696 277 722C257 739 206 750 162 750C54 750 49 735 49 704L48 30C48 5 51 1 60 0C77-1 115-1 132 1C126 63 124 120 124 336C145 333 172 332 190 335C228 229 280 10 288 3ZM129 412C123 417 122 420 121 543C120 655 121 664 126 678C136 682 153 684 172 684C192 684 206 681 215 674C228 664 238 622 239 559C240 500 237 447 226 416C216 406 195 401 170 401C151 401 141 402 129 412Z\",\"advanceWidth\":361,\"leftSideBearing\":48},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 443 125 439L125 575C125 612 123 652 123 686L123 688C184 689 302 690 315 684C319 709 312 751 312 751C308 751 192 749 116 749L116 750C113 750 110 750 107 749C80 749 58 750 49 751L49 740C49 575 51 22 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 374L183 374C229 374 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":365,\"leftSideBearing\":49},{\"path\":\"M94-3C193-3 246 39 246 257C246 342 205 385 166 406C195 436 222 485 222 564C222 650 194 753 105 753C48 753 5 749 8 731L16 684C130 716 145 636 145 560C145 540 145 433 94 427L57 423C51 417 45 383 45 374C101 386 169 368 169 246C169 97 150 59 105 59C94 59 33 56 8 64L9 0C26 0 72-3 94-3Z\",\"advanceWidth\":267,\"leftSideBearing\":8},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 453 125 449L125 575C125 612 123 652 122 749C53 749 15 751-8 751C-15 751-14 697-14 684C-1 686 24 687 49 686C49 473 51 20 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":342,\"leftSideBearing\":-14},{\"path\":\"M50 3C53 1 76 0 100 0C128 0 129 1 129 38C129 64 128 204 129 355L174 361C179 362 282 10 282 5C287 1 296 0 327 0C350 0 364 2 366 4C367 5 366 11 358 33C343 75 314 155 294 220C271 292 250 360 241 401C241 409 263 490 288 571C314 654 343 738 347 747L277 747C263 747 259 743 256 730C240 659 186 437 164 424C155 419 139 418 129 419L129 437C129 590 133 727 133 747C126 748 85 748 70 748C52 748 50 746 51 726C54 660 53 571 52 429C51 279 50 76 50 3Z\",\"advanceWidth\":384,\"leftSideBearing\":50},{\"path\":\"\",\"advanceWidth\":0,\"leftSideBearing\":0},{\"path\":\"M62 753C31 753 23 750 26 727C33 676 50 558 60 404C67 301 73 130 73 49C73 37 77 28 83 21C96 6 124 3 188 3C249 3 261 4 267 6C297 57 346 325 342 541C341 610 341 686 338 755L305 755C268 755 264 748 266 721C269 686 270 609 271 522C273 337 243 151 223 89C221 80 218 74 216 70C212 68 205 67 187 67C170 67 160 69 154 73C151 77 150 83 150 90C150 157 145 281 137 405C128 542 115 683 105 748C98 751 83 753 62 753Z\",\"advanceWidth\":378,\"leftSideBearing\":25},{\"path\":\"M146 0C215 0 243 46 273 148C284 186 287 232 289 248L292 248C292 233 286 136 282 57C281 37 282 23 289 16C303 3 316 0 379 0C434 0 440 0 452 2C497 38 536 299 536 547C536 752 524 746 527 746C522 747 501 750 483 750C459 750 451 746 452 737C455 711 463 643 464 522C466 247 424 65 416 63C409 61 393 59 382 60C360 62 348 71 348 85C348 325 336 581 310 746C301 748 282 750 265 750C239 750 232 746 234 736C237 715 251 582 251 473C251 238 208 71 161 61C144 61 134 57 134 82C134 223 110 621 91 746C78 748 58 750 42 750C17 750 6 746 8 735C33 561 60 210 60 46C60 7 77 0 146 0Z\",\"advanceWidth\":567,\"leftSideBearing\":7},{\"path\":\"M7 4C11 1 19 0 40 0C129 0 150 121 150 356C150 573 171 638 199 677C216 682 270 683 269 663C266 611 264 518 264 364C264 244 274 67 286 3C292 1 304 0 315 0C341 0 352 2 359 9C364 14 364 19 358 61C350 120 343 268 342 369C341 486 340 546 342 603C343 640 345 684 347 720C307 740 275 747 191 747C168 747 155 746 147 736C99 680 76 601 72 350C69 155 57 72 25 72C15 72 7 71 5 69C2 66 0 59 0 42C0 27 3 12 7 4Z\",\"advanceWidth\":409,\"leftSideBearing\":0},{\"path\":\"M-35-115C-20-115 38-117 38-108C38-69 39-27 39 0C125 0 237-4 329-4C348-4 337-88 337-112C337-126 407-110 407-104C406-11 415 59 410 58C410 58 379 58 335 59C324 197 317 515 324 707C326 758 152 755 135 743C78 732 63 140 21 60L-18 60C-50 60-25-111-35-115ZM254 59C205 59 147 60 99 60L102 60C141 121 152 669 189 687C206 687 253 691 252 666C246 541 245 220 254 59Z\",\"advanceWidth\":382,\"leftSideBearing\":-35},{\"path\":\"M255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M40-196L40-219C40-218 47-220 63-220C108-220 111-216 111-194L108 1C117-1 127-3 169-3C210-3 237 3 254 20C274 40 282 61 281 270C280 470 257 511 246 522C239 527 219 533 168 533C104 533 82 529 68 514C42 487 38 406 38 268C38 268 40-102 40-196ZM209 65C201 59 183 56 166 56C150 56 133 58 126 66C115 78 107 182 107 270C107 304 108 445 115 469C126 475 141 476 153 476C166 476 187 473 195 464C213 442 213 308 213 268C213 241 212 86 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":38},{\"path\":\"M43 10C46 7 50 6 91 6C107 6 113 14 112 41C111 74 107 163 114 357C121 549 130 659 138 679C144 684 148 686 158 686C166 686 169 685 171 683C185 592 187 541 201 334C208 231 211 130 211 49C211 12 243 3 298 3C359 3 371 4 377 6C407 57 448 329 448 545C448 611 447 654 446 685C452 688 459 689 471 689C479 689 504 689 508 685C511 682 512 646 513 627C517 547 517 433 517 322C517 160 514 16 515 8C520 6 523 6 572 6C590 6 592 9 592 34C592 80 596 192 594 329C592 452 587 613 586 741C569 748 533 753 481 753C377 753 371 747 373 719C376 684 378 609 379 522C381 311 344 100 324 71C321 70 318 70 308 70C295 70 286 74 286 90C286 231 262 621 243 746C235 750 206 753 169 753C113 753 101 749 87 736C60 711 52 558 45 351C38 146 41 12 43 10Z\",\"advanceWidth\":648,\"leftSideBearing\":40},{\"path\":\"M48 723L49 4C52 3 59 2 90 2C118 2 123 8 123 28L122 686L186 685C236 684 287 681 289 683C291 685 291 690 290 724C289 742 289 745 288 749L89 749C51 749 48 746 48 723Z\",\"advanceWidth\":277,\"leftSideBearing\":48},{\"path\":\"M58 329C56 192 60 80 60 34C60 9 62 6 80 6C125 6 119 6 124 8C123 16 120 160 120 322C120 433 117 547 121 627C122 646 123 682 126 687C133 689 137 689 143 689C152 689 161 685 161 678C163 424 199 175 240 44C253 3 265 0 328 0C342 0 372 4 381 15C387 37 385 151 387 371C388 464 389 582 395 743C388 745 379 746 360 746C329 746 327 744 326 715C324 643 324 505 320 368C318 301 317 165 317 99C317 88 316 84 309 84C267 218 241 471 241 670C241 680 240 732 238 741C231 745 203 748 148 748C96 748 79 746 67 736C61 731 59 721 59 714C59 590 60 445 58 329Z\",\"advanceWidth\":445,\"leftSideBearing\":57},{\"path\":\"M45 4C49 0 53 0 86 0C123 0 126 2 126 32C126 60 126 212 123 323C135 328 169 353 210 394C243 427 255 444 263 459L263 380C263 275 262 86 261 4C264 0 269 0 307 0C339 0 341 2 341 32C341 65 341 245 338 387C337 434 339 722 341 740C326 747 277 753 265 739C258 731 261 745 262 561C257 550 231 510 193 466C162 430 134 408 121 402C120 472 123 724 126 741C110 748 65 750 50 740C41 734 47 698 47 380C47 275 46 86 45 4Z\",\"advanceWidth\":383,\"leftSideBearing\":45},{\"path\":\"M200 753C230 753 254 760 271 778C289 798 295 839 295 883C291 886 284 888 260 888C244 888 238 886 238 875C238 849 237 823 237 818C226 811 214 809 205 809C193 809 182 811 175 818C168 825 167 867 166 887C161 888 142 889 129 889C105 889 101 883 101 874C101 832 114 788 130 771C140 763 154 753 200 753ZM52 4C56 0 60 0 93 0C130 0 133 2 133 32C133 60 133 212 130 323C142 328 176 353 217 394C250 427 262 444 270 459L270 380C270 275 269 86 268 4C271 0 276 0 314 0C346 0 348 2 348 32C348 65 348 245 345 387C344 434 346 722 348 740C333 747 284 753 272 739C265 731 268 745 269 561C264 550 238 510 200 466C169 430 141 408 128 402C127 472 130 724 133 741C117 748 72 750 57 740C48 734 54 698 54 380C54 275 53 86 52 4Z\",\"advanceWidth\":400,\"leftSideBearing\":52},{\"path\":\"M7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M181 779C187 779 198 779 211 780C239 782 240 783 244 787C247 790 248 813 248 843C248 859 247 889 246 894C241 894 233 894 220 893C186 890 181 889 178 886C175 883 174 877 176 836C177 815 180 783 181 779ZM73 779C89 776 133 776 136 779C138 781 139 804 139 836L138 890C133 890 128 890 113 889C76 887 76 886 72 882C68 878 67 871 69 835C70 811 72 783 73 779ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M176 615C182 615 193 615 206 616C234 618 235 619 239 623C242 626 243 649 243 679C243 695 242 725 241 730C236 730 228 730 215 729C181 726 176 725 173 722C170 719 169 713 171 672C172 651 175 619 176 615ZM68 615C84 612 128 612 131 615C133 617 134 640 134 672L133 726C128 726 123 726 108 725C71 723 71 722 67 718C63 714 62 707 64 671C65 647 67 619 68 615ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M50 723L51 4C54 3 61 2 92 2C120 2 125 8 125 28L124 686C161 689 199 691 206 691L285 686L286 4C289 3 296 2 327 2C355 2 360 8 360 28L359 746C350 748 318 749 207 749L75 749C55 748 55 747 53 745C51 743 50 739 50 723Z\",\"advanceWidth\":410,\"leftSideBearing\":50},{\"path\":\"M374 753C252 753 234 702 226 436C202 432 144 435 125 436C125 641 118 697 126 750C73 749 49 747 49 742C50 490 50 264 50 0C63 0 111-1 126 6C126 9 125 72 125 371C157 374 210 372 226 371L226 350C226 56 269-2 377-3C492-4 532 44 532 387C532 713 488 752 374 753ZM384 54C310 54 305 155 305 353C305 610 309 696 375 696C439 696 455 625 455 384C455 131 439 54 384 54Z\",\"advanceWidth\":575,\"leftSideBearing\":49},{\"path\":\"M429 58C429 58 398 58 356 59C355 192 354 729 355 748C340 748 279 750 279 741L280 173C280 135 281 95 281 61C251 59 180 60 126 62C125 200 124 729 125 748C110 748 49 750 49 741L50 173C50 105 54 26 49-2C169 2 335-3 359-3C359-40 358-85 358-109C358-123 428-107 428-101C428 17 432 58 429 58Z\",\"advanceWidth\":448,\"leftSideBearing\":49},{\"path\":\"M589 748C574 748 513 750 513 741L514 173C514 135 515 95 515 61C484 59 409 60 355 62C354 200 353 729 354 748C339 748 279 750 279 741L280 173C280 135 281 95 281 61C251 59 180 60 126 62C125 200 124 729 125 748C110 748 49 750 49 741L50 173C50 105 54 26 49-2C401 2 590-8 590 6C590 12 588 727 589 748Z\",\"advanceWidth\":640,\"leftSideBearing\":49},{\"path\":\"M669 62C669 62 636 62 590 61C589 197 588 729 589 748C574 748 513 750 513 741L514 173C514 135 515 95 515 61C484 59 410 60 356 62C355 200 354 729 355 748C347 748 326 749 309 748C296 747 284 746 280 743C279 743 279 742 279 741L280 173L280 142C280 114 281 86 281 61C250 59 180 60 126 62C125 200 124 729 125 748C110 748 55 750 49 742L49 741L51 27C51 15 50 5 49-2C280-2 488-3 599-1C599-38 598-84 598-107C598-121 668-105 668-99C668 19 672 62 669 62Z\",\"advanceWidth\":683,\"leftSideBearing\":49},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 453 125 449L125 575C125 612 123 652 122 749C91 748 57 750 49 751C49 575 51 22 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":347,\"leftSideBearing\":49},{\"path\":\"M125 449L125 575C125 612 123 652 122 749C91 748 57 750 49 751C49 575 51 22 50 3C50 3 76-1 172-1C281-1 323 29 323 257C323 419 246 453 125 449ZM458 750C444 750 381 748 381 742C381 736 383 21 382 0C397 0 458-2 458 7L457 575C457 643 453 722 458 750ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":508,\"leftSideBearing\":49},{\"path\":\"M52 11C60 4 86-6 150-5C202-4 233 0 256 23C282 49 288 67 288 226C288 374 91 484 91 577C91 610 90 649 91 676C110 684 127 685 137 685C146 685 164 684 175 673C191 657 188 571 187 554L210 554C260 554 266 561 266 575C266 661 251 728 238 742C230 748 178 754 148 754C110 754 64 750 40 726C12 698 16 614 16 559C16 445 210 347 210 211C210 159 209 78 209 71C196 64 183 62 160 62C135 62 122 64 113 72C98 86 101 236 107 253L63 253C33 253 25 246 25 229C25 61 44 18 52 11Z\",\"advanceWidth\":296,\"leftSideBearing\":15},{\"path\":\"M61 748C43 748 20 744 18 742C15 739 17 727 64 552C84 478 105 402 106 392C105 377 84 284 61 205C39 131 4 14 0 3C4 1 12 0 43 0C73 0 78 2 84 23C89 40 168 344 171 352L178 352C183 352 184 351 186 343C200 287 282 9 277 4C288 1 295 0 342 0C361 0 365 0 367 2C368 3 365 11 358 33C344 76 320 149 301 214C281 283 259 351 249 392C250 402 266 481 286 565C306 648 327 735 331 744C322 745 307 747 270 747C256 747 252 743 249 730C235 659 191 427 182 412L178 412C173 412 171 416 168 427C160 456 146 521 132 582C116 654 100 742 100 744C97 746 89 748 61 748Z\",\"advanceWidth\":367,\"leftSideBearing\":0},{\"path\":\"M72 9C79 3 102-3 162-3C200-3 244 0 264 19C286 40 291 184 291 374C291 467 283 702 256 737C249 742 242 748 164 748C136 748 80 745 64 729C37 702 34 625 34 391C34 190 57 21 72 9ZM170 62C148 62 131 64 124 71C113 82 101 305 101 393C101 427 102 655 108 679C117 684 145 686 159 686C176 686 193 688 205 674C224 652 224 431 224 383C224 343 227 167 220 70C212 64 187 62 170 62Z\",\"advanceWidth\":329,\"leftSideBearing\":34},{\"path\":\"M164-3C215-3 235 3 255 23C273 41 283 96 283 242C283 352 261 414 252 425C238 433 221 442 204 442C217 443 232 449 240 457C252 469 271 538 271 596C271 670 257 714 246 733C225 748 193 752 162 752C122 752 92 747 74 729C57 712 55 663 55 596C55 504 70 471 82 457C92 450 106 444 118 443C110 442 82 439 66 423C50 407 39 327 40 238C42 35 71 15 78 9C85 3 105-3 164-3ZM163 475C117 490 117 527 115 595C114 626 113 674 117 687C130 694 147 695 155 695C175 695 187 696 195 688C205 678 207 652 208 593C209 529 204 490 163 475ZM170 62C151 62 138 61 128 72C113 89 109 137 110 242C111 329 114 368 121 381C130 388 148 396 160 399C173 397 185 392 196 381C215 362 216 269 216 237C216 168 216 97 211 70C200 64 188 62 170 62Z\",\"advanceWidth\":314,\"leftSideBearing\":40},{\"path\":\"M80 0L273 0L272 59L209 59L209 750C209 750 143 749 139 747C135 746 67 669 67 669C67 669 65 599 67 599C71 599 128 667 137 675L155 696L156 696C156 696 139 676 139 674L141 59L80 58Z\",\"advanceWidth\":320,\"leftSideBearing\":66},{\"path\":\"M155-3C192-3 226 0 245 19C267 41 271 61 272 247C273 421 266 450 238 478C222 494 206 501 159 501C181 535 215 607 237 649C250 674 259 687 259 703L259 754L68 754C53 754 46 747 46 728C46 714 46 692 46 687L190 687C186 681 96 513 77 483C70 472 76 440 76 440C137 442 171 446 186 431C205 412 205 398 205 244C205 219 209 102 200 65C190 59 177 57 164 57C139 57 129 59 122 66C110 78 115 261 118 269C108 270 97 270 89 270C62 270 47 261 47 243C47 125 56 15 63 9C70 3 95-3 155-3Z\",\"advanceWidth\":354,\"leftSideBearing\":46},{\"path\":\"M57 610C53 642 53 666 67 666C84 666 88 610 133 610C170 610 197 653 197 722C197 729 195 731 176 731C166 731 155 730 155 730C159 697 153 671 139 671C119 671 122 730 70 730C31 730 15 695 15 621C15 611 23 610 38 610Z\",\"advanceWidth\":203,\"leftSideBearing\":15},{\"path\":\"M152 778C148 810 148 834 162 834C179 834 183 778 228 778C265 778 292 821 292 890C292 897 290 899 271 899C261 899 250 898 250 898C254 865 248 839 234 839C214 839 217 898 165 898C126 898 110 863 110 789C110 779 118 778 133 778ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M173 780C169 812 169 836 183 836C200 836 204 780 249 780C286 780 313 823 313 892C313 899 311 901 292 901C282 901 271 900 271 900C275 867 269 841 255 841C235 841 238 900 186 900C147 900 131 865 131 791C131 781 139 780 154 780ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M183 780C179 812 179 836 193 836C210 836 214 780 259 780C296 780 323 823 323 892C323 899 321 901 302 901C292 901 281 900 281 900C285 867 279 841 265 841C245 841 248 900 196 900C157 900 141 865 141 791C141 781 149 780 164 780ZM51 329C49 192 53 80 53 34C53 9 55 6 73 6C118 6 112 6 117 8C116 16 113 160 113 322C113 433 110 547 114 627C115 646 116 682 119 687C126 689 130 689 136 689C145 689 154 685 154 678C156 424 192 175 233 44C246 3 258 0 321 0C335 0 365 4 374 15C380 37 378 151 380 371C381 464 382 582 388 743C381 745 372 746 353 746C322 746 320 744 319 715C317 643 317 505 313 368C311 301 310 165 310 99C310 88 309 84 302 84C260 218 234 471 234 670C234 680 233 732 231 741C224 745 196 748 141 748C89 748 72 746 60 736C54 731 52 721 52 714C52 590 53 445 51 329Z\",\"advanceWidth\":438,\"leftSideBearing\":50},{\"path\":\"M100 602C96 634 96 658 110 658C127 658 131 602 176 602C213 602 240 645 240 714C240 721 238 723 219 723C209 723 198 722 198 722C202 689 196 663 182 663C162 663 165 722 113 722C74 722 58 687 58 613C58 603 66 602 81 602ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M95 610C91 642 91 666 105 666C122 666 126 610 171 610C208 610 235 653 235 722C235 729 233 731 214 731C204 731 193 730 193 730C197 697 191 671 177 671C157 671 160 730 108 730C69 730 53 695 53 621C53 611 61 610 76 610ZM40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C170 477 179 473 187 464C200 449 205 386 205 262C205 142 206 12 205 2C208 0 213 0 244 0C274 0 276 2 276 26L275 266C275 466 252 512 242 522C236 528 195 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":315,\"leftSideBearing\":40},{\"path\":\"M101 610C97 642 97 666 111 666C128 666 132 610 177 610C214 610 241 653 241 722C241 729 239 731 220 731C210 731 199 730 199 730C203 697 197 671 183 671C163 671 166 730 114 730C75 730 59 695 59 621C59 611 67 610 82 610ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M34 883C31 881 26 877 22 873C10 861 12 855 25 844C84 794 115 768 117 767L226 851C223 858 221 860 216 867C207 879 202 881 193 877C164 863 137 849 119 841C109 845 65 868 34 883ZM7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M115 193C117 203 122 309 128 418C141 660 144 675 140 679C134 685 90 689 55 688C55 631 56 566 56 448C56 210 58 201 63 194C66 190 106 191 115 193ZM58 17C73 15 109 18 114 22C120 27 122 103 118 110C101 119 56 116 53 113C50 110 54 30 58 17Z\",\"advanceWidth\":195,\"leftSideBearing\":51},{\"path\":\"M60 364C76 361 120 365 125 369C131 374 133 446 129 453C126 457 111 465 105 466C85 466 54 461 51 456C46 448 55 377 60 364ZM57-104C59-106 70-106 74-106C88-106 96-106 98-104C101-101 102-100 117-50C128-14 137 24 139 33C141 44 141 78 137 117C136 119 118 130 113 129C100 130 63 124 60 119C61 108 71 54 74 22C70-19 65-45 57-104Z\",\"advanceWidth\":152,\"leftSideBearing\":49},{\"path\":\"M49 365C65 362 109 366 114 370C120 375 122 447 118 454C115 458 100 466 94 467C74 467 43 462 40 457C35 449 44 378 49 365ZM48 18C64 15 108 19 113 23C119 28 121 100 117 107C114 111 99 119 93 120C73 120 42 115 39 110C34 102 43 31 48 18Z\",\"advanceWidth\":152,\"leftSideBearing\":37},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M235 770C237 771 245 779 251 786C263 800 262 804 257 810L173 896L152 872C136 854 130 843 129 839C128 834 132 830 178 803C205 787 232 771 235 770ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M133 776C149 773 193 773 196 776C198 778 199 801 199 833L198 887C193 887 188 887 173 886C136 884 136 883 132 879C128 875 127 868 129 832C130 808 132 780 133 776ZM232 774C238 773 249 772 262 771C290 769 291 772 297 775C301 777 302 801 306 831C308 847 310 876 309 881C304 882 296 883 283 884C249 887 244 884 240 880C237 877 236 872 234 831ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M14 513C16 511 27 511 31 511C41 511 51 511 53 513C56 516 57 517 72 567C83 603 89 631 91 640C93 651 89 714 89 735C78 737 21 734 16 726C12 719 25 661 28 629C24 588 22 572 14 513Z\",\"advanceWidth\":152,\"leftSideBearing\":14},{\"path\":\"M14 513C16 511 27 511 31 511C41 511 49 511 51 513C54 516 55 517 70 567C81 603 87 631 89 640C91 651 87 714 87 735C76 737 21 734 16 726C12 719 25 661 28 629C24 588 22 572 14 513ZM114 513C116 511 125 511 129 511C139 511 149 511 151 513C154 516 155 517 170 567C181 603 187 631 189 640C191 651 187 714 187 735C176 737 121 734 116 726C112 719 125 661 128 629C124 588 122 572 114 513Z\",\"advanceWidth\":152,\"leftSideBearing\":14},{\"path\":\"M88 754C86 756 77 756 73 756C63 756 53 756 51 754C48 751 47 750 32 700C21 664 15 636 13 627C11 616 15 553 15 532C26 530 81 533 86 541C90 548 77 606 74 638C78 679 80 695 88 754ZM188 754C186 756 175 756 171 756C161 756 153 756 151 754C148 751 147 750 132 700C121 664 115 636 113 627C111 616 115 553 115 532C126 530 181 533 186 541C190 548 177 606 174 638C178 679 180 695 188 754Z\",\"advanceWidth\":208,\"leftSideBearing\":12},{\"path\":\"M30 513C32 511 43 511 47 511C57 511 65 511 67 513C70 516 71 517 86 567C97 603 103 631 105 640C107 651 103 714 103 735C92 737 37 734 32 726C28 719 41 661 44 629C40 588 38 572 30 513ZM130 513C132 511 141 511 145 511C155 511 165 511 167 513C170 516 171 517 186 567C197 603 203 631 205 640C207 651 203 714 203 735C192 737 137 734 132 726C128 719 141 661 144 629C140 588 138 572 130 513Z\",\"advanceWidth\":168,\"leftSideBearing\":30},{\"path\":\"M32-146C34-148 45-148 49-148C59-148 67-148 69-146C72-143 73-142 88-92C99-56 105-28 107-19C109-8 105 55 105 76C94 78 39 75 34 67C30 60 43 2 46-30C42-71 40-87 32-146ZM132-146C134-148 143-148 147-148C157-148 167-148 169-146C172-143 173-142 188-92C199-56 205-28 207-19C209-8 205 55 205 76C194 78 139 75 134 67C130 60 143 2 146-30C142-71 140-87 132-146Z\",\"advanceWidth\":152,\"leftSideBearing\":32},{\"path\":\"M163-156C161-152 148-115 144-101C112 11 89 162 90 339C91 557 154 738 179 774C176 779 166 786 158 789C134 798 122 799 115 790C100 770 27 552 27 316C27 85 65-91 103-172C125-184 166-162 163-156Z\",\"advanceWidth\":219,\"leftSideBearing\":27},{\"path\":\"M53 775C55 771 68 734 72 720C104 608 127 457 126 280C125 62 62-119 37-155C40-160 50-167 58-170C82-179 94-180 101-171C116-151 189 67 189 303C189 534 151 710 113 791C91 803 50 781 53 775Z\",\"advanceWidth\":219,\"leftSideBearing\":37},{\"path\":\"M180-179C201-179 206-176 206-152C206-139 205-130 204-125C173-125 151-125 120-125L119 575C119 615 117 708 117 743L187 743C203 743 206 746 206 771C206 787 205 797 205 797C187 800 116 799 78 799C58 799 55 798 55 783C55 777 57-156 56-177C64-178 86-179 121-179Z\",\"advanceWidth\":233,\"leftSideBearing\":55},{\"path\":\"M52 800C31 800 26 797 26 773C26 760 27 751 28 746C59 746 81 746 112 746L113 46C113 6 115-87 115-122L45-122C29-122 26-125 26-150C26-166 27-176 27-176C45-179 116-178 154-178C174-178 177-177 177-162C177-156 175 777 176 798C168 799 146 800 111 800Z\",\"advanceWidth\":233,\"leftSideBearing\":26},{\"path\":\"M281-207C281-187 281-185 280-182C276-181 214-181 148-181C72-181 21-182 17-185C14-187 13-193 13-207C13-226 14-235 16-238C20-239 23-239 146-239C244-239 277-238 278-237C281-235 281-224 281-207Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M125-150L124 794C122 795 117 797 101 797C54 797 58 793 58 771L59-174C62-175 59-176 92-176C120-176 125-170 125-150Z\",\"advanceWidth\":152,\"leftSideBearing\":58},{\"path\":\"M88 758C86 760 75 760 71 760C61 760 51 760 49 758C46 755 45 754 30 704C19 668 13 640 11 631C9 620 13 557 13 536C24 534 81 537 86 545C90 552 77 610 74 642C78 683 80 699 88 758Z\",\"advanceWidth\":132,\"leftSideBearing\":10},{\"path\":\"M42 513C44 511 55 511 59 511C69 511 79 511 81 513C84 516 85 517 100 567C111 603 117 631 119 640C121 651 117 714 117 735C106 737 49 734 44 726C40 719 53 661 56 629C52 588 50 572 42 513Z\",\"advanceWidth\":180,\"leftSideBearing\":42},{\"path\":\"M194 2C205 0 231 0 246 0C253 0 257 3 258 13C265 81 273 148 280 216L313 216C324 216 328 220 329 232C330 249 330 259 326 276C319 274 315 274 286 274L302 441L332 441C345 441 354 446 355 458C356 470 356 489 353 503C348 501 331 499 308 499C317 588 324 666 327 710C320 710 305 710 291 709C268 707 265 705 263 678C260 644 254 578 246 499L158 499C167 589 174 667 177 711C170 711 154 711 141 710C120 708 117 702 116 687C114 656 107 585 99 500L55 502C48 502 44 497 43 487C41 471 42 449 43 441L93 441L77 275C59 276 44 277 34 277C25 277 21 273 20 267C17 251 17 225 18 216L70 216C58 101 49 10 47 1C52 0 78 0 92 0C105 0 107 3 108 11C113 49 123 148 130 216L218 216C206 100 196 11 194 2ZM136 274L152 441L240 441L224 274Z\",\"advanceWidth\":373,\"leftSideBearing\":17},{\"path\":\"M119 390L118 795C116 795 111 797 97 797C56 797 54 794 54 778C54 653 55 504 55 373C57 372 61 372 89 372C114 372 119 376 119 390ZM118-158L117 247C115 247 110 249 96 249C55 249 53 246 53 230C53 105 54-44 54-175C56-176 60-176 88-176C113-176 118-172 118-158Z\",\"advanceWidth\":137,\"leftSideBearing\":53},{\"path\":\"M-3-179C0-180 19-181 35-181C57-181 61-178 65-162C92-49 261 672 284 792C278 795 262 797 242 797C217 797 216 795 212 779C194 685 35-14-3-179Z\",\"advanceWidth\":279,\"leftSideBearing\":-3},{\"path\":\"M242 0L478 0C478 0 485 42 481 67C468 60 380 59 316 61C316 121 313 230 313 350C372 350 456 348 459 348C459 348 466 390 462 415C450 408 368 409 313 411C317 611 315 651 315 686L315 687C376 688 456 689 469 683C473 708 466 750 466 750C408 746 185 753 126 747C87 736 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 108 114 229C114 243 114 258 115 272C151 273 210 272 242 271C241 26 242 7 242 0ZM119 334C136 548 155 683 174 694C179 695 241 701 241 676C241 606 242 464 243 334C188 331 146 333 119 334Z\",\"advanceWidth\":513,\"leftSideBearing\":35},{\"path\":\"M-1 793C37 628 196-71 214-165C218-181 219-183 244-183C264-183 280-181 286-178C263-58 94 663 67 776C63 792 59 795 37 795C21 795 2 794-1 793Z\",\"advanceWidth\":279,\"leftSideBearing\":-1},{\"path\":\"M526 71C516 69 428 63 386 61C369 60 365 63 365 76L364 254C365 283 365 316 365 353L413 353C494 353 501 354 504 357C506 359 509 383 509 394C509 412 508 417 507 419L365 419C365 442 365 464 364 483C364 551 365 619 365 687L405 686C455 685 506 682 508 684C510 686 511 691 509 725C508 743 508 746 507 750C501 751 428 750 308 750C299 750 295 749 293 742C274 749 247 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39C91 17 138-2 201-3C217-3 232-2 246-1C281 1 320 3 365 3C522 3 520 3 524 7C526 9 527 13 527 29C527 60 526 71 526 71ZM145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 293 604 293 375C293 153 283 109 272 78C261 67 242 64 207 64C170 64 155 69 145 82Z\",\"advanceWidth\":572,\"leftSideBearing\":46},{\"path\":\"M447 185L417 185C382 185 380 183 380 159C380 147 382 96 377 65C366 59 352 57 340 57C319 57 306 59 299 66C291 74 284 140 281 194L281 251C292 249 317 246 339 246C359 246 397 249 417 269C435 287 447 304 447 387C447 456 429 511 418 522C412 528 391 533 328 532C310 532 269 530 248 520L246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9C83 3 103-3 163-3C196-3 226-1 245 13C246 11 247 10 248 9C255 3 285-3 335-3C372-3 403 0 422 19C444 41 448 61 447 185ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C204 452 209 405 211 359L211 268C211 234 212 205 214 179C214 134 213 86 209 65ZM287 470C296 472 343 485 366 463C383 446 379 331 373 308C359 302 297 297 283 311C282 312 281 315 280 319C280 334 279 348 279 361C279 402 283 455 287 470Z\",\"advanceWidth\":482,\"leftSideBearing\":38},{\"path\":\"M98 438C98 438 172 425 173 441C173 458 164 525 162 580L281 487C281 487 329 544 315 553C300 562 235 591 186 617L324 675C324 675 299 745 284 737C269 729 213 685 167 656L187 807C187 807 113 820 112 804C112 786 121 714 123 658L4 751C4 751-44 694-30 685C-15 676 50 648 99 622L-38 564C-38 564-13 494 2 502C16 509 71 552 117 582Z\",\"advanceWidth\":292,\"leftSideBearing\":-38},{\"path\":\"M185 780C188 782 193 786 197 790C209 802 207 808 194 819C135 869 104 895 102 896L-7 812C-4 805-2 803 3 796C12 784 17 782 26 786C55 800 82 814 100 822C110 818 154 795 185 780Z\",\"advanceWidth\":199,\"leftSideBearing\":-7},{\"path\":\"M302 780C305 782 310 786 314 790C326 802 324 808 311 819C252 869 221 895 219 896L110 812C113 805 115 803 120 796C129 784 134 782 143 786C172 800 199 814 217 822C227 818 271 795 302 780ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M243 780C246 782 251 786 255 790C267 802 265 808 252 819C193 869 162 895 160 896L51 812C54 805 56 803 61 796C70 784 75 782 84 786C113 800 140 814 158 822C168 818 212 795 243 780ZM49 721C49 607 51 492 51 378C51 253 51 16 50 2C53 1 57 0 123 0C280 0 278 0 282 4C284 6 285 10 285 26C285 57 284 68 284 68C274 66 186 60 144 58C127 57 123 60 123 73C123 120 122 256 122 352L165 352C256 352 261 353 265 357C267 359 270 381 270 392C270 410 269 415 268 417L122 417C122 506 123 595 123 684L163 683C220 682 271 679 273 681C275 683 276 688 274 722C273 740 273 743 272 747C266 748 186 747 66 747C53 747 56 747 52 743C50 741 49 737 49 721Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M174 779C177 781 182 785 186 789C198 801 196 807 183 818C124 868 93 894 91 895L-18 811C-15 804-13 802-8 795C1 783 6 781 15 785C44 799 71 813 89 821C99 817 143 794 174 779ZM126 26C126 39 124 206 124 375C123 551 125 730 125 744C123 745 118 747 102 747C57 747 51 746 51 721C51 634 53 503 53 371C54 234 52 96 52 2C55 1 62 0 93 0C121 0 126 6 126 26Z\",\"advanceWidth\":175,\"leftSideBearing\":-18},{\"path\":\"M289 780C292 782 297 786 301 790C313 802 311 808 298 819C239 869 208 895 206 896L97 812C100 805 102 803 107 796C116 784 121 782 130 786C159 800 186 814 204 822C214 818 258 795 289 780ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M282 780C285 782 290 786 294 790C306 802 304 808 291 819C232 869 201 895 199 896L90 812C93 805 95 803 100 796C109 784 114 782 123 786C152 800 179 814 197 822C207 818 251 795 282 780ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M148 768C173 784 237 824 258 838L240 859C225 877 213 893 210 893C205 892 204 888 151 838C137 824 115 801 110 797C111 795 118 786 121 782C135 763 140 763 148 768ZM26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M181 775C187 775 198 775 211 776C239 778 240 779 244 783C247 786 248 809 248 839C248 855 247 885 246 890C241 890 233 890 220 889C186 886 181 885 178 882C175 879 174 873 176 832C177 811 180 779 181 775ZM73 775C89 772 133 772 136 775C138 777 139 800 139 832L138 886C133 886 128 886 113 885C76 883 76 882 72 878C68 874 67 867 69 831C70 807 72 779 73 775ZM26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M20 881C17 879 12 875 8 871C-4 859-2 853 11 842C70 792 101 766 103 765L212 849C209 856 207 858 202 865C193 877 188 879 179 875C150 861 123 847 105 839C95 843 51 866 20 881Z\",\"advanceWidth\":199,\"leftSideBearing\":0},{\"path\":\"M30 183C43 170 50 164 53 163C56 164 59 167 117 225C174 167 179 162 182 161C185 162 186 164 200 178C212 190 223 201 223 204C223 205 221 209 161 269C221 329 223 332 223 334C223 337 215 344 203 356C189 370 187 372 185 373C182 372 177 367 120 310C57 372 56 373 53 375C50 373 40 365 27 351C17 341 13 336 13 334C13 329 16 326 76 266C20 211 16 205 16 201C16 198 20 193 30 183Z\",\"advanceWidth\":285,\"leftSideBearing\":13},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M19 311C19 292 20 283 21 280C24 279 26 279 107 279C107 198 107 191 108 188C111 187 116 187 136 187C153 187 168 187 170 189C171 190 172 194 172 279C257 279 261 280 262 281C264 283 264 294 264 311C264 331 264 333 263 336C260 337 253 337 172 337C172 425 172 427 171 430C168 431 155 432 136 432C122 432 113 431 111 429C108 426 107 422 107 337C29 337 25 336 22 333C20 331 19 325 19 311ZM265 129C265 149 265 151 264 154C261 155 254 155 143 155C35 155 26 154 23 151C21 149 20 143 20 129C20 111 21 102 22 99C25 98 30 98 142 98C257 98 262 99 263 100C264 101 265 113 265 129Z\",\"advanceWidth\":285,\"leftSideBearing\":19},{\"path\":\"M61 745C43 745 20 741 18 739C15 736 17 724 64 549C84 475 105 399 106 389C105 374 84 281 61 202C39 128 4 11 0 0C4-2 12-3 43-3C73-3 78-1 84 20C89 37 168 341 171 349L178 349C183 349 184 348 186 340C200 284 282 6 277 1C288-2 295-3 342-3C361-3 365-3 367-1C368 0 365 8 358 30C344 73 320 146 301 211C281 280 259 348 249 389C250 399 266 478 286 562C306 645 327 732 331 741C322 742 307 744 270 744C256 744 252 740 249 727C235 656 191 424 182 409L178 409C173 409 171 413 168 424C160 453 146 518 132 579C116 651 100 739 100 741C97 743 89 745 61 745Z\",\"advanceWidth\":373,\"leftSideBearing\":0},{\"path\":\"M52 522C45 517 50 414 50 262C50 175 49 72 48 3C51 0 55 0 87 0C118 0 120 2 120 26C120 53 118 150 117 268C117 337 116 440 119 473C126 476 134 477 178 477C237 477 244 475 250 474C253 480 257 518 252 523C248 527 226 530 182 530C89 530 59 527 52 522Z\",\"advanceWidth\":239,\"leftSideBearing\":48},{\"path\":\"M6 508C6 494 8 483 12 469C18 471 57 474 102 475C102 395 104 320 105 245C105 168 103 90 103 2C106 1 110 0 141 0C169 0 174 6 174 26C174 38 171 138 171 246C170 331 171 421 172 476C256 473 259 468 263 472C268 477 271 511 268 525C264 529 240 530 145 530L35 530C16 530 12 529 9 526C6 523 6 515 6 508Z\",\"advanceWidth\":275,\"leftSideBearing\":6},{\"path\":\"M43 507C43 420 45 342 45 263C46 182 44 96 44 2C47 1 51 0 82 0C110 0 115 6 115 26C115 40 113 151 112 264L112 270L168 270L216 270L216 261C217 180 215 95 215 2C218 1 222 0 253 0C281 0 286 6 286 26L284 298C283 409 285 514 285 530C283 531 278 533 262 533C217 533 214 532 214 507C214 443 215 384 216 326C202 325 187 324 171 324C147 324 127 325 112 325L114 530C112 531 107 533 91 533C46 533 43 532 43 507Z\",\"advanceWidth\":323,\"leftSideBearing\":43},{\"path\":\"M43 507C43 420 45 342 45 263C45 182 44 96 44 2C47 1 51 0 82 0C110 0 115 6 115 26C115 40 113 151 112 264C111 343 113 424 113 478C128 479 144 480 161 480C182 480 200 480 214 479C214 402 216 332 216 261C216 180 215 95 215 2C218 1 222 0 253 0C281 0 286 6 286 26C286 39 284 153 284 267C284 374 286 513 283 529C275 533 271 534 164 534L64 534C58 534 54 532 51 530C44 524 43 520 43 507Z\",\"advanceWidth\":312,\"leftSideBearing\":43},{\"path\":\"M38 504C38 425 40 353 40 282C41 193 39 104 39 2C46 0 84 0 238 0L398 0C426 0 431 6 431 26L429 304C429 408 430 506 430 527C428 528 423 530 407 530C362 530 359 529 359 504C359 428 361 358 361 289C362 215 361 140 360 59C331 57 298 55 270 54C269 100 268 197 267 296C267 402 269 512 269 530C267 531 262 533 246 533C201 533 199 532 199 507C199 429 201 358 201 287C202 212 201 137 200 54C160 55 131 56 110 57L107 288C107 401 109 512 109 527C107 528 102 530 86 530C41 530 38 529 38 504Z\",\"advanceWidth\":467,\"leftSideBearing\":38},{\"path\":\"M174-3C284-6 324 42 324 399C324 693 278 754 186 755C94 756 41 711 41 566C86 570 111 566 111 593C111 666 130 696 178 696C225 696 242 646 244 421C181 420 107 422 93 422C86 422 87 365 87 352C105 362 181 363 244 362C243 67 227 56 181 56C131 56 100 99 107 231C100 231 34 234 34 215C34 75 75 0 174-3Z\",\"advanceWidth\":363,\"leftSideBearing\":34},{\"path\":\"M38 504C38 425 40 353 40 282C41 193 39 104 39 2C46 0 84 0 238 0L431 0C432-25 432-57 432-85C435-89 442-91 458-91C486-91 491-89 491-65L490 56C488 57 483 58 467 58L431 58L429 304C429 408 430 506 430 527C428 528 423 530 407 530C362 530 359 529 359 504C359 428 361 358 361 289C362 215 361 140 360 59C331 57 298 55 270 54C269 100 268 197 267 296C267 402 269 512 269 530C267 531 262 533 246 533C201 533 199 532 199 507C199 429 201 358 201 287C202 212 201 137 200 54C160 55 131 56 110 57L107 288C107 401 109 512 109 527C107 528 102 530 86 530C41 530 38 529 38 504Z\",\"advanceWidth\":467,\"leftSideBearing\":38},{\"path\":\"M42 241C42 183 40 20 40 3C42 1 47 0 163 0L281 0C282-25 282-57 282-85C285-89 292-91 308-91C339-91 341-89 341-65C341-26 341 52 339 55C336 57 333 57 307 57L272 57L271 528C267 529 262 530 248 530C203 530 200 529 200 504C200 352 201 217 201 67C201 61 201 59 199 57C196 54 175 52 159 52C142 52 120 52 112 54L111 531C108 532 104 533 88 533C44 533 41 532 41 507C41 352 42 275 42 241Z\",\"advanceWidth\":354,\"leftSideBearing\":40},{\"path\":\"M7 1C9 0 15 0 34 0C81 0 91 1 94 4C96 6 197 361 202 361L250 361L251 362L249 2C252 0 274-1 300-1C328-1 328 0 328 38C328 64 327 208 328 361L374 361C379 361 482 9 482 4C488 1 495 0 542 0C561 0 565 0 567 2C568 3 566 11 558 33C543 74 514 155 494 220C472 292 450 360 441 401C444 408 463 490 488 571C514 654 543 738 547 747L477 747C463 747 459 743 456 730C440 659 387 438 364 424C355 419 338 418 328 418L328 432C329 585 332 727 332 747C325 748 283 748 268 748C250 748 249 746 250 726C253 660 252 571 251 429L251 418C241 417 217 417 207 422C203 428 177 503 155 578C133 655 114 735 112 743C106 745 96 747 76 747C37 747 32 741 37 724C47 692 68 631 87 571C112 490 132 408 135 401C126 360 106 292 83 220C67 169 41 93 7 1Z\",\"advanceWidth\":575,\"leftSideBearing\":7},{\"path\":\"M0 3C1 1 7 0 32 0C53 0 57 2 63 8C72 16 128 185 134 201L135 205L136 201C156 132 198 6 199 3C201 1 223 0 242 0C260 0 271 2 272 3C273 4 272 6 268 18C246 83 181 259 176 276C179 284 253 499 258 508C257 510 243 519 229 525C218 530 207 531 202 524C198 519 161 395 145 350L143 343L141 350C133 375 80 527 79 530C73 531 64 530 47 523C17 511 19 501 28 477C52 413 97 285 100 277C93 256 8 23 0 3Z\",\"advanceWidth\":275,\"leftSideBearing\":0},{\"path\":\"M290 750C276 750 213 748 213 742C213 739 213 585 214 418C204 412 87 399 87 463C87 511 85 732 90 752C90 752 10 755 10 745C10 584 12 598 12 457C12 397 57 350 131 350C192 350 210 353 214 353L214 0C229 0 290-2 290 7L289 575C289 643 285 722 290 750Z\",\"advanceWidth\":333,\"leftSideBearing\":10},{\"path\":\"M145-3C219-3 232 1 251 20C273 42 279 72 279 151C279 209 274 241 255 265C247 275 236 279 223 280C231 282 237 286 244 294C259 311 263 327 263 398C263 444 254 485 225 509C208 524 183 533 149 533C78 533 64 530 55 521C42 508 46 381 46 291C46 186 43 147 43 103C43 33 54 20 62 12C79 0 100-3 145-3ZM186 306C181 304 175 304 154 304C125 304 115 303 113 305C105 313 107 355 107 394C107 423 109 454 110 473C119 477 131 479 145 479C157 479 170 479 180 469C190 459 195 453 195 396C195 319 191 313 186 306ZM207 66C196 60 183 57 163 57C142 57 118 57 113 62C107 68 105 113 105 149C105 165 106 222 113 247C121 251 132 251 149 251C167 251 182 248 190 241C208 225 211 197 211 147C211 137 211 80 207 66Z\",\"advanceWidth\":301,\"leftSideBearing\":43},{\"path\":\"M-26-98C-19-100-7-101 9-101C43-101 46-99 46-69C46-44 49-14 49 0L253 0C284 0 288-4 289-22C290-48 290-86 290-97C290-101 306-103 323-102C353-101 358-96 358-78C358-14 354 58 349 57L305 57C299 57 294 60 293 73C290 112 284 207 282 294C279 398 281 499 282 508C266 519 241 528 202 530C165 532 131 530 120 526C87 478 69 360 62 282C52 164 33 83 32 58L7 58C-5 58-13 51-16 24C-21-23-23-91-26-98ZM225 57L115 57C105 57 105 61 108 74C116 109 125 194 131 270C139 373 147 442 165 471C176 474 204 474 215 464C224 456 218 346 218 275C218 201 220 115 225 57Z\",\"advanceWidth\":361,\"leftSideBearing\":-26},{\"path\":\"M183 2C186 1 190 0 221 0C249 0 254 6 254 26C254 139 251 448 253 527C251 528 246 530 219 530C185 530 182 526 182 504C182 502 182 331 181 314C170 307 157 304 140 304C121 304 104 306 97 313C88 321 85 504 86 528C82 530 76 531 54 531C23 531 20 527 20 506C20 355 31 271 43 259C53 249 75 244 135 244C159 244 178 247 184 249Z\",\"advanceWidth\":291,\"leftSideBearing\":20},{\"path\":\"M139-3C177-3 206 1 225 20C247 42 253 72 253 151C253 209 250 247 229 270C218 282 208 284 196 284L196 286C203 287 210 290 218 298C233 313 237 331 235 401C233 474 214 511 205 522C196 527 157 533 127 533C78 533 54 520 45 511C28 494 21 444 21 376L43 376C79 376 87 381 87 395C87 418 87 451 89 470C97 474 108 476 124 476C134 476 146 475 154 469C164 461 168 452 169 396C170 342 169 337 165 324C154 316 136 313 118 313C101 313 98 310 98 267C98 262 99 257 101 255C108 257 118 257 126 257C148 257 154 256 164 246C181 229 185 197 185 147C185 137 185 80 181 66C170 60 157 57 137 57C121 57 98 56 92 62C87 67 83 139 83 177L59 177C27 177 18 171 18 155C18 126 30 14 38 9C48 1 78-3 139-3Z\",\"advanceWidth\":276,\"leftSideBearing\":18},{\"path\":\"M180-3C218-3 251 1 270 20C292 42 298 72 298 151C298 229 274 298 263 309C256 314 236 320 174 320C146 320 130 316 127 316C126 332 127 459 127 530C60 530 23 531 1 531C-11 531-13 529-13 501L-13 468C0 470 54 471 55 470C56 469 59 352 60 280L60 138C61 68 72 25 86 8C93 2 120-3 180-3ZM226 66C215 59 204 57 182 57C151 57 138 60 134 64C131 67 124 113 124 151C124 165 125 228 132 253C136 255 154 258 171 259C187 260 200 258 209 248C225 230 230 197 230 147C230 137 230 80 226 66Z\",\"advanceWidth\":313,\"leftSideBearing\":-13},{\"path\":\"M165-3C203-3 236 1 255 20C277 42 279 78 279 157C279 235 260 291 249 302C236 312 227 318 165 318C137 318 115 312 112 312C111 328 112 459 112 530L89 530C47 530 41 527 41 511C41 497 45 336 45 290C45 158 45 36 71 9C78 3 98-3 165-3ZM211 66C200 59 189 57 167 57C136 57 125 59 121 63C118 66 109 108 109 151C109 165 109 228 116 253C120 255 139 258 156 259C172 260 185 258 194 248C210 230 215 197 215 147C215 137 215 80 211 66Z\",\"advanceWidth\":308,\"leftSideBearing\":41},{\"path\":\"M402 26L401 527C399 528 394 530 378 530C333 530 330 526 330 504C330 327 331 187 331 2C334 1 338 0 369 0C397 0 402 6 402 26ZM164-3C202-3 235 1 254 20C276 42 278 78 278 157C278 235 259 291 248 302C235 312 226 318 164 318C136 318 114 312 111 312C110 328 111 459 111 530L88 530C46 530 40 527 40 511C40 497 44 336 44 290C44 158 44 36 70 9C77 3 97-3 164-3ZM210 66C199 59 188 57 166 57C135 57 124 59 120 63C117 66 108 108 108 151C108 165 108 228 115 253C119 255 138 258 155 259C171 260 184 258 193 248C209 230 214 197 214 147C214 137 214 80 210 66Z\",\"advanceWidth\":442,\"leftSideBearing\":40},{\"path\":\"M40 504C40 460 43 382 43 279C44 176 41 46 40 1C43 0 47-1 78-1C106-1 111 5 111 25L111 255C125 253 178 254 190 256C190 249 190 205 191 184C198 51 221 14 227 9C234 3 254-3 314-3C352-3 385 0 404 19C426 41 432 61 432 270C432 433 410 508 397 522C390 527 370 533 308 533L304 533L303 533L300 533C272 532 233 528 219 514C201 496 194 461 191 395C190 372 189 349 189 318C178 315 171 314 148 314C118 314 114 315 112 317C107 322 110 395 110 436L110 527C108 528 103 530 87 530C42 530 40 526 40 504ZM258 270C258 304 259 445 266 470C274 474 290 476 304 476C321 476 332 477 343 465C364 442 364 308 364 266C364 226 367 102 360 65C349 59 336 57 319 57C298 57 285 59 278 66C266 78 258 182 258 270Z\",\"advanceWidth\":469,\"leftSideBearing\":40},{\"path\":\"M2 3C5 1 12 0 29 0C103 0 125 85 125 253C125 370 138 437 162 470C176 474 215 475 214 458C211 415 210 337 210 260C210 160 218 56 228 3C233 1 249 0 258 0C280 0 289 2 295 8C299 12 299 16 294 51C287 100 283 180 281 264C280 311 279 361 281 408C282 439 283 477 285 507C252 524 225 530 155 530C136 530 125 529 118 521C81 478 59 403 56 248C53 91 43 60 17 60C8 60 2 59 0 57C-2 55-4 49-4 35C-4 22-2 10 2 3Z\",\"advanceWidth\":327,\"leftSideBearing\":-4},{\"path\":\"M36 163C36 74 55 19 66 8C73 3 113-3 151-3C182-3 229 4 244 19C271 46 272 125 273 262C274 463 243 515 236 521C225 530 189 533 149 533C96 533 79 526 62 509C43 490 37 474 37 371L44 371C96 371 102 378 102 392C102 407 99 428 105 464C112 469 123 473 143 473C163 473 177 472 185 464C195 454 204 390 206 300L122 300C84 300 82 294 82 271L82 242C85 242 112 243 174 243L206 243C206 175 204 69 197 60C189 56 173 54 156 54C135 54 124 55 117 61C102 74 101 124 102 175C98 179 36 179 36 163Z\",\"advanceWidth\":309,\"leftSideBearing\":36},{\"path\":\"M40 3C43 0 47 0 76 0C107 0 109 2 109 27C109 50 109 121 107 213C127 224 154 244 196 283C206 292 211 299 215 306L215 262C215 175 214 72 213 3C216 0 220 0 252 0C280 0 282 2 282 27C282 54 282 150 279 268C278 307 280 508 282 523C269 529 227 534 217 522C212 515 213 499 214 385C210 376 197 361 165 331C135 303 117 289 106 282C105 341 107 509 109 523C96 529 57 531 44 522C37 517 42 488 42 262C42 175 41 72 40 3Z\",\"advanceWidth\":322,\"leftSideBearing\":40},{\"path\":\"M38 711C52 629 71 533 84 285C85 266 86 216 90 199C93 186 99 173 108 164C117 155 132 150 150 150C200 150 233 159 251 177C236 136 204 30 83 30C65 30 63-38 63-38C236-38 352 47 340 574C337 709 337 736 335 747C324 749 284 755 269 747C263 744 263 741 263 737C263 713 273 657 273 554C273 348 267 278 252 248C235 228 220 224 197 224C166 224 159 229 159 239C159 397 133 639 112 746C99 748 81 749 65 749C33 749 32 745 38 711Z\",\"advanceWidth\":381,\"leftSideBearing\":35},{\"path\":\"M162 603C192 603 216 610 233 628C251 648 257 689 257 733C253 736 246 738 222 738C206 738 200 736 200 725C200 699 199 673 199 668C188 661 176 659 167 659C155 659 144 661 137 668C130 675 129 717 128 737C123 738 104 739 91 739C67 739 63 733 63 724C63 682 76 638 92 621C102 613 116 603 162 603ZM40 3C43 0 47 0 76 0C107 0 109 2 109 27C109 50 109 121 107 213C127 224 154 244 196 283C206 292 211 299 215 306L215 262C215 175 214 72 213 3C216 0 220 0 252 0C280 0 282 2 282 27C282 54 282 150 279 268C278 307 280 508 282 523C269 529 227 534 217 522C212 515 213 499 214 385C210 376 197 361 165 331C135 303 117 289 106 282C105 341 107 509 109 523C96 529 57 531 44 522C37 517 42 488 42 262C42 175 41 72 40 3Z\",\"advanceWidth\":328,\"leftSideBearing\":40},{\"path\":\"M163-3C201-3 233 0 252 19C272 40 279 87 279 272C279 404 261 471 248 497C234 507 216 512 164 512C138 512 133 511 116 508C116 529 122 651 137 678C172 696 201 704 263 713C270 714 274 719 278 739C282 759 283 779 283 783C224 781 109 744 81 712C44 669 40 336 40 268C39 62 69 15 76 9C83 3 103-3 163-3ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 163 107 270C107 302 108 424 113 449C121 453 139 454 153 454C174 454 183 452 192 443C208 427 213 307 213 266C213 248 216 102 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":40},{\"path\":\"M15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M294 4C295 5 295 7 290 19C262 86 184 261 185 278C185 283 278 498 283 507C282 509 268 517 251 525C232 534 223 533 217 527C214 524 202 489 193 463C171 399 126 286 117 286C116 286 115 270 118 270C118 270 215 9 216 5C218 2 224 1 262 1C280 1 293 3 294 4ZM41 3C46 2 50 1 76 1C108 1 113 4 113 24C113 69 109 132 109 290C109 341 110 495 114 529C110 530 97 530 84 530C43 530 40 526 40 504C40 443 44 319 44 287C44 148 42 96 41 3Z\",\"advanceWidth\":306,\"leftSideBearing\":40},{\"path\":\"M187-220L225-220C253-220 258-214 258-194C258-149 258-90 258-3L303-3C341-3 364 0 383 19C405 41 408 61 411 270C414 457 397 500 383 519C371 527 352 533 298 533C279 533 270 533 258 529C258 649 257 741 257 747C255 748 250 750 234 750C189 750 186 746 186 724L186 530C174 531 150 533 135 533C105 533 75 527 59 512C34 488 33 429 33 268C33 66 62 15 68 9C75 3 97-3 130-3L187-3ZM185 61C175 57 165 57 152 57C131 57 124 59 117 66C105 78 101 182 101 270C101 304 100 445 107 470C115 474 123 476 151 476C174 476 180 475 184 471C187 468 187 407 187 266C187 200 187 99 185 61ZM259 62C253 86 256 448 263 473C268 474 279 476 293 476C316 476 325 473 331 466C343 451 343 438 343 266C343 181 346 101 339 65C328 59 317 57 304 57C271 57 265 57 259 62Z\",\"advanceWidth\":445,\"leftSideBearing\":33},{\"path\":\"M20 1L42 1C81 1 91 1 94 4C96 6 180 251 184 251L222 251L223 252L221 2C224 1 242 0 264 0C287 0 287 1 287 32C287 54 286 124 287 251L323 251C328 251 413 8 413 4C418 1 426 1 465 1C481 1 485 1 486 2C487 3 486 10 479 28C466 63 444 116 425 164C413 194 387 251 379 285C382 291 394 332 418 396C439 453 464 523 468 530L411 530C400 530 397 527 394 516C376 456 332 317 318 303C313 298 295 299 287 299L287 311C287 408 290 513 290 530C285 531 250 531 237 531C222 531 221 529 222 513C225 458 223 396 223 308L223 299C215 298 195 298 186 302C183 307 165 343 144 402C126 453 109 520 107 527C102 528 94 530 77 530C45 530 40 525 45 511C55 484 72 433 86 396C110 333 124 291 126 285C119 251 96 195 83 164C66 122 48 78 20 1Z\",\"advanceWidth\":506,\"leftSideBearing\":20},{\"path\":\"M33 4C36 1 38 1 73 1C86 1 91 7 90 30C89 57 88 102 92 243C95 359 105 451 112 467C117 472 120 473 128 473C135 473 137 472 139 471C151 395 154 352 164 224C171 138 172 94 172 36C172 6 199-2 245-2C285-2 295-1 300 1C332 43 359 176 359 356C359 411 358 447 357 472C362 475 368 476 378 476C385 476 405 476 409 472C411 470 412 440 413 424C417 357 416 266 416 214C416 79 414 9 413 2C417 1 422 1 462 1C477 1 479 3 479 24C479 62 483 106 481 220C480 278 475 412 474 519C460 525 430 529 387 529C300 529 295 524 297 501C300 472 301 409 302 337C304 161 272 69 267 55C264 54 262 54 253 54C243 54 235 55 235 61C235 178 215 419 199 523C193 527 168 529 138 529C91 529 81 526 69 515C47 494 39 367 34 238C27 67 31 6 33 4Z\",\"advanceWidth\":522,\"leftSideBearing\":30},{\"path\":\"M7 0L87 0C93 3 149 230 167 339C176 336 223 340 234 344C234 128 232 63 226 1C253-3 310 1 310 5C310 168 308 730 309 749C309 749 267 753 171 753C71 753 37 710 37 553C37 463 68 355 101 353C90 290 16 17 6 3C6 3 5 0 7 0ZM234 406C223 403 145 391 127 429C107 472 105 633 135 689C176 697 237 700 237 670Z\",\"advanceWidth\":359,\"leftSideBearing\":5},{\"path\":\"M6 9C10 7 16 6 56 6C74 6 77 7 81 17C95 51 125 153 140 217C144 216 155 217 166 217C176 217 190 220 195 221C195 70 194 46 189 7C200 6 210 6 225 6C261 6 262 7 262 27C262 86 260 194 260 284C260 476 254 493 237 518C230 524 211 533 148 533C110 533 78 528 59 509C38 488 27 441 28 388C29 299 41 268 64 239C68 234 76 229 80 229C66 172 12 19 6 9ZM192 280C184 276 175 274 157 274C130 274 122 277 113 286C103 296 95 331 95 379C95 415 96 431 102 463C113 469 126 471 143 471C164 471 177 469 184 462C196 450 197 388 197 362C197 330 198 307 192 280Z\",\"advanceWidth\":300,\"leftSideBearing\":6},{\"path\":\"M498 15C492 149 490 599 490 602C490 667 489 718 489 745C488 767 442 757 422 757C422 757 422 755 421 753C421 745 421 728 421 708L421 694C421 630 425 604 422 604C286 604 243 528 243 364C243 347 411 352 420 353C422 242 426 57 425 6C442 2 502-6 498 15ZM273 285C273 285 237 287 201 287C190 287 153 287 129 285C129 362 130 448 131 533L139 534C245 545 324 683 324 749L240 752C251 701 200 605 133 605C134 656 135 706 137 753C86 752 50 750 50 750C61 737 52 173 52 5C52 1 108-3 135 1C132 35 130 117 129 222L208 224C223 224 268 6 268 1L348 1C350 1 349 4 349 4C337 36 282 267 273 285ZM420 417C365 414 343 416 316 417C326 507 348 546 421 545C421 435 420 507 420 417Z\",\"advanceWidth\":548,\"leftSideBearing\":50},{\"path\":\"M447 409C476 439 503 488 503 567C503 653 475 753 386 754C376 754 331 755 294 752L280 752C221 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 211 252 243 251C244 215 244 182 245 152C245 70 244 12 244 6C244 6 256-1 352-1C488-1 526 55 526 211C526 342 486 388 447 409ZM426 563C426 543 427 459 386 431C361 430 329 430 319 432L319 578C319 619 317 662 317 698L350 698C408 698 426 639 426 563ZM243 314C188 311 146 313 119 314C136 528 155 678 174 689C179 690 244 702 244 686C244 616 242 444 243 314ZM427 71C416 64 319 53 319 71L319 367L370 367C418 367 451 339 451 205C451 178 450 97 427 71Z\",\"advanceWidth\":371,\"leftSideBearing\":35},{\"path\":\"M562 3C539 23 435 406 426 424C434 438 514 740 541 749L450 749C455 743 379 454 354 439C343 432 320 433 312 430C312 524 313 620 316 709C318 766 129 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 211 252 243 251C245 140 248 57 254 4C271 0 335-6 331 15C322 92 315 229 313 378L361 383C385 386 468 5 468 0L561 0C563 0 562 3 562 3ZM247 672C244 602 242 444 243 314C188 311 146 313 119 314C136 528 155 678 174 689C179 690 248 697 247 672Z\",\"advanceWidth\":597,\"leftSideBearing\":35},{\"path\":\"M316 316L316 456C436 455 499 523 499 616C499 690 471 753 382 753C374 753 344 754 314 752L314 753C306 753 298 753 291 752L279 752C220 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 210 252 242 251L240 5C240 5 242 3 272 1C288 0 312-1 349-1C485-1 523 38 523 165C523 288 459 313 316 316ZM422 612C422 592 418 543 388 522C364 521 327 519 316 521L316 578C316 602 315 626 315 650C315 666 316 682 316 697L346 697C404 697 422 686 422 612ZM119 314C136 528 155 678 174 689C179 690 241 701 244 687L244 617C243 553 243 469 243 389C243 364 242 339 242 314C188 311 146 313 119 314ZM424 71C414 65 334 55 318 67C318 80 317 95 316 110L316 251L367 251C415 251 448 203 448 159C448 132 447 97 424 71Z\",\"advanceWidth\":545,\"leftSideBearing\":35},{\"path\":\"M320-1L321 0C331 2 332 6 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2L256 2C234-20 216-44 197-68C153-123 144-170 172-200C184-213 206-220 263-220C299-220 318-215 324-208C329-202 313-169 309-161C294-168 284-171 265-172C241-173 232-171 219-161C214-144 216-131 250-82C270-53 292-29 320-1ZM245 534C243 463 241 423 242 334C193 332 151 334 124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M82 768C107 784 171 824 192 838L174 859C159 877 147 893 144 893C139 892 138 888 85 838C71 824 49 801 44 797C45 795 52 786 55 782C69 763 74 763 82 768ZM7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M229 8L230 9C235 12 240 15 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3C136-21 121-40 106-59C62-114 53-161 81-191C93-204 115-211 172-211C208-211 227-206 233-199C238-193 222-160 218-152C203-159 193-162 174-163C150-164 141-162 128-152C123-135 125-122 159-73C179-44 201-20 229 8ZM103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56C146 56 125 57 118 64C105 77 103 140 103 159Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C86 2 103-1 127-2C113-18 95-39 95-54C95-74 133-108 149-119C140-128 114-150 104-158C101-165 104-177 113-190C126-208 134-211 147-200C160-189 177-173 199-150C219-130 219-104 189-69C183-62 171-52 162-42C166-35 187-12 199 0C213 3 224 8 235 19Z\",\"advanceWidth\":300,\"leftSideBearing\":41},{\"path\":\"M235 8C241 11 246 15 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9C83 3 111-3 158-3C142-21 127-40 112-59C68-114 59-161 87-191C99-204 121-211 178-211C214-211 233-206 239-199C244-193 228-160 224-152C209-159 199-162 180-163C156-164 147-162 134-152C129-135 131-122 165-73C185-44 207-20 235 8ZM115 470C124 472 171 485 194 463C211 446 207 331 201 308C187 302 125 297 111 311C102 320 109 446 115 470Z\",\"advanceWidth\":315,\"leftSideBearing\":39},{\"path\":\"M227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10C58 5 76-2 117-3C103-19 87-39 87-53C87-73 125-107 141-118C132-127 106-149 96-157C93-164 96-176 105-189C118-207 126-210 139-199C152-188 169-172 191-149C211-129 211-103 181-68C175-61 163-51 154-41C158-34 181-9 192 2C206 6 218 11 227 20Z\",\"advanceWidth\":306,\"leftSideBearing\":25},{\"path\":\"M275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C165-3 178-3 193-2C173-23 155-46 138-68C94-123 85-170 113-200C125-213 147-220 204-220C240-220 259-215 265-208C270-202 254-169 250-161C235-168 225-171 206-172C182-173 173-171 160-161C155-144 157-131 191-82C211-53 233-29 261-1L265 3C268 3 270 4 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M65 609L81 600C101 590 106 589 111 599C117 610 133 647 140 665C142 670 142 671 142 671L144 671C144 671 144 670 146 665C157 640 176 601 182 589L204 600C220 608 222 612 219 619C207 653 174 750 174 750L153 750C122 750 120 750 118 748C116 746 108 726 93 686ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M133 593C135 593 148 598 156 601C172 607 175 611 173 618L140 748C138 748 131 746 110 738C88 730 76 724 73 721C71 719 72 715 96 667C116 627 124 612 133 593ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M122 598C136 625 175 705 186 727L160 737C138 745 120 753 117 751C113 748 113 744 94 674C85 641 77 610 75 604L92 597C114 589 118 590 122 598ZM20 0L178 0C204 0 210 9 210 32C210 44 210 58 210 63L98 62C90 62 93 68 95 74L204 468C207 476 204 529 204 529L51 530C30 530 24 527 24 506C24 497 24 484 24 467L126 467C134 467 137 465 135 460C132 453 20 44 20 44Z\",\"advanceWidth\":230,\"leftSideBearing\":20},{\"path\":\"M1 469C4 469 43 472 45 470C47 468 45 341 45 258L42 0L71 0C107 0 111 3 111 26C111 44 111 149 110 257L110 470C118 471 155 471 159 471C162 471 202 472 204 470C206 468 204 341 204 258C204 147 201 13 201 0L230 0C266 0 270 3 270 26C270 44 270 149 269 257C268 340 269 423 269 470C277 471 314 470 318 470C325 470 326 526 325 528C311 527 277 527 269 527C267 641 269 693 276 718C284 722 297 724 312 724C324 724 331 723 336 722C344 720 347 721 353 742C357 756 361 773 361 775C354 778 336 781 317 781C263 781 241 774 229 762C202 735 203 668 203 527L171 527L110 527C108 641 110 693 117 718C125 722 131 724 146 724C158 724 165 723 170 722C178 720 181 721 187 742C191 756 195 773 195 775C188 778 170 781 151 781C97 781 82 774 70 762C43 735 44 668 44 527L12 527C2 527 1 525 1 480Z\",\"advanceWidth\":338,\"leftSideBearing\":1},{\"path\":\"M54 0L83 0C119 0 123 3 123 26C123 44 123 149 122 257L122 470C128 471 200 473 203 470C205 468 206 373 206 260C206 174 204 77 204 2C207 1 211 0 242 0C270 0 275 6 275 26C275 90 273 178 273 261C273 396 275 521 274 527C265 530 151 529 122 529C120 643 122 691 129 716C137 720 150 722 165 722C190 722 210 721 229 720C237 720 241 722 246 740C250 754 254 771 254 773C247 776 229 780 170 780C116 780 94 772 82 760C55 733 56 668 56 527L24 527C14 527 13 525 13 480L13 469C16 469 55 472 57 470C59 468 57 341 57 258Z\",\"advanceWidth\":315,\"leftSideBearing\":13},{\"path\":\"M20 466C20 466 54 469 54 467L52 268C52 67 83 15 90 9C112 0 125-3 185-3C221-3 238-1 246 2C247 53 233 56 229 56L187 56C158 56 148 58 140 66C131 75 125 117 125 266C125 331 124 405 127 466C130 466 157 467 186 467C214 467 235 467 235 466L233 268C234 60 264 15 271 9C298-3 322-3 353-3C391-3 424 0 443 19C455 31 471 61 466 323L439 323C406 323 397 318 397 290C397 245 402 81 393 61C393 61 389 56 358 56C339 56 329 58 321 66C312 75 306 117 306 266C306 331 305 405 308 466L443 465C450 465 456 465 456 477C456 495 458 526 457 530C411 526 306 527 308 529C308 529 307 615 310 630L276 630C238 630 236 629 236 618L235 528L223 528C193 528 126 528 127 529C127 529 126 615 129 630L95 630C57 630 55 629 55 618L54 528L42 528C23 528 20 526 20 497Z\",\"advanceWidth\":491,\"leftSideBearing\":20},{\"path\":\"M316 316L316 461C459 461 499 523 499 616C499 690 471 753 382 753C374 753 344 754 314 752L314 753C306 753 298 753 291 752L279 752C220 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 210 252 242 251L240 5C240 5 242 3 272 1C288 0 312-1 349-1C485-1 523 38 523 165C523 288 459 313 316 316ZM422 612C422 592 422 541 398 527C377 521 327 515 316 520L316 578C316 602 315 626 315 650C315 666 316 682 316 697L346 697C404 697 422 686 422 612ZM119 314C136 528 155 678 174 689C179 690 241 701 244 687L244 617C243 553 243 469 243 389C243 364 242 339 242 314C188 311 146 313 119 314ZM424 71C414 65 334 55 318 67C318 80 317 95 316 110L316 251L367 251C415 251 448 203 448 159C448 132 447 97 424 71Z\",\"advanceWidth\":371,\"leftSideBearing\":35},{\"path\":\"M116 246L116 496C236 495 309 540 309 636C309 690 271 753 182 753C174 753 144 754 114 752L114 753C106 753 98 753 91 752C68 751 46 753 45 749C44 749 44 748 44 748C44 595 41 24 40 5C40 5 42 3 72 1C88 0 112-1 149-1C285-1 323 48 323 125C323 236 259 243 116 246ZM473 12C457 146 463 526 463 529C463 594 462 709 462 736C461 758 415 748 395 748C395 748 395 746 394 744C394 736 394 719 394 699L394 685C395 621 398 531 395 531C259 531 216 455 216 291C216 274 384 279 393 280C395 169 398 56 404 3C421-1 477-9 473 12ZM232 632C232 587 224 577 203 567C179 566 128 559 116 561L116 588C116 629 114 661 114 697L146 697C204 697 232 686 232 632ZM393 344C338 341 316 343 289 344C299 434 321 473 394 472C394 362 393 434 393 344ZM116 71L116 181L167 181C215 181 248 155 248 119C248 54 116 58 116 71Z\",\"advanceWidth\":545,\"leftSideBearing\":40},{\"path\":\"M196-3C317-3 351 57 351 151C306 147 271 151 271 124C271 82 254 61 203 61C157 61 128 104 128 355C128 637 144 696 207 696C250 696 270 679 272 610C279 610 346 608 346 627C346 705 308 753 209 753C89 753 49 697 49 350C49 58 89-3 196-3ZM298 199C365 199 400 223 400 381C400 534 362 558 301 558C238 558 198 520 198 368C198 236 231 200 298 199ZM301 259C266 259 256 294 256 373C256 465 263 498 297 498C337 498 344 462 343 378C342 299 337 259 301 259Z\",\"advanceWidth\":445,\"leftSideBearing\":49},{\"path\":\"M478 685C609 684 662 681 665 681C665 681 671 726 668 751C640 744 237 750 214 750C206 750 208 694 208 681C219 683 270 685 404 685C405 536 406 43 404 0C419 0 481 0 481 5C481 77 476 491 478 685ZM266 192C266 120 254 55 198 55C149 55 119 101 119 351C119 493 145 566 198 566C241 566 261 519 263 410C270 410 337 408 337 427C337 565 299 622 200 623C86 624 40 552 40 348C40 54 85-4 187-5C308-6 342 65 342 219C297 215 266 219 266 192ZM668 622C653 624 592 624 592 615C592 609 594 22 593 1C608-1 669-1 669 8L668 448C668 516 667 594 668 622Z\",\"advanceWidth\":719,\"leftSideBearing\":40},{\"path\":\"M255 372C255 369 255 264 256 244C255 245 255 245 255 246C178 241 151 245 125 246L125 385C125 453 121 722 126 750C112 750 49 748 49 742C49 736 51 21 50 0C65 0 123-2 126 6C126 12 125 47 125 182C169 186 251 181 256 181L256 0C271 0 331-2 332 7C332 14 331 101 331 205C331 273 327 352 332 380C318 380 255 378 255 372ZM546 750C532 750 469 748 469 742C469 739 469 661 470 574C469 575 469 575 469 576C392 571 355 575 329 576L329 655C329 723 325 722 330 750C316 750 253 748 253 742C253 736 255 421 254 400C269 400 328 398 330 407C330 411 329 458 329 512C373 516 465 511 470 511L470 0C485 0 546-2 546 7L545 655C545 723 541 722 546 750ZM330 407C330 406 330 406 330 407ZM126 7C126 7 126 7 126 6ZM332 7C332 6 332 6 332 7Z\",\"advanceWidth\":596,\"leftSideBearing\":49},{\"path\":\"M46-1L393-1C393-1 401 43 396 68C389 64 244 63 203 63C176 63 147 63 121 64C120 84 121 106 121 133C119 319 123 638 125 749C111 749 40 743 46 742C52 740 50 154 46-1ZM200 155L394 155C394 155 402 197 397 222C390 218 375 217 334 217C307 217 301 217 275 218C274 238 275 262 275 289C273 475 277 637 279 748C265 748 194 742 200 741C206 739 204 310 200 155Z\",\"advanceWidth\":424,\"leftSideBearing\":45},{\"path\":\"M286 0C302 0 383-2 389 9C399 28 417 684 418 750C379 751 339 748 339 740L340 131C340 131 336 130 330 130C323 191 247 595 224 723C215 766 73 746 54 749C57 712 53 373 53 340C68 337 129 336 129 345C129 400 124 573 125 689C128 689 150 693 152 683C190 492 245 204 286 0ZM97-40C164-40 199 4 199 132C199 275 161 299 100 299C37 299-3 261-3 119C-3 7 30-39 97-40ZM100 20C65 20 55 45 55 124C55 206 62 239 96 239C136 239 143 203 142 129C141 50 136 20 100 20Z\",\"advanceWidth\":448,\"leftSideBearing\":-3},{\"path\":\"M267 175C252 185 171 180 125 178C124 254 124 359 124 503C252 503 301 537 301 635C301 704 260 753 187 753C91 753 51 749 51 749C52 730 50 138 50 5C50 1 105-3 132 1C129 27 128 64 126 122L207 124C222 124 262 6 262 1L342 1C344 1 343 4 343 4C331 36 274 157 267 175ZM169 695C202 695 229 678 229 630C229 604 218 573 202 566C193 563 151 560 124 562L122 691C135 693 156 695 169 695ZM359 277C359 255 354 244 354 244C294 239 279 237 279 330C294 331 359 325 359 337L359 377C337 375 290 380 279 377C275 387 278 446 284 465C334 479 357 467 359 410C383 409 409 410 409 418C409 481 370 519 320 519C268 519 223 481 223 422L223 284C223 216 283 188 318 188C383 188 412 227 415 300C370 298 359 291 359 277Z\",\"advanceWidth\":395,\"leftSideBearing\":50},{\"path\":\"M288 3C292 0 307 0 333 0C345 0 363 1 377 5C344 83 276 294 262 356C303 390 319 443 319 561C319 637 301 696 277 722C257 739 206 750 162 750C54 750 49 735 49 704L48 30C48 5 51 1 60 0C77-1 115-1 132 1C126 63 124 120 124 336C145 333 172 332 190 335C228 229 280 10 288 3ZM649 3C653 0 668 0 694 0C706 0 724 1 738 5C705 83 637 294 623 356C664 390 680 443 680 561C680 637 662 696 638 722C618 739 567 750 523 750C415 750 410 735 410 704L409 30C409 5 412 1 421 0C438-1 476-1 493 1C487 63 485 120 485 336C506 333 533 332 551 335C589 229 641 10 649 3ZM129 412C123 417 122 420 121 543C120 655 121 664 126 678C136 682 153 684 172 684C192 684 206 681 215 674C228 664 238 622 239 559C240 500 237 447 226 416C216 406 195 401 170 401C151 401 141 402 129 412ZM490 412C484 417 483 420 482 543C481 655 482 664 487 678C497 682 514 684 533 684C553 684 567 681 576 674C589 664 599 622 600 559C601 500 598 447 587 416C577 406 556 401 531 401C512 401 502 402 490 412Z\",\"advanceWidth\":722,\"leftSideBearing\":48},{\"path\":\"M128 352C158 352 192 354 210 374C226 391 232 426 232 534C232 631 223 677 204 706C190 714 162 718 129 718C106 718 72 715 54 699C36 683 31 661 33 626C37 625 48 625 55 625C89 625 92 632 92 648C92 673 146 672 156 661C163 653 170 628 170 573C170 573 144 576 130 576C101 576 76 571 56 554C35 536 30 508 30 458C30 425 39 397 52 375C62 365 86 352 128 352ZM169 410C148 402 110 400 99 411C86 424 85 485 93 517C115 526 152 527 165 514C175 504 174 426 169 410Z\",\"advanceWidth\":272,\"leftSideBearing\":30},{\"path\":\"M44 522C37 517 42 414 42 262C42 175 41 72 40 3C43 0 47 0 79 0C110 0 112 2 112 26C112 53 110 150 109 268C109 337 108 437 111 470C128 477 189 474 208 472C219 471 221 473 222 479C224 493 224 520 222 525C214 528 206 530 154 530C61 530 51 527 44 522ZM231 508C231 494 234 479 237 465C244 468 259 474 304 475C304 395 306 320 307 245C308 168 305 90 305 2C308 1 312 0 343 0C371 0 376 6 376 26C376 38 373 138 373 246C372 331 373 421 374 476C458 473 460 464 464 468C469 473 473 511 470 525C466 529 442 530 347 530L260 530C241 530 237 529 234 526C231 523 231 515 231 508Z\",\"advanceWidth\":476,\"leftSideBearing\":40},{\"path\":\"M124 191C140 191 177 190 183 194L183 344C183 410 270 458 269 547C268 616 260 652 242 671C225 689 183 690 164 690C133 690 85 685 67 667C50 650 47 505 54 490C58 488 63 487 71 487C101 487 117 493 117 504C117 511 108 612 117 629C135 637 170 636 181 626C196 613 199 592 199 539C199 463 120 442 120 341C120 329 124 200 124 191ZM129 17C144 15 180 18 185 22C191 27 193 103 189 110C171 118 127 116 124 113C121 110 125 30 129 17Z\",\"advanceWidth\":319,\"leftSideBearing\":50},{\"path\":\"M409 79C382 127 318 231 282 294L401 462C416 483 418 492 397 505L366 525C364 523 288 416 279 403C233 337 216 313 208 302C201 293 202 284 208 273C221 249 345 48 358 24C360 24 365 25 379 33C418 55 420 59 409 79ZM259 70C232 118 168 222 132 285L251 453C266 474 268 482 247 496L216 517C214 515 138 408 129 395C83 329 66 305 58 294C51 285 52 276 58 265C71 241 195 39 208 15C210 15 215 16 229 24C268 46 270 50 259 70Z\",\"advanceWidth\":475,\"leftSideBearing\":53},{\"path\":\"M216 463C243 415 307 311 343 248L224 80C209 59 207 51 228 37L259 16C261 18 337 125 346 138C392 204 409 228 417 239C424 248 423 257 417 268C404 292 280 494 267 518C265 518 260 517 246 509C207 487 205 483 216 463ZM66 454C93 406 157 302 193 239L74 71C59 50 57 41 78 28L109 8C111 10 187 117 196 130C242 196 259 220 267 231C274 240 273 249 267 260C254 284 130 485 117 509C115 509 110 508 96 500C57 478 55 474 66 454Z\",\"advanceWidth\":475,\"leftSideBearing\":60},{\"path\":\"M110 343C125 340 162 344 167 348C173 353 175 412 171 419C160 434 108 434 101 422C96 414 105 356 110 343ZM265 269C265 289 265 291 264 294C261 295 254 295 143 295C35 295 26 294 23 291C21 289 20 283 20 269C20 251 21 242 22 239C25 238 30 238 142 238C257 238 262 239 263 240C264 241 265 253 265 269ZM118 101C133 98 170 102 175 106C181 111 183 170 179 177C168 192 116 192 109 180C104 172 113 114 118 101Z\",\"advanceWidth\":280,\"leftSideBearing\":20},{\"path\":\"M158 98C169 87 173 85 175 85C181 85 187 85 360 258C367 265 368 268 368 271L206 435C192 449 184 450 164 430C142 408 138 403 137 400C174 362 254 281 272 263C213 207 118 118 130 127C132 126 140 116 158 98Z\",\"advanceWidth\":359,\"leftSideBearing\":128},{\"path\":\"M270 433C259 444 255 446 253 446C247 446 241 446 68 273C61 266 60 263 60 260L222 96C236 82 244 81 264 101C286 123 290 128 291 131C254 169 174 250 156 268C215 324 310 413 298 404C296 405 288 415 270 433Z\",\"advanceWidth\":359,\"leftSideBearing\":60},{\"path\":\"M35 294C35 273 36 262 36 260C41 261 85 262 85 262L214 262C214 240 215 239 215 194C218 193 224 193 250 193C274 193 278 198 278 215L277 315C276 316 273 317 264 317L95 317C45 317 41 316 38 313C36 311 35 308 35 294Z\",\"advanceWidth\":323,\"leftSideBearing\":35},{\"path\":\"M38 504C38 454 41 221 41 215L42 127C43-12 40-155 39-248C44-249 48-250 74-250C106-250 111-247 111-227C111-193 109-103 108 10C118 1 134-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C130 53 109 60 109 268L110 486C110 506 111 521 112 529C108 530 95 530 82 530L80 530L72 530C54 530 46 529 43 524C39 520 38 514 38 504Z\",\"advanceWidth\":313,\"leftSideBearing\":38},{\"path\":\"M39 368C51 354 82 340 201 340C324 340 356 352 367 366C384 388 387 413 387 532C387 634 381 681 359 712C345 719 327 731 204 731C73 731 59 724 48 710C28 685 20 660 21 533C22 417 27 390 39 368ZM344 385C335 377 320 369 204 369C89 369 74 378 67 388C58 401 53 415 52 534C51 639 55 671 67 689C77 693 90 703 202 703C318 703 328 692 337 684C351 671 356 634 356 527C356 441 355 408 344 385ZM241 413C244 410 250 411 266 411C273 411 284 411 291 414C272 459 266 477 256 512C275 530 279 555 279 591C279 615 273 636 259 651C247 660 218 668 197 668C134 668 132 659 132 640C132 607 132 580 132 534L131 428C131 414 134 410 138 410C148 410 170 409 179 410C176 422 176 484 176 504C189 502 204 502 214 504C223 472 237 417 241 413ZM177 544C173 548 172 611 176 626C189 629 212 632 223 623C236 612 235 562 226 546C218 538 184 537 177 544Z\",\"advanceWidth\":400,\"leftSideBearing\":21},{\"path\":\"M76 484C83 478 103 472 163 472C201 472 234 475 253 494C275 516 281 564 281 603C281 651 257 711 246 722C239 727 219 733 157 733C129 733 83 729 68 714C41 687 41 634 41 602C41 551 56 507 76 484ZM209 535C189 524 132 522 119 535C101 553 98 653 115 670C131 678 183 687 198 670C220 646 221 565 209 535Z\",\"advanceWidth\":322,\"leftSideBearing\":41},{\"path\":\"M162 606C192 606 216 613 233 631C251 651 257 692 257 736C253 739 246 741 222 741C206 741 200 739 200 728C200 702 199 676 199 671C188 664 176 662 167 662C155 662 144 664 137 671C130 678 129 720 128 740C123 741 104 742 91 742C67 742 63 736 63 727C63 685 76 641 92 624C102 616 116 606 162 606Z\",\"advanceWidth\":328,\"leftSideBearing\":63},{\"path\":\"M177 8L108 9C94-7 67-35 67-53C67-73 105-107 121-118C112-127 86-149 76-157C73-164 76-176 85-189C98-207 106-210 119-199C132-188 149-172 171-149C191-129 191-103 161-68C155-61 143-51 134-41C139-32 173 3 177 8Z\",\"advanceWidth\":232,\"leftSideBearing\":67},{\"path\":\"M199 3C177-19 158-44 139-68C95-123 86-170 114-200C126-213 148-220 205-220C241-220 260-215 266-208C271-202 255-169 251-161C236-168 226-171 207-172C183-173 174-171 161-161C156-144 158-131 192-82C212-53 234-29 262-1C264 1 267 4 268 7C265 6 249 3 243 3C224 2 211 2 199 3Z\",\"advanceWidth\":297,\"leftSideBearing\":98},{\"path\":\"M267 175C252 185 171 180 125 178C124 254 124 359 124 503C252 503 301 537 301 635C301 704 260 753 187 753C91 753 51 749 51 749C52 730 50 138 50 5C50 1 105-3 132 1C129 27 128 64 126 122L207 124C222 124 262 6 262 1L342 1C344 1 343 4 343 4C331 36 274 157 267 175ZM2262 740L2263 131C2263 131 2259 130 2253 130C2246 191 2170 595 2147 723C2138 766 1996 746 1977 749C1980 712 1976 373 1976 340C1991 337 2052 336 2052 345C2052 400 2047 573 2048 689C2051 689 2073 693 2075 683C2113 492 2168 204 2209 0C2225 0 2306-2 2312 9C2322 28 2340 684 2341 750C2302 751 2262 748 2262 740ZM1682 685C1813 684 1866 681 1869 681C1869 681 1875 726 1872 751C1844 744 1441 750 1418 750C1410 750 1412 694 1412 681C1423 683 1474 685 1608 685C1609 536 1610 43 1608 0C1623 0 1685 0 1685 5C1685 77 1680 491 1682 685ZM574 750C449 750 444 747 444 723C444 636 446 505 446 373C446 236 445 101 445 7C449 4 476 3 569 3C650 3 676 13 698 35C721 58 733 87 733 380C733 608 722 678 693 724C673 741 644 750 574 750ZM1110 750C1074 750 1072 747 1072 716C1072 623 1074 433 1074 365C1074 143 1072 109 1061 78C1050 67 1031 64 1004 64C967 64 952 69 942 82C929 99 926 127 924 393C923 479 924 705 925 750L877 750C845 750 842 746 842 699L842 391C842 140 850 72 868 39C886 17 935-2 998-3C1060-4 1104 15 1119 36C1143 69 1149 96 1149 370C1149 455 1147 699 1145 749C1132 750 1127 750 1110 750ZM169 695C202 695 229 678 229 630C229 604 218 573 202 566C193 563 151 560 124 562L122 691C135 693 156 695 169 695ZM641 88C633 79 619 71 575 71C545 71 531 74 524 80C523 144 522 258 522 377L522 679C529 682 529 683 572 683C607 683 621 679 631 669C644 656 653 604 653 375C653 153 651 122 641 88ZM1470 192C1470 120 1458 55 1402 55C1353 55 1323 101 1323 351C1323 493 1349 566 1402 566C1445 566 1465 519 1467 410C1474 410 1541 408 1541 427C1541 565 1503 622 1404 623C1290 624 1244 552 1244 348C1244 54 1289-4 1391-5C1512-6 1546 65 1546 219C1501 215 1470 219 1470 192ZM1872 622C1857 624 1796 624 1796 615C1796 609 1798 22 1797 1C1812-1 1873-1 1873 8L1872 448C1872 516 1871 594 1872 622ZM359 277C359 255 354 244 354 244C294 239 279 237 279 330C294 331 359 325 359 337L359 377C337 375 290 380 279 377C275 387 278 446 284 465C334 479 357 467 359 410C383 409 409 410 409 418C409 481 370 519 320 519C268 519 223 481 223 422L223 284C223 216 283 188 318 188C383 188 412 227 415 300C370 298 359 291 359 277ZM2023 299C1960 299 1920 261 1920 119C1920 7 1953-39 2020-40C2087-40 2122 4 2122 132C2122 275 2084 299 2023 299ZM2065 129C2064 50 2059 20 2023 20C1988 20 1978 45 1978 124C1978 206 1985 239 2019 239C2059 239 2066 203 2065 129Z\",\"advanceWidth\":2371,\"leftSideBearing\":50},{\"path\":\"M0 780L0-220L694-220C694-182 725-152 763-152C800-152 831-182 831-220L1000-220L1000 142L958 177L958 499L1000 534L1000 780Z\",\"advanceWidth\":1000,\"leftSideBearing\":0}],\"ascender\":780,\"descender\":-220,\"xHeight\":530,\"capHeight\":750,\"unitsPerEm\":1000,\"ligatures\":[{\"sub\":[5,5],\"by\":252},{\"sub\":[5,8],\"by\":253},{\"sub\":[19,19],\"by\":254}],\"kerning\":[{\"posFormat\":1,\"coverage\":{\"format\":1,\"glyphs\":[5,17]},\"valueFormat1\":4,\"valueFormat2\":0,\"pairSets\":[[{\"secondGlyph\":172,\"value1\":{\"xAdvance\":20}}],[{\"secondGlyph\":37,\"value1\":{\"xAdvance\":-53}}]]},{\"posFormat\":2,\"coverage\":{\"format\":1,\"glyphs\":[48,56,113]},\"valueFormat1\":4,\"valueFormat2\":0,\"classDef1\":{\"format\":1,\"startGlyph\":56,\"classes\":[1]},\"classDef2\":{\"format\":2,\"ranges\":[{\"start\":4,\"end\":4,\"classId\":1},{\"start\":14,\"end\":14,\"classId\":1},{\"start\":41,\"end\":41,\"classId\":1}]},\"class1Count\":2,\"class2Count\":2,\"classRecords\":[[{\"value1\":{\"xAdvance\":0}},{\"value1\":{\"xAdvance\":-25}}],[{\"value1\":{\"xAdvance\":0}},{\"value1\":{\"xAdvance\":-40}}]]}]}\n'));
-
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$viewGlyph = F2(
-	function (k, _p0) {
-		var _p1 = _p0;
-		return A2(
-			_elm_lang$svg$Svg$path,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill('#bbb'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$transform(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'scale(',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(k),
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										',',
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(0 - k),
-											')'))))),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			{ctor: '[]'});
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$label = F3(
-	function (_p2, anchor, str) {
-		var _p3 = _p2;
-		return A2(
-			_elm_lang$svg$Svg$text_,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$x(
-					_elm_lang$core$Basics$toString(_p3._0)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$y(
-						_elm_lang$core$Basics$toString(_p3._1)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$textAnchor(anchor),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg$text(str),
-				_1: {ctor: '[]'}
-			});
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$viewMetrics = F2(
-	function (k, _p4) {
-		var _p5 = _p4;
-		var _p7 = _p5.leftSideBearing;
-		var _p6 = _p5.advanceWidth;
-		return A2(
-			_elm_lang$svg$Svg$g,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$svg$Svg$circle,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$r('5'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('black'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$svg$Svg$line,
-						{
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$x1(
-								_elm_lang$core$Basics$toString((0 - k) * 400)),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$x2(
-									_elm_lang$core$Basics$toString(k * (_p6 + 400))),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A3(
-							_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
-							{ctor: '_Tuple2', _0: (k * (_p6 + 400)) - 30, _1: -20},
-							'end',
-							'baseline'),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
-								{ctor: '_Tuple2', _0: k * (_p6 + 400), _1: k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) - 50)},
-								'middle',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									'units per em = ',
-									_elm_lang$core$Basics$toString(_w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm))),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$svg$Svg$circle,
-									{
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$r('5'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$fill('black'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$cx(
-													_elm_lang$core$Basics$toString(k * _p6)),
-												_1: {ctor: '[]'}
-											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$svg$Svg$line,
-										{
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$y1(
-												_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50))),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$x1(
-													_elm_lang$core$Basics$toString(k * _p6)),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$x2(
-														_elm_lang$core$Basics$toString(k * _p6)),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$svg$Svg$line,
-											{
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$y1(
-													_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 20))),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$y2(
-														_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 20))),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$x2(
-															_elm_lang$core$Basics$toString(k * _p6)),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
-											},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: A3(
-												_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
-												{ctor: '_Tuple2', _0: 0, _1: (k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50)) + 30},
-												'start',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													'advance width = ',
-													_elm_lang$core$Basics$toString(_p6))),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$svg$Svg$line,
-													{
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$y1(
-															_elm_lang$core$Basics$toString(k * (((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2) - 50))),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$x1(
-																_elm_lang$core$Basics$toString(k * _p7)),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$x2(
-																	_elm_lang$core$Basics$toString(k * _p7)),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															}
-														}
-													},
-													{ctor: '[]'}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$svg$Svg$line,
-														{
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$y1(
-																_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2))),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$y2(
-																	_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2))),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$x2(
-																		_elm_lang$core$Basics$toString(k * _p7)),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-																			_1: {
-																				ctor: '::',
-																				_0: (_elm_lang$core$Native_Utils.cmp(
-																					_elm_lang$core$Basics$abs(_p7),
-																					30) > -1) ? _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)') : _elm_lang$svg$Svg_Attributes$markerEnd(''),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}
-																}
-															}
-														},
-														{ctor: '[]'}),
-													_1: {
-														ctor: '::',
-														_0: A3(
-															_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
-															{
-																ctor: '_Tuple2',
-																_0: A2(_elm_lang$core$Basics$min, 0, k * _p7) - 20,
-																_1: (k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2)) + 8
-															},
-															'end',
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																'left bearing = ',
-																_elm_lang$core$Basics$toString(_p7))),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$svg$Svg$line,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$y1(
-																		_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50))),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$y2(
-																			_elm_lang$core$Basics$toString((0 - k) * (_w0rm$rendering_text_with_webgl$Iverni$font.ascender + 50))),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
-																				_1: {
-																					ctor: '::',
-																					_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	}
-																},
-																{ctor: '[]'}),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			});
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$view = function (_p8) {
-	var _p9 = _p8;
-	var _p13 = _p9.width;
-	var _p12 = _p9.height;
-	var _p11 = _p9.glyph;
-	var k = _p9.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
-	var _p10 = {ctor: '_Tuple2', _0: (_p13 - (k * _p11.advanceWidth)) / 2, _1: (_p12 / 2) - (((_w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm / 2) - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) * k)};
-	var centerX = _p10._0;
-	var centerY = _p10._1;
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$width(
-					_elm_lang$core$Basics$toString(_p13)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height(
-						_elm_lang$core$Basics$toString(_p12)),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$svg$Svg$g,
-				{
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$transform(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'translate(',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(centerX),
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									',',
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(centerY),
-										')'))))),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(_w0rm$rendering_text_with_webgl$Custom_Metrics$viewGlyph, k, _p11),
-					_1: {
-						ctor: '::',
-						_0: A2(_w0rm$rendering_text_with_webgl$Custom_Metrics$viewMetrics, k, _p11),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$update = F2(
-	function (action, model) {
-		var _p14 = action;
-		var glyph = A2(
-			_elm_lang$core$Maybe$withDefault,
-			_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-			A2(
-				_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
-				_w0rm$rendering_text_with_webgl$Iverni$font,
-				_elm_lang$core$Char$fromCode(_p14._0)));
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				model,
-				{glyph: glyph}),
-			_1: _elm_lang$core$Platform_Cmd$none
-		};
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$initial = function (options) {
-	var glyph = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-		A2(
-			_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
-			_w0rm$rendering_text_with_webgl$Iverni$font,
-			_elm_lang$core$Native_Utils.chr('H')));
-	return {glyph: glyph, fontSize: options.fontSize, width: options.width, height: options.height};
-};
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$Model = F4(
-	function (a, b, c, d) {
-		return {glyph: a, fontSize: b, width: c, height: d};
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$Options = F3(
-	function (a, b, c) {
-		return {fontSize: a, width: b, height: c};
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress = function (a) {
-	return {ctor: 'KeyPress', _0: a};
-};
-var _w0rm$rendering_text_with_webgl$Custom_Metrics$subscriptions = function (_p15) {
-	return _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress);
-};
-
-var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
-	function (x, y, k, _p0) {
-		var _p1 = _p0;
-		return A2(
-			_elm_lang$svg$Svg$g,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$transform(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'translate(',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(x),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								',',
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(y),
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										') scale(',
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(k),
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												',',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(0 - k),
-													')'))))))))),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$svg$Svg$path,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
-										_elm_lang$core$Basics$toString(2 / k)),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p2) {
-	var _p3 = _p2;
-	return A2(
-		_elm_lang$svg$Svg$svg,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$width(
-					_elm_lang$core$Basics$toString(_p3.width)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$height(
-						_elm_lang$core$Basics$toString(_p3.height)),
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		function (_) {
-			return _.paths;
-		}(
-			A3(
-				_elm_lang$core$List$foldl,
-				F2(
-					function ($char, _p4) {
-						var _p5 = _p4;
-						var _p6 = _p5.advance;
-						var glyph = A2(
-							_elm_lang$core$Maybe$withDefault,
-							_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-							A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyph, _w0rm$rendering_text_with_webgl$Iverni$font, $char));
-						var k = _p3.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
-						return {
-							advance: _p6 + (glyph.advanceWidth * k),
-							paths: {
-								ctor: '::',
-								_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph, _p6, _p3.top + (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k), k, glyph),
-								_1: _p5.paths
-							}
-						};
-					}),
-				{
-					advance: _p3.left,
-					paths: {ctor: '[]'}
-				},
-				_elm_lang$core$String$toList(_p3.text))));
-};
-var _w0rm$rendering_text_with_webgl$Custom_Outline$Options = F6(
-	function (a, b, c, d, e, f) {
-		return {fontSize: a, text: b, width: c, height: d, left: e, top: f};
-	});
-
 var _w0rm$rendering_text_with_webgl$LineSegment2d$endpoints = function (_p0) {
 	var _p1 = _p0;
 	return _p1._0;
@@ -25623,6 +24691,622 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$MoveTo = F2(
 		return {ctor: 'MoveTo', _0: a, _1: b};
 	});
 
+var _w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal = F3(
+	function (p0, p1, p2) {
+		var _p0 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
+		var x2 = _p0._0;
+		var y2 = _p0._1;
+		var _p1 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
+		var x1 = _p1._0;
+		var y1 = _p1._1;
+		var n2 = _elm_community$linear_algebra$Math_Vector3$normalize(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, y2 - y1, 0 - (x2 - x1), 0));
+		var _p2 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p0);
+		var x0 = _p2._0;
+		var y0 = _p2._1;
+		var n1 = _elm_community$linear_algebra$Math_Vector3$normalize(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, y1 - y0, 0 - (x1 - x0), 0));
+		return A2(
+			_elm_community$linear_algebra$Math_Vector3$scale,
+			0.5,
+			A2(_elm_community$linear_algebra$Math_Vector3$add, n1, n2));
+	});
+var _w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices = F4(
+	function (p0, p1, p2, p3) {
+		var n2 = A3(_w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal, p1, p2, p3);
+		var _p3 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
+		var x2 = _p3._0;
+		var y2 = _p3._1;
+		var n1 = A3(_w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal, p0, p1, p2);
+		var _p4 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
+		var x1 = _p4._0;
+		var y1 = _p4._1;
+		return F2(
+			function (x, y) {
+				return A2(_elm_lang$core$Basics_ops['++'], x, y);
+			})(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, -0.5),
+						normal: n2
+					},
+					_1: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
+						normal: n1
+					},
+					_2: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
+						normal: n2
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
+							normal: n2
+						},
+						_1: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
+							normal: n1
+						},
+						_2: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0.5),
+							normal: n1
+						}
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Font_Mesh$edgesHelp = F5(
+	function (first, second, third, points, result) {
+		edgesHelp:
+		while (true) {
+			var _p5 = points;
+			if (_p5.ctor === '::') {
+				if (_p5._1.ctor === '::') {
+					if (_p5._1._1.ctor === '::') {
+						if (_p5._1._1._1.ctor === '::') {
+							var _p8 = _p5._1._1._1._0;
+							var _p7 = _p5._1._1._0;
+							var _p6 = _p5._1._0;
+							var _v1 = first,
+								_v2 = second,
+								_v3 = third,
+								_v4 = {
+								ctor: '::',
+								_0: _p6,
+								_1: {
+									ctor: '::',
+									_0: _p7,
+									_1: {ctor: '::', _0: _p8, _1: _p5._1._1._1._1}
+								}
+							},
+								_v5 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p6, _p7, _p8, result);
+							first = _v1;
+							second = _v2;
+							third = _v3;
+							points = _v4;
+							result = _v5;
+							continue edgesHelp;
+						} else {
+							var _p10 = _p5._1._1._0;
+							var _p9 = _p5._1._0;
+							var _v6 = first,
+								_v7 = second,
+								_v8 = third,
+								_v9 = {
+								ctor: '::',
+								_0: _p9,
+								_1: {
+									ctor: '::',
+									_0: _p10,
+									_1: {ctor: '[]'}
+								}
+							},
+								_v10 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p9, _p10, first, result);
+							first = _v6;
+							second = _v7;
+							third = _v8;
+							points = _v9;
+							result = _v10;
+							continue edgesHelp;
+						}
+					} else {
+						var _p11 = _p5._1._0;
+						var _v11 = first,
+							_v12 = second,
+							_v13 = third,
+							_v14 = {
+							ctor: '::',
+							_0: _p11,
+							_1: {ctor: '[]'}
+						},
+							_v15 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p11, first, second, result);
+						first = _v11;
+						second = _v12;
+						third = _v13;
+						points = _v14;
+						result = _v15;
+						continue edgesHelp;
+					}
+				} else {
+					return A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, first, second, third, result);
+				}
+			} else {
+				return result;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
+var _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1);
+var _w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d = function (outlines) {
+	var edges = A3(
+		_elm_lang$core$List$foldl,
+		function (outline) {
+			var _p12 = outline;
+			if (((_p12.ctor === '::') && (_p12._1.ctor === '::')) && (_p12._1._1.ctor === '::')) {
+				return A4(_w0rm$rendering_text_with_webgl$Font_Mesh$edgesHelp, _p12._0, _p12._1._0, _p12._1._1._0, outline);
+			} else {
+				return _elm_lang$core$Basics$identity;
+			}
+		},
+		{ctor: '[]'},
+		outlines);
+	var triangles = _w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate(outlines);
+	return _elm_community$webgl$WebGL$triangles(
+		A3(
+			_elm_lang$core$List$foldl,
+			function (_p13) {
+				var _p14 = _p13;
+				var _p15 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._2);
+				var x3 = _p15._0;
+				var y3 = _p15._1;
+				var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._1);
+				var x2 = _p16._0;
+				var y2 = _p16._1;
+				var _p17 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._0);
+				var x1 = _p17._0;
+				var y1 = _p17._1;
+				return F2(
+					function (x, y) {
+						return A2(_elm_lang$core$Basics_ops['++'], x, y);
+					})(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple3',
+							_0: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, -0.5),
+								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
+							},
+							_1: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, -0.5),
+								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
+							},
+							_2: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
+								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
+							}
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple3',
+								_0: {
+									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0.5),
+									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
+								},
+								_1: {
+									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, 0.5),
+									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
+								},
+								_2: {
+									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
+									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
+								}
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+			},
+			edges,
+			triangles));
+};
+var _w0rm$rendering_text_with_webgl$Font_Mesh$mesh2d = function (outlines) {
+	return _elm_community$webgl$WebGL$triangles(
+		A3(
+			_elm_lang$core$List$foldl,
+			function (_p18) {
+				var _p19 = _p18;
+				var _p20 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._2);
+				var x3 = _p20._0;
+				var y3 = _p20._1;
+				var _p21 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._1);
+				var x2 = _p21._0;
+				var y2 = _p21._1;
+				var _p22 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._0);
+				var x1 = _p22._0;
+				var y1 = _p22._1;
+				return F2(
+					function (x, y) {
+						return {ctor: '::', _0: x, _1: y};
+					})(
+					{
+						ctor: '_Tuple3',
+						_0: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0)
+						},
+						_1: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0)
+						},
+						_2: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, 0)
+						}
+					});
+			},
+			{ctor: '[]'},
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate(outlines)));
+};
+var _w0rm$rendering_text_with_webgl$Font_Mesh$Attributes3d = F2(
+	function (a, b) {
+		return {position: a, normal: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Mesh$Attributes2d = function (a) {
+	return {position: a};
+};
+
+var _w0rm$rendering_text_with_webgl$Font_Glyph$empty = {path: '', advanceWidth: 0, leftSideBearing: 0};
+var _w0rm$rendering_text_with_webgl$Font_Glyph$Glyph = F3(
+	function (a, b, c) {
+		return {path: a, advanceWidth: b, leftSideBearing: c};
+	});
+
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeGlyph = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_w0rm$rendering_text_with_webgl$Font_Glyph$Glyph,
+	A2(_elm_lang$core$Json_Decode$field, 'path', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'advanceWidth', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'leftSideBearing', _elm_lang$core$Json_Decode$float));
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'value1',
+		_1: {
+			ctor: '::',
+			_0: 'xAdvance',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$float);
+var _w0rm$rendering_text_with_webgl$Font_Font$empty = {
+	glyphs: _Skinney$elm_array_exploration$Array_Hamt$empty,
+	cmap: _elm_lang$core$Dict$empty,
+	ligatures: {ctor: '[]'},
+	kerning: {ctor: '[]'},
+	ascender: 0,
+	descender: 0,
+	unitsPerEm: 0
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$getGlyph = F2(
+	function (_p0, $char) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$core$Maybe$andThen,
+			function (index) {
+				return A2(_Skinney$elm_array_exploration$Array_Hamt$get, index, _p1.glyphs);
+			},
+			A2(
+				_elm_lang$core$Dict$get,
+				_elm_lang$core$Char$toCode($char),
+				_p1.cmap));
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$searchRangeHelp = F3(
+	function (list, glyphIndex, currentIndex) {
+		searchRangeHelp:
+		while (true) {
+			var _p2 = list;
+			if (_p2.ctor === '[]') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p3 = _p2._0;
+				if ((_elm_lang$core$Native_Utils.cmp(_p3.start, glyphIndex) > -1) && (_elm_lang$core$Native_Utils.cmp(_p3.end, glyphIndex) < 1)) {
+					return _elm_lang$core$Maybe$Just((_p3.index + glyphIndex) - _p3.start);
+				} else {
+					var _v2 = _p2._1,
+						_v3 = glyphIndex,
+						_v4 = currentIndex + 1;
+					list = _v2;
+					glyphIndex = _v3;
+					currentIndex = _v4;
+					continue searchRangeHelp;
+				}
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$searchIndexHelp = F3(
+	function (list, glyphIndex, currentIndex) {
+		searchIndexHelp:
+		while (true) {
+			var _p4 = list;
+			if (_p4.ctor === '[]') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				if (_elm_lang$core$Native_Utils.eq(_p4._0, glyphIndex)) {
+					return _elm_lang$core$Maybe$Just(currentIndex);
+				} else {
+					var _v6 = _p4._1,
+						_v7 = glyphIndex,
+						_v8 = currentIndex + 1;
+					list = _v6;
+					glyphIndex = _v7;
+					currentIndex = _v8;
+					continue searchIndexHelp;
+				}
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex = F2(
+	function (coverage, glyphIndex) {
+		var _p5 = coverage;
+		if (_p5.ctor === 'CoverageList') {
+			return A3(_w0rm$rendering_text_with_webgl$Font_Font$searchIndexHelp, _p5._0, glyphIndex, 0);
+		} else {
+			return A3(_w0rm$rendering_text_with_webgl$Font_Font$searchRangeHelp, _p5._0, glyphIndex, 0);
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$searchClassDefRangeHelp = F2(
+	function (list, glyphIndex) {
+		searchClassDefRangeHelp:
+		while (true) {
+			var _p6 = list;
+			if (_p6.ctor === '[]') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p7 = _p6._0;
+				if ((_elm_lang$core$Native_Utils.cmp(_p7.start, glyphIndex) > -1) && (_elm_lang$core$Native_Utils.cmp(_p7.end, glyphIndex) < 1)) {
+					return _elm_lang$core$Maybe$Just(_p7.classId);
+				} else {
+					var _v11 = _p6._1,
+						_v12 = glyphIndex;
+					list = _v11;
+					glyphIndex = _v12;
+					continue searchClassDefRangeHelp;
+				}
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass = F2(
+	function (classDef, glyphIndex) {
+		var _p8 = classDef;
+		if (_p8.ctor === 'ClassDefFormat1') {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				0,
+				A2(_Skinney$elm_array_exploration$Array_Hamt$get, glyphIndex - _p8._0.startGlyph, _p8._0.classes));
+		} else {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				0,
+				A2(_w0rm$rendering_text_with_webgl$Font_Font$searchClassDefRangeHelp, _p8._0, glyphIndex));
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$Font = F7(
+	function (a, b, c, d, e, f, g) {
+		return {glyphs: a, cmap: b, ligatures: c, kerning: d, ascender: e, descender: f, unitsPerEm: g};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1Pair = F2(
+	function (a, b) {
+		return {secondGlyph: a, xAdvance: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1Pair = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1Pair,
+	A2(_elm_lang$core$Json_Decode$field, 'secondGlyph', _elm_lang$core$Json_Decode$int),
+	_w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance);
+var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefRange = F3(
+	function (a, b, c) {
+		return {start: a, end: b, classId: c};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDefRange = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_w0rm$rendering_text_with_webgl$Font_Font$ClassDefRange,
+	A2(_elm_lang$core$Json_Decode$field, 'start', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'end', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'classId', _elm_lang$core$Json_Decode$int));
+var _w0rm$rendering_text_with_webgl$Font_Font$Ligature = F2(
+	function (a, b) {
+		return {sub: a, by: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeLigature = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_w0rm$rendering_text_with_webgl$Font_Font$Ligature,
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'sub',
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)),
+	A2(_elm_lang$core$Json_Decode$field, 'by', _elm_lang$core$Json_Decode$int));
+var _w0rm$rendering_text_with_webgl$Font_Font$CoverageRangeRecord = F3(
+	function (a, b, c) {
+		return {start: a, end: b, index: c};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverageRangeRecord = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_w0rm$rendering_text_with_webgl$Font_Font$CoverageRangeRecord,
+	A2(_elm_lang$core$Json_Decode$field, 'start', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'end', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'index', _elm_lang$core$Json_Decode$int));
+var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat2 = function (a) {
+	return {ctor: 'KerningPairPosFormat2', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1 = function (a) {
+	return {ctor: 'KerningPairPosFormat1', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat2 = function (a) {
+	return {ctor: 'ClassDefFormat2', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat1 = function (a) {
+	return {ctor: 'ClassDefFormat1', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: A3(
+			_elm_lang$core$Json_Decode$map2,
+			F2(
+				function (startGlyph, classes) {
+					return _w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat1(
+						{
+							startGlyph: startGlyph,
+							classes: _Skinney$elm_array_exploration$Array_Hamt$fromList(classes)
+						});
+				}),
+			A2(_elm_lang$core$Json_Decode$field, 'startGlyph', _elm_lang$core$Json_Decode$int),
+			A2(
+				_elm_lang$core$Json_Decode$field,
+				'classes',
+				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Json_Decode$map,
+				_w0rm$rendering_text_with_webgl$Font_Font$ClassDefFormat2,
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'ranges',
+					_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeClassDefRange))),
+			_1: {ctor: '[]'}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$CoverageRanges = function (a) {
+	return {ctor: 'CoverageRanges', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$CoverageList = function (a) {
+	return {ctor: 'CoverageList', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$core$Json_Decode$map,
+			_w0rm$rendering_text_with_webgl$Font_Font$CoverageList,
+			A2(
+				_elm_lang$core$Json_Decode$field,
+				'glyphs',
+				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Json_Decode$map,
+				_w0rm$rendering_text_with_webgl$Font_Font$CoverageRanges,
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'ranges',
+					_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeCoverageRangeRecord))),
+			_1: {ctor: '[]'}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1 = A2(
+	_elm_lang$core$Json_Decode$map,
+	_w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat1,
+	A3(
+		_elm_lang$core$Json_Decode$map2,
+		F2(
+			function (coverage, pairSets) {
+				return {
+					coverage: coverage,
+					pairSets: _Skinney$elm_array_exploration$Array_Hamt$fromList(pairSets)
+				};
+			}),
+		A2(_elm_lang$core$Json_Decode$field, 'coverage', _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage),
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'pairSets',
+			_elm_lang$core$Json_Decode$list(
+				_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1Pair)))));
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat2 = A5(
+	_elm_lang$core$Json_Decode$map4,
+	F4(
+		function (coverage, classDef1, classDef2, classRecords) {
+			return _w0rm$rendering_text_with_webgl$Font_Font$KerningPairPosFormat2(
+				{
+					coverage: coverage,
+					classDef1: classDef1,
+					classDef2: classDef2,
+					classRecords: _Skinney$elm_array_exploration$Array_Hamt$fromList(classRecords)
+				});
+		}),
+	A2(_elm_lang$core$Json_Decode$field, 'coverage', _w0rm$rendering_text_with_webgl$Font_Font$decodeCoverage),
+	A2(_elm_lang$core$Json_Decode$field, 'classDef1', _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef),
+	A2(_elm_lang$core$Json_Decode$field, 'classDef2', _w0rm$rendering_text_with_webgl$Font_Font$decodeClassDef),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'classRecords',
+		_elm_lang$core$Json_Decode$list(
+			A2(
+				_elm_lang$core$Json_Decode$map,
+				_Skinney$elm_array_exploration$Array_Hamt$fromList,
+				_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeXAdvance)))));
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeKerning = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat2,
+		_1: {
+			ctor: '::',
+			_0: _w0rm$rendering_text_with_webgl$Font_Font$decodeKerningPairPosFormat1,
+			_1: {ctor: '[]'}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Font$decodeFont = A8(
+	_elm_lang$core$Json_Decode$map7,
+	_w0rm$rendering_text_with_webgl$Font_Font$Font,
+	A2(
+		_elm_lang$core$Json_Decode$map,
+		_Skinney$elm_array_exploration$Array_Hamt$fromList,
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'glyphs',
+			_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeGlyph))),
+	A2(
+		_elm_lang$core$Json_Decode$map,
+		function (_p9) {
+			return _elm_lang$core$Dict$fromList(
+				A2(
+					_elm_lang$core$List$filterMap,
+					function (_p10) {
+						var _p11 = _p10;
+						return A2(
+							_elm_lang$core$Maybe$map,
+							function (code) {
+								return {ctor: '_Tuple2', _0: code, _1: _p11._1};
+							},
+							_elm_lang$core$Result$toMaybe(
+								_elm_lang$core$String$toInt(_p11._0)));
+					},
+					_p9));
+		},
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'cmap',
+			_elm_lang$core$Json_Decode$keyValuePairs(_elm_lang$core$Json_Decode$int))),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'ligatures',
+		_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeLigature)),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'kerning',
+		_elm_lang$core$Json_Decode$list(_w0rm$rendering_text_with_webgl$Font_Font$decodeKerning)),
+	A2(_elm_lang$core$Json_Decode$field, 'ascender', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'descender', _elm_lang$core$Json_Decode$float),
+	A2(_elm_lang$core$Json_Decode$field, 'unitsPerEm', _elm_lang$core$Json_Decode$float));
+
 var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces = A2(
 	_elm_tools$parser$Parser$ignore,
 	_elm_tools$parser$Parser$zeroOrMore,
@@ -25787,6 +25471,1030 @@ var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path = A2(
 		_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
 		A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$zeroOrMore, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$commands)),
 	_elm_tools$parser$Parser$end);
+
+var _w0rm$rendering_text_with_webgl$Font_Text$findInPairsPositions = F2(
+	function (pairsPositions, rightIndex) {
+		findInPairsPositions:
+		while (true) {
+			var _p0 = pairsPositions;
+			if (_p0.ctor === '::') {
+				if (_elm_lang$core$Native_Utils.eq(_p0._0.secondGlyph, rightIndex)) {
+					return _elm_lang$core$Maybe$Just(_p0._0.xAdvance);
+				} else {
+					var _v1 = _p0._1,
+						_v2 = rightIndex;
+					pairsPositions = _v1;
+					rightIndex = _v2;
+					continue findInPairsPositions;
+				}
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$getKerningValue = F3(
+	function (kerning, leftIndex, rightIndex) {
+		getKerningValue:
+		while (true) {
+			var _p1 = kerning;
+			if (_p1.ctor === '::') {
+				if (_p1._0.ctor === 'KerningPairPosFormat1') {
+					var _p2 = A2(
+						_elm_lang$core$Maybe$andThen,
+						function (pairsPositions) {
+							return A2(_w0rm$rendering_text_with_webgl$Font_Text$findInPairsPositions, pairsPositions, rightIndex);
+						},
+						A2(
+							_elm_lang$core$Maybe$andThen,
+							function (covIndex) {
+								return A2(_Skinney$elm_array_exploration$Array_Hamt$get, covIndex, _p1._0._0.pairSets);
+							},
+							A2(_w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex, _p1._0._0.coverage, leftIndex)));
+					if (_p2.ctor === 'Just') {
+						return _elm_lang$core$Maybe$Just(_p2._0);
+					} else {
+						var _v5 = _p1._1,
+							_v6 = leftIndex,
+							_v7 = rightIndex;
+						kerning = _v5;
+						leftIndex = _v6;
+						rightIndex = _v7;
+						continue getKerningValue;
+					}
+				} else {
+					if (_elm_lang$core$Native_Utils.eq(
+						A2(_w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex, _p1._0._0.coverage, leftIndex),
+						_elm_lang$core$Maybe$Nothing)) {
+						var _v8 = _p1._1,
+							_v9 = leftIndex,
+							_v10 = rightIndex;
+						kerning = _v8;
+						leftIndex = _v9;
+						rightIndex = _v10;
+						continue getKerningValue;
+					} else {
+						var rightClass = A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass, _p1._0._0.classDef2, rightIndex);
+						var leftClass = A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass, _p1._0._0.classDef1, leftIndex);
+						return A2(
+							_elm_lang$core$Maybe$andThen,
+							_Skinney$elm_array_exploration$Array_Hamt$get(rightClass),
+							A2(_Skinney$elm_array_exploration$Array_Hamt$get, leftClass, _p1._0._0.classRecords));
+					}
+				}
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$findLigature = F2(
+	function (ligatures, text) {
+		findLigature:
+		while (true) {
+			var _p3 = ligatures;
+			if (_p3.ctor === '::') {
+				var _p4 = _p3._0;
+				var ligatureSize = _elm_lang$core$List$length(_p4.sub);
+				var takeFromText = A2(_elm_lang$core$List$take, ligatureSize, text);
+				if (_elm_lang$core$Native_Utils.eq(
+					A2(
+						_elm_lang$core$List$map,
+						function (_) {
+							return _.index;
+						},
+						takeFromText),
+					_p4.sub)) {
+					return _elm_lang$core$Maybe$Just(_p4);
+				} else {
+					var _v12 = _p3._1,
+						_v13 = text;
+					ligatures = _v12;
+					text = _v13;
+					continue findLigature;
+				}
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$ClassifiedGlyph = F2(
+	function (a, b) {
+		return {index: a, $class: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$Context = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return {font: a, size: b, lineHeight: c, width: d, kerning: e, x: f, y: g, cache: h, glyphs: i, xAtLastWordBreak: j, glyphsSinceLastWordBreak: k, nextIndices: l, prevIndices: m};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _w0rm$rendering_text_with_webgl$Font_Text$Style = F6(
+	function (a, b, c, d, e, f) {
+		return {font: a, fontSize: b, lineHeight: c, width: d, features: e, cache: f};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$GlyphInfo = F2(
+	function (a, b) {
+		return {mesh: a, transform: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$Kern = {ctor: 'Kern'};
+var _w0rm$rendering_text_with_webgl$Font_Text$contextFromStyle = F2(
+	function (style, glyphIndices) {
+		return {
+			font: style.font,
+			size: style.fontSize / style.font.unitsPerEm,
+			kerning: A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Kern, style.features),
+			lineHeight: style.lineHeight * style.font.unitsPerEm,
+			width: (style.width / style.fontSize) * style.font.unitsPerEm,
+			x: 0,
+			y: 0 - style.font.ascender,
+			cache: style.cache,
+			glyphs: {ctor: '[]'},
+			xAtLastWordBreak: 0,
+			glyphsSinceLastWordBreak: 0,
+			nextIndices: glyphIndices,
+			prevIndices: {ctor: '[]'}
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$Liga = {ctor: 'Liga'};
+var _w0rm$rendering_text_with_webgl$Font_Text$Other = {ctor: 'Other'};
+var _w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp = F3(
+	function (font, text, result) {
+		replaceLigaturesHelp:
+		while (true) {
+			var _p5 = text;
+			if (_p5.ctor === '[]') {
+				return _elm_lang$core$List$reverse(result);
+			} else {
+				var _p6 = A2(_w0rm$rendering_text_with_webgl$Font_Text$findLigature, font.ligatures, text);
+				if (_p6.ctor === 'Just') {
+					var _p7 = _p6._0;
+					var _v16 = font,
+						_v17 = A2(
+						_elm_lang$core$List$drop,
+						_elm_lang$core$List$length(_p7.sub),
+						text),
+						_v18 = {
+						ctor: '::',
+						_0: {index: _p7.by, $class: _w0rm$rendering_text_with_webgl$Font_Text$Other},
+						_1: result
+					};
+					font = _v16;
+					text = _v17;
+					result = _v18;
+					continue replaceLigaturesHelp;
+				} else {
+					var _v19 = font,
+						_v20 = _p5._1,
+						_v21 = {ctor: '::', _0: _p5._0, _1: result};
+					font = _v19;
+					text = _v20;
+					result = _v21;
+					continue replaceLigaturesHelp;
+				}
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$Newline = {ctor: 'Newline'};
+var _w0rm$rendering_text_with_webgl$Font_Text$Space = {ctor: 'Space'};
+var _w0rm$rendering_text_with_webgl$Font_Text$classify = function ($char) {
+	var _p8 = $char;
+	switch (_p8.valueOf()) {
+		case ' ':
+			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
+		case '\t':
+			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
+		case '\n':
+			return _w0rm$rendering_text_with_webgl$Font_Text$Newline;
+		default:
+			return _w0rm$rendering_text_with_webgl$Font_Text$Other;
+	}
+};
+var _w0rm$rendering_text_with_webgl$Font_Text$stringToGlyphIndices = F2(
+	function (font, text) {
+		return A2(
+			_elm_lang$core$List$filterMap,
+			function ($char) {
+				return A2(
+					_elm_lang$core$Maybe$map,
+					function (index) {
+						return {
+							index: index,
+							$class: _w0rm$rendering_text_with_webgl$Font_Text$classify($char)
+						};
+					},
+					A2(
+						_elm_lang$core$Dict$get,
+						_elm_lang$core$Char$toCode($char),
+						font.cmap));
+			},
+			_elm_lang$core$String$toList(text));
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$textHelp = F2(
+	function (meshFn, ctx) {
+		textHelp:
+		while (true) {
+			var _p9 = ctx.nextIndices;
+			if (_p9.ctor === '[]') {
+				return ctx;
+			} else {
+				var _p16 = _p9._1;
+				var _p15 = _p9._0;
+				var cached = A2(_elm_lang$core$Dict$get, _p15.index, ctx.cache);
+				var glyph = A2(
+					_elm_lang$core$Maybe$withDefault,
+					_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+					A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p15.index, ctx.font.glyphs));
+				var mesh = function () {
+					var _p10 = cached;
+					if (_p10.ctor === 'Just') {
+						return _p10._0;
+					} else {
+						return meshFn(
+							A2(
+								_elm_lang$core$List$map,
+								_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
+								A2(
+									_elm_lang$core$Result$withDefault,
+									{ctor: '[]'},
+									A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+					}
+				}();
+				var cache = function () {
+					var _p11 = cached;
+					if (_p11.ctor === 'Nothing') {
+						return A3(_elm_lang$core$Dict$insert, _p15.index, mesh, ctx.cache);
+					} else {
+						return ctx.cache;
+					}
+				}();
+				var xAdvance = ctx.kerning ? A2(
+					_elm_lang$core$Maybe$withDefault,
+					0,
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						A2(_w0rm$rendering_text_with_webgl$Font_Text$getKerningValue, ctx.font.kerning, _p15.index),
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (_) {
+								return _.index;
+							},
+							_elm_lang$core$List$head(_p16)))) : 0;
+				var newX = (ctx.x + glyph.advanceWidth) + xAdvance;
+				var _p12 = ((_elm_lang$core$Native_Utils.cmp(newX, ctx.width) > 0) && ((!_elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space)) && (!_elm_lang$core$Native_Utils.eq(ctx.xAtLastWordBreak, 0)))) ? {ctor: '_Tuple3', _0: 0, _1: ctx.y - ctx.lineHeight, _2: true} : {ctor: '_Tuple3', _0: newX, _1: ctx.y, _2: false};
+				var x = _p12._0;
+				var y = _p12._1;
+				var dropWord = _p12._2;
+				var _p13 = _elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space) ? {ctor: '_Tuple2', _0: x, _1: 0} : (dropWord ? {ctor: '_Tuple2', _0: 0, _1: 0} : {ctor: '_Tuple2', _0: ctx.xAtLastWordBreak, _1: ctx.glyphsSinceLastWordBreak + 1});
+				var xAtLastWordBreak = _p13._0;
+				var glyphsSinceLastWordBreak = _p13._1;
+				var _p14 = function () {
+					if (dropWord) {
+						var undoGlyphs = A2(_elm_lang$core$List$take, ctx.glyphsSinceLastWordBreak, ctx.prevIndices);
+						return {
+							ctor: '_Tuple3',
+							_0: A3(
+								_elm_lang$core$List$foldl,
+								F2(
+									function (x, y) {
+										return {ctor: '::', _0: x, _1: y};
+									}),
+								ctx.nextIndices,
+								undoGlyphs),
+							_1: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.prevIndices),
+							_2: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.glyphs)
+						};
+					} else {
+						return {
+							ctor: '_Tuple3',
+							_0: _p16,
+							_1: {ctor: '::', _0: _p15, _1: ctx.prevIndices},
+							_2: {
+								ctor: '::',
+								_0: {
+									mesh: mesh,
+									transform: A2(
+										_elm_community$linear_algebra$Math_Matrix4$mul,
+										A3(_elm_community$linear_algebra$Math_Matrix4$makeScale3, ctx.size, ctx.size, ctx.size),
+										A3(_elm_community$linear_algebra$Math_Matrix4$makeTranslate3, ctx.x, ctx.y, 0))
+								},
+								_1: ctx.glyphs
+							}
+						};
+					}
+				}();
+				var nextIndices = _p14._0;
+				var prevIndices = _p14._1;
+				var glyphs = _p14._2;
+				var _v26 = meshFn,
+					_v27 = _elm_lang$core$Native_Utils.update(
+					ctx,
+					{cache: cache, x: x, y: y, glyphs: glyphs, nextIndices: nextIndices, prevIndices: prevIndices, xAtLastWordBreak: xAtLastWordBreak, glyphsSinceLastWordBreak: glyphsSinceLastWordBreak});
+				meshFn = _v26;
+				ctx = _v27;
+				continue textHelp;
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$text = F3(
+	function (meshFn, style, string) {
+		var indicesList = A2(_w0rm$rendering_text_with_webgl$Font_Text$stringToGlyphIndices, style.font, string);
+		var indicesArray = A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Liga, style.features) ? A3(
+			_w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp,
+			style.font,
+			indicesList,
+			{ctor: '[]'}) : indicesList;
+		var result = A2(
+			_w0rm$rendering_text_with_webgl$Font_Text$textHelp,
+			meshFn,
+			A2(_w0rm$rendering_text_with_webgl$Font_Text$contextFromStyle, style, indicesArray));
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$List$reverse(result.glyphs),
+			_1: result.cache
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Font_Text$text2d = _w0rm$rendering_text_with_webgl$Font_Text$text(_w0rm$rendering_text_with_webgl$Font_Mesh$mesh2d);
+var _w0rm$rendering_text_with_webgl$Font_Text$text3d = _w0rm$rendering_text_with_webgl$Font_Text$text(_w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d);
+
+var _w0rm$rendering_text_with_webgl$Iverni$font = A2(
+	_elm_lang$core$Result$withDefault,
+	_w0rm$rendering_text_with_webgl$Font_Font$empty,
+	A2(_elm_lang$core$Json_Decode$decodeString, _w0rm$rendering_text_with_webgl$Font_Font$decodeFont, '\n{\"cmap\":{\"32\":3,\"33\":166,\"34\":173,\"35\":185,\"39\":172,\"40\":177,\"41\":178,\"42\":192,\"43\":67,\"44\":37,\"45\":39,\"46\":36,\"47\":187,\"48\":26,\"49\":27,\"50\":28,\"51\":29,\"52\":30,\"53\":31,\"54\":32,\"55\":33,\"56\":34,\"57\":35,\"58\":168,\"59\":167,\"60\":271,\"61\":68,\"62\":270,\"63\":266,\"64\":203,\"65\":40,\"66\":76,\"67\":63,\"68\":66,\"69\":46,\"70\":48,\"71\":38,\"72\":44,\"73\":47,\"74\":112,\"75\":128,\"76\":45,\"77\":49,\"78\":138,\"79\":50,\"80\":113,\"81\":51,\"82\":124,\"83\":152,\"84\":56,\"85\":111,\"86\":130,\"87\":131,\"88\":153,\"89\":142,\"90\":141,\"91\":179,\"92\":189,\"93\":180,\"95\":181,\"96\":82,\"97\":41,\"98\":42,\"99\":55,\"100\":54,\"101\":4,\"102\":5,\"103\":6,\"104\":7,\"105\":8,\"106\":9,\"107\":10,\"108\":11,\"109\":12,\"110\":13,\"111\":14,\"112\":15,\"113\":16,\"114\":17,\"115\":18,\"116\":19,\"117\":20,\"118\":21,\"119\":22,\"120\":23,\"121\":24,\"122\":25,\"124\":182,\"126\":169,\"166\":186,\"168\":99,\"169\":53,\"170\":264,\"171\":267,\"172\":272,\"174\":274,\"176\":275,\"177\":204,\"180\":70,\"181\":273,\"184\":277,\"187\":268,\"192\":170,\"194\":194,\"195\":160,\"196\":171,\"198\":188,\"200\":120,\"201\":105,\"202\":195,\"203\":106,\"204\":121,\"205\":107,\"206\":196,\"207\":114,\"209\":161,\"210\":122,\"211\":108,\"212\":197,\"213\":159,\"214\":115,\"215\":202,\"217\":123,\"218\":119,\"219\":198,\"220\":110,\"221\":199,\"222\":109,\"224\":71,\"225\":72,\"226\":84,\"227\":162,\"228\":101,\"230\":85,\"231\":245,\"232\":86,\"233\":73,\"234\":87,\"235\":98,\"236\":88,\"237\":89,\"238\":90,\"239\":104,\"241\":163,\"242\":81,\"243\":74,\"244\":91,\"245\":164,\"246\":100,\"247\":269,\"249\":92,\"250\":75,\"251\":93,\"252\":102,\"253\":78,\"255\":103,\"260\":242,\"261\":244,\"281\":246,\"305\":97,\"338\":190,\"339\":191,\"351\":247,\"353\":95,\"371\":248,\"375\":249,\"376\":200,\"377\":243,\"378\":251,\"381\":165,\"382\":96,\"710\":83,\"711\":94,\"728\":276,\"731\":278,\"732\":158,\"1025\":143,\"1040\":134,\"1041\":125,\"1042\":117,\"1043\":137,\"1044\":133,\"1045\":60,\"1046\":214,\"1047\":126,\"1048\":139,\"1049\":140,\"1051\":132,\"1052\":136,\"1053\":61,\"1054\":62,\"1055\":145,\"1056\":116,\"1057\":64,\"1058\":65,\"1059\":228,\"1060\":52,\"1061\":205,\"1062\":147,\"1063\":216,\"1064\":148,\"1065\":149,\"1066\":127,\"1067\":151,\"1068\":150,\"1069\":211,\"1070\":146,\"1071\":236,\"1072\":43,\"1073\":230,\"1074\":217,\"1075\":206,\"1076\":218,\"1077\":57,\"1078\":234,\"1079\":220,\"1080\":227,\"1081\":229,\"1082\":232,\"1083\":225,\"1084\":235,\"1085\":208,\"1086\":58,\"1087\":209,\"1088\":135,\"1089\":59,\"1090\":207,\"1091\":231,\"1092\":233,\"1093\":215,\"1094\":213,\"1095\":219,\"1096\":210,\"1097\":212,\"1098\":221,\"1099\":223,\"1100\":222,\"1101\":226,\"1102\":224,\"1103\":237,\"1105\":144,\"7923\":250,\"8216\":183,\"8217\":184,\"8220\":174,\"8221\":175,\"8222\":176,\"8722\":69,\"64257\":253},\"glyphs\":[{\"path\":\"M50 721L51 1C51 1 58 0 72 0L332 0C355 0 358 1 361 4C364 7 365 12 365 26L364 746C350 748 327 748 209 748C64 748 60 746 56 742C51 737 50 731 50 721ZM124 689C161 692 200 695 208 694L290 689L291 294C272 325 252 356 239 379C212 425 154 520 124 572ZM124 450L189 344C213 305 261 224 291 174L291 59C254 56 216 53 208 54C173 56 146 58 125 60Z\",\"advanceWidth\":415,\"leftSideBearing\":50},{\"path\":\"\",\"advanceWidth\":0,\"leftSideBearing\":0},{\"path\":\"\",\"advanceWidth\":154,\"leftSideBearing\":0},{\"path\":\"\",\"advanceWidth\":160,\"leftSideBearing\":0},{\"path\":\"M76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M51 0L80 0C116 0 120 3 120 26C120 44 120 149 119 257L119 470C127 471 164 470 168 470C175 470 176 526 175 528C161 527 127 527 119 527C117 641 119 693 126 718C134 722 147 724 162 724C174 724 181 723 186 722C194 720 197 721 203 742C207 756 211 773 211 775C204 778 186 781 167 781C113 781 91 774 79 762C52 735 53 668 53 527L21 527C11 527 10 525 10 480L10 469C13 469 52 472 54 470C56 468 54 341 54 258Z\",\"advanceWidth\":178,\"leftSideBearing\":10},{\"path\":\"M162-221C200-221 240-218 259-199C282-176 285-168 285-20C285 9 281 20 212 84C181 113 151 139 148 143C150 146 214 209 230 225C251 246 260 284 259 313L259 387C259 452 252 490 231 517L264 620C264 621 257 624 241 627C199 635 195 630 192 622C190 617 172 542 171 533L143 533C113 533 75 528 59 512C43 496 30 452 30 367C30 298 45 261 61 245C79 228 133 220 157 229C146 217 116 189 101 173C74 145 72 111 99 88C212-9 215-13 216-44C216-44 217-139 213-155C202-162 190-165 167-165C137-165 123-162 113-152C101-140 102-35 107-4C103-3 91-2 83-2C40-2 37-6 36-28C32-112 43-190 62-209C69-216 102-221 162-221ZM189 284C181 278 167 276 152 276C139 276 118 278 111 285C99 297 99 319 99 379C99 394 100 427 106 469C114 475 127 476 139 476C148 476 161 475 172 464C188 447 193 415 193 381C193 341 195 309 189 284Z\",\"advanceWidth\":300,\"leftSideBearing\":30},{\"path\":\"M205 2C208 0 229 0 244 0C274 0 276 2 276 26C276 187 275 126 275 268C275 466 252 512 242 522C236 528 189 533 156 533C136 533 116 529 112 529C113 572 108 743 111 780L88 780C43 780 40 776 40 757C40 750 42 20 41 0L78 0C110 0 111 2 111 26C111 51 110 420 111 470C118 475 135 477 149 477C170 477 180 473 188 464C200 450 206 387 206 236C206 188 206 12 205 2Z\",\"advanceWidth\":311,\"leftSideBearing\":40},{\"path\":\"M40 610L76 610C108 610 111 614 111 625C111 633 111 625 111 689L88 689C44 689 41 685 41 663C41 641 40 610 40 610ZM78 0C106 0 111 6 111 26L110 527C108 528 103 530 87 530C42 530 39 526 39 504C39 327 40 187 40 2C43 1 47 0 78 0Z\",\"advanceWidth\":154,\"leftSideBearing\":39},{\"path\":\"M40 610L76 610C108 610 111 614 111 625C111 633 111 625 111 689L88 689C44 689 41 685 41 663C41 641 40 610 40 610ZM-59-195L-61-218C-48-219-31-220-8-220C30-220 63-209 82-188C110-157 113-100 112 204L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 468 44 302 44 197C44 169 43-78 38-142C34-152 30-159-33-159C-53-159-56-162-59-195Z\",\"advanceWidth\":153,\"leftSideBearing\":-61},{\"path\":\"M41 2C46 1 50 0 76 0C108 0 113 3 113 23C113 68 109 222 109 380C108 560 110 745 114 779C110 780 97 780 84 780C43 780 40 776 40 754C40 693 43 538 44 377C44 238 42 95 41 2ZM294 3C295 4 295 6 290 18C262 85 183 281 184 298C184 303 269 500 274 509C273 511 259 519 242 527C223 536 214 535 208 529C205 526 193 491 184 465C162 401 131 306 116 306C115 306 114 290 117 290C117 290 215 8 216 4C218 1 224 0 262 0C280 0 293 2 294 3Z\",\"advanceWidth\":306,\"leftSideBearing\":40},{\"path\":\"M106 0C134 0 148 2 154 4C155 55 141 59 137 59C130 59 125 60 120 66C107 81 108 252 108 394C108 580 111 771 111 777C109 778 104 780 88 780C43 780 40 776 40 754C40 712 42 544 42 387C42 108 49 48 66 8C72 3 84 0 106 0Z\",\"advanceWidth\":159,\"leftSideBearing\":40},{\"path\":\"M40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C166 477 175 473 183 464C196 449 201 386 201 262C201 200 203 12 202 2C205 1 209 0 240 0C268 0 271 3 271 26L269 266C268 370 267 433 259 470C269 474 295 477 308 477C321 477 330 473 338 464C351 449 356 386 356 262C356 142 357 12 356 2C359 0 364 0 395 0C425 0 427 2 427 26L426 266C426 466 403 512 393 522C387 528 346 533 314 533C281 533 249 528 228 520C224 526 204 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":466,\"leftSideBearing\":40},{\"path\":\"M40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C170 477 179 473 187 464C200 449 205 386 205 262C205 142 206 12 205 2C208 0 213 0 244 0C274 0 276 2 276 26L275 266C275 466 252 512 242 522C236 528 195 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":315,\"leftSideBearing\":40},{\"path\":\"M76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M40-196L40-219C40-218 47-220 63-220C108-220 111-216 111-194L108 1C117-1 127-3 169-3C210-3 237 3 254 20C274 40 282 61 281 270C280 470 257 511 246 522C239 527 219 533 168 533C104 533 82 529 68 514C42 487 38 406 38 268C38 268 40-102 40-196ZM209 65C201 59 183 56 166 56C150 56 133 58 126 66C115 78 107 182 107 270C107 304 108 445 115 469C126 475 141 476 153 476C166 476 187 473 195 464C213 442 213 308 213 268C213 241 212 86 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":38},{\"path\":\"M274-194L274 270C274 442 250 511 239 522C212 533 175 533 158 533C122 533 76 529 60 513C34 487 31 420 31 268C31 86 58 15 69 9C96-3 112-3 156-3C185-3 200-2 204 1C202-7 203-201 203-218C203-218 210-220 226-220C271-220 274-216 274-194ZM202 65C190 58 174 55 159 55C140 55 127 59 120 66C108 78 100 180 100 268C100 286 101 445 108 472C117 475 136 476 152 476C167 476 177 474 185 465C204 445 204 394 205 264C205 220 208 83 202 65Z\",\"advanceWidth\":314,\"leftSideBearing\":31},{\"path\":\"M36 2C38 0 41 0 58 0C103 0 105 2 105 26C105 68 101 161 100 261C99 331 97 445 102 470C110 474 116 475 126 475C141 475 149 473 155 465C164 454 169 405 165 330C169 330 185 329 201 329C229 329 231 332 231 374C231 471 219 512 209 522C203 528 160 530 115 530C48 530 44 529 39 524C35 520 37 341 37 261C37 254 38 10 36 2Z\",\"advanceWidth\":232,\"leftSideBearing\":36},{\"path\":\"M52 10C59 4 80-4 134-3C177-2 208 1 227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10Z\",\"advanceWidth\":284,\"leftSideBearing\":25},{\"path\":\"M90 9C117-3 141-3 172-3C210-3 243 0 262 19C274 31 290 61 285 323L258 323C225 323 216 318 216 290C216 245 221 81 212 61C212 61 208 56 177 56C158 56 148 58 140 66C131 75 125 117 125 266C125 331 124 405 127 466L262 465C269 465 275 465 275 477C275 495 277 526 276 530C230 526 125 527 127 529C127 529 126 615 129 630L95 630C57 630 55 629 55 618C55 612 54 529 54 528L42 528C23 528 20 526 20 497L20 466C20 466 54 469 54 467L52 268C52 67 83 15 90 9Z\",\"advanceWidth\":310,\"leftSideBearing\":20},{\"path\":\"M275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M108-2C151-2 181 9 202 33C248 85 272 156 272 385C272 532 264 527 264 527C260 528 246 530 232 530C198 530 195 526 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M137-3C158-3 176 5 190 18C226 49 244 113 250 178C251 163 251 42 251 29C251 20 254 14 258 9C272-4 302-1 326-2C350-3 371 7 388 26C437 82 456 216 456 387C456 472 453 516 448 527C443 529 431 530 401 530C377 530 375 529 378 504C381 479 383 435 385 370C390 173 374 61 338 54L321 54C310 55 302 58 302 70C302 150 276 405 261 523C257 526 241 530 222 530C189 530 185 525 190 504C199 465 209 400 212 330C219 152 187 60 149 53L136 53C128 54 123 57 123 69C123 170 99 437 82 526C73 528 58 530 44 530C13 530 8 527 14 495C33 391 55 170 55 28C55 19 58 13 62 9C78-6 113-3 137-3Z\",\"advanceWidth\":491,\"leftSideBearing\":11},{\"path\":\"M0 3C1 1 7 0 32 0C53 0 57 2 63 8C72 16 128 185 134 201L135 205L136 201C156 132 198 6 199 3C201 1 223 0 242 0C260 0 271 2 272 3C273 4 272 6 268 18C246 83 181 259 176 276C179 284 253 499 258 508C257 510 243 519 229 525C218 530 207 531 202 524C198 519 161 395 145 350L143 343L141 350C133 375 80 527 79 530C73 531 64 530 47 523C17 511 19 501 28 477C52 413 97 285 100 277C93 256 8 23 0 3Z\",\"advanceWidth\":275,\"leftSideBearing\":0},{\"path\":\"M15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M0 0L158 0C184 0 190 9 190 32C190 44 190 58 190 63L78 62C70 62 73 68 75 74L184 468C187 476 184 529 184 529L31 530C10 530 4 527 4 506C4 497 4 484 4 467L106 467C114 467 117 465 115 460C112 453 0 44 0 44Z\",\"advanceWidth\":192,\"leftSideBearing\":0},{\"path\":\"M79 9C86 3 109-3 169-3C207-3 251 0 271 19C293 40 298 94 298 284C298 319 295 393 295 404C295 491 274 527 263 538C256 543 249 549 171 549C143 549 87 546 71 530C44 503 41 426 41 301C41 100 64 21 79 9ZM177 62C155 62 135 64 128 71C117 82 108 215 108 303C108 337 109 456 115 480C124 485 152 487 166 487C183 487 200 489 212 475C231 453 231 341 231 293C231 253 234 107 227 70C219 64 194 62 177 62Z\",\"advanceWidth\":340,\"leftSideBearing\":41},{\"path\":\"M87 3C91 1 98 0 132 0C155 0 157 2 157 27L157 544C157 544 95 544 87 541C82 539 17 492 8 486C8 479 8 420 11 419C13 418 74 463 86 471C87 472 92 470 92 469C92 448 91 427 91 404C91 250 89 55 87 3Z\",\"advanceWidth\":198,\"leftSideBearing\":8},{\"path\":\"M38 0L265 0L265 47C265 60 258 67 245 67L139 67C113 67 100 67 100 67L100 102L100 127C100 197 257 279 255 408C254 477 246 513 228 532C211 550 177 551 158 551C127 551 87 546 69 528C52 511 50 485 50 357L66 357C110 357 111 360 111 371C111 378 107 466 111 479C127 486 141 487 149 487C157 487 166 486 175 477C188 464 193 453 193 400C193 305 38 239 38 114Z\",\"advanceWidth\":280,\"leftSideBearing\":38},{\"path\":\"M140-126C177-126 211-123 230-104C252-82 257-62 257 120C257 214 245 257 229 282C205 299 187 304 143 305C165 339 200 400 222 442C235 467 244 480 244 496L244 547L55 547C40 547 33 540 33 521C33 507 33 485 33 480L175 480C171 474 79 317 61 287C54 276 60 240 60 240C121 242 165 245 177 233C185 225 190 212 190 113C190 88 194-15 185-52C175-58 162-60 149-60C124-60 114-58 107-51C95-39 96 94 99 102C89 103 78 103 70 103C48 103 33 94 33 76C33-22 44-72 56-103C70-116 99-126 140-126Z\",\"advanceWidth\":286,\"leftSideBearing\":33},{\"path\":\"M248-128C248-128 246 384 247 390C244 392 240 392 199 392C190 392 185 387 185 372C185 270 185 168 185 66L100 66C88 66 87 68 91 84C111 166 179 455 194 522C197 536 195 538 181 542C166 546 140 550 138 550L125 500C124 496 123 493 123 489C97 383 46 166 29 91C24 69 21 46 21 38C21 25 21 13 21 0L173 0C184 0 186-1 186-15L186-127Z\",\"advanceWidth\":288,\"leftSideBearing\":21},{\"path\":\"M51-109C58-115 91-126 140-126C177-126 218-119 232-103C253-79 247-54 247 218C247 260 103 327 103 350L103 476L219 476C241 476 246 482 246 520C246 532 246 544 246 547L44 547C42 431 41 319 41 314C41 290 183 222 184 187C186 116 191-14 182-51C172-57 158-59 149-59C124-59 109-58 103-51C95-42 95 21 95 104L66 104C43 104 32 94 32 76C32-42 44-103 51-109Z\",\"advanceWidth\":287,\"leftSideBearing\":32},{\"path\":\"M165-129C204-128 233-124 253-106C271-89 282-44 281 100C280 230 272 256 250 279C237 290 204 298 165 298C155 298 124 296 112 293C111 298 110 455 117 480C125 484 141 486 161 486C179 486 192 485 199 477C210 465 209 440 209 400C212 398 229 399 231 399C266 399 271 403 271 428C271 483 255 526 246 537C236 544 213 550 166 550C131 550 89 546 74 531C55 512 43 473 44 294L45 91C46-95 75-111 82-117C89-123 105-131 165-129ZM170-69C158-69 140-70 129-59C120-50 111-35 111 90C111 168 111 212 114 230C126 235 142 236 158 236C184 236 194 233 201 225C211 213 216 179 216 89C216 19 213-54 210-64C206-65 183-69 170-69Z\",\"advanceWidth\":308,\"leftSideBearing\":44},{\"path\":\"M-2 538C-2 520-3 480-3 480L133 480L133 432C133 333 41 209 41 82L41-126L81-125C101-124 103-123 103-105L103 95C103 183 195 323 195 440L195 480L195 547L9 547C2 547-2 544-2 538Z\",\"advanceWidth\":197,\"leftSideBearing\":-3},{\"path\":\"M164-3C215-3 235 3 255 23C273 41 283 65 283 211C283 267 283 312 273 346C261 368 238 390 213 402C248 422 277 459 277 535C277 590 261 650 246 660C225 675 193 679 162 679C122 679 92 674 74 656C57 639 53 584 53 533C53 463 76 420 111 399C94 392 67 371 58 354C46 331 43 294 41 207C39 92 54 44 77 20C91 8 114-3 164-3ZM165 434C142 446 116 473 116 532C116 563 117 601 121 614C134 621 154 624 162 624C182 624 193 621 201 613C211 603 214 573 214 530C214 475 193 448 165 434ZM170 60C151 60 135 59 124 72C115 82 111 106 110 211C109 298 111 317 119 332C123 341 148 363 160 368C173 366 189 351 200 340C211 329 216 301 216 206C216 137 216 97 211 70C200 64 188 60 170 60Z\",\"advanceWidth\":323,\"leftSideBearing\":41},{\"path\":\"M148 551C109 550 78 547 58 529C40 512 33 509 33 326C33 184 54 155 65 145C72 140 92 134 149 134L199 134C201 134 203-33 196-58C188-62 172-64 152-64C134-64 121-63 114-55C103-43 104 6 104 46C101 48 82 47 80 47C45 47 40 43 40 18C40-53 55-98 65-115C78-125 87-128 147-128C182-128 228-124 243-109C262-90 274-31 273 138L272 335C271 521 242 533 235 539C228 545 208 553 148 551ZM143 491C155 491 173 492 184 481C193 472 202 428 202 336C202 258 202 220 199 202C187 197 171 196 155 196C129 196 121 201 114 207C103 217 102 246 102 336C102 406 100 448 104 486C108 487 130 491 143 491Z\",\"advanceWidth\":310,\"leftSideBearing\":33},{\"path\":\"M42 13C58 10 102 14 107 18C113 23 115 95 111 102C108 106 93 114 87 115C67 115 36 110 33 105C28 97 37 26 42 13Z\",\"advanceWidth\":152,\"leftSideBearing\":31},{\"path\":\"M35-115C37-117 48-117 53-117C67-117 77-117 79-115C82-112 83-111 99-60C111-23 120 17 122 26C124 37 124 72 120 112C119 114 100 126 95 125C81 126 41 120 38 114C39 103 49 47 53 14C48-28 43-55 35-115Z\",\"advanceWidth\":152,\"leftSideBearing\":35},{\"path\":\"M233 379C197 379 196 377 196 355C196 338 197 316 200 309C215 313 246 313 281 312C281 122 279 108 267 76C258 68 239 64 202 64C166 64 150 71 140 83C127 99 124 118 124 383C124 590 128 649 142 675C151 683 166 686 201 686C235 686 248 681 258 671C274 655 279 631 279 534C285 533 286 533 342 533C353 533 354 535 354 556C354 651 349 677 320 724C297 744 272 753 202 753C122 753 100 743 82 720C52 682 44 657 44 382C44 151 52 72 69 40C87 16 134-1 201-2C265-3 314 16 329 36C352 67 357 126 357 182C357 253 357 335 360 380C356 380 279 379 233 379ZM360 380C360 380 360 380 360 380Z\",\"advanceWidth\":403,\"leftSideBearing\":44},{\"path\":\"M218 265C218 285 218 287 217 290C214 291 167 291 116 291C58 291 19 290 16 287C14 285 13 279 13 265C13 246 14 237 15 234C18 233 21 233 115 233C190 233 215 234 216 235C218 237 218 248 218 265Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":373,\"leftSideBearing\":39},{\"path\":\"M152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M39 754L39 260C39 88 63 19 74 8C101-3 138-3 155-3C191-3 237 1 253 17C279 43 282 110 282 262C282 444 255 515 244 521C217 533 201 533 157 533C120 533 112 532 106 530C110 535 110 540 110 778C110 778 103 780 87 780C42 780 39 776 39 754ZM111 465C123 472 139 475 154 475C173 475 186 471 193 464C205 452 213 350 213 262C213 244 212 85 205 58C196 55 177 54 161 54C146 54 136 56 128 65C110 86 108 136 108 266C108 310 105 447 111 465Z\",\"advanceWidth\":317,\"leftSideBearing\":39},{\"path\":\"M152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M50 723C50 636 52 505 52 373C53 236 51 98 51 4C54 3 61 2 92 2C120 2 125 8 125 28C125 41 123 199 123 363C148 364 177 364 206 364L285 362C286 229 284 96 284 4C287 3 294 2 325 2C353 2 358 8 358 28C358 41 356 208 356 377C355 553 357 732 357 746C355 747 350 749 334 749C289 749 283 748 283 723C283 648 285 539 285 425C257 424 227 423 207 423C179 423 148 424 123 425C122 584 124 733 124 746C122 747 117 749 101 749C56 749 50 748 50 723Z\",\"advanceWidth\":408,\"leftSideBearing\":50},{\"path\":\"M50 724C50 610 52 495 52 381C52 256 52 19 51 5C54 4 58 3 124 3C281 3 279 3 283 7C285 9 286 13 286 29C286 60 285 71 285 71C275 69 187 63 145 61C128 60 124 63 124 76C124 128 123 293 123 387C123 507 124 627 124 747C122 748 117 750 101 750C56 750 50 749 50 724Z\",\"advanceWidth\":277,\"leftSideBearing\":50},{\"path\":\"M49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":51},{\"path\":\"M50 724C50 610 52 495 52 381C52 256 52 19 51 5C54 4 59 3 102 3C124 3 126 5 126 56C126 101 126 196 125 325L173 324C254 323 259 324 263 328C266 331 268 353 268 364C268 382 267 387 266 389L124 389C123 487 124 587 125 687L164 686C214 685 265 682 267 684C269 686 270 691 268 725C267 743 267 746 266 750C260 751 191 750 71 750C59 750 56 749 53 746C51 744 50 740 50 724Z\",\"advanceWidth\":299,\"leftSideBearing\":50},{\"path\":\"M43 10C46 7 50 6 91 6C107 6 113 14 112 41C111 74 107 163 114 357C121 549 130 659 138 679C144 684 148 686 158 686C166 686 169 685 171 683C185 592 187 541 201 334C208 231 211 130 211 49C211 12 243 3 298 3C359 3 371 4 377 6C407 57 448 329 448 545C448 611 447 654 446 685C452 688 459 689 471 689C479 689 504 689 508 685C511 682 512 646 513 627C517 547 517 433 517 322C517 160 514 16 515 8C520 6 523 6 572 6C590 6 592 9 592 34C592 80 596 192 594 329C592 452 587 613 586 741C569 748 533 753 481 753C377 753 371 747 373 719C376 684 378 609 379 522C381 311 344 100 324 71C321 70 318 70 308 70C295 70 286 74 286 90C286 231 262 621 243 746C235 750 206 753 169 753C113 753 101 749 87 736C60 711 52 558 45 351C38 146 41 12 43 10Z\",\"advanceWidth\":648,\"leftSideBearing\":40},{\"path\":\"M73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":412,\"leftSideBearing\":46},{\"path\":\"M43 381C45 152 51 72 69 39C87 17 134-2 197-3C219-3 239-2 257 2L293-34C303-43 312-42 325-33C338-24 344-18 353-10L318 24C324 28 328 32 331 36C355 69 361 106 361 380C361 608 352 678 319 724C299 741 272 753 202 753C121 753 100 742 83 721C53 684 41 657 43 381ZM123 383C121 591 126 652 142 676C152 683 167 686 200 686C235 686 248 681 258 671C273 655 281 604 281 375C281 153 279 109 268 78L267 77C258 87 251 95 242 104C232 114 223 114 216 108L180 78L202 59C172 60 155 65 141 82C127 98 125 117 123 383Z\",\"advanceWidth\":400,\"leftSideBearing\":42},{\"path\":\"M601 374C601 606 520 679 349 689C349 720 349 747 352 760C338 760 275 758 275 752L275 688C153 688 28 595 28 326C28 158 141 56 279 56L279-16C294-16 355-18 355-9C355-9 354 34 354 55C528 55 601 219 601 374ZM524 371C524 219 472 113 354 113L350 631C457 618 524 544 524 371ZM105 338C105 546 181 630 275 630C276 490 279 263 279 118C201 118 105 209 105 338Z\",\"advanceWidth\":625,\"leftSideBearing\":28},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M276 756L276 779C276 778 269 780 253 780C208 780 205 776 205 754L206 522C196 530 180 534 147 534C106 534 79 528 62 511C42 491 34 470 35 261C36 61 59 20 70 9C77 4 97-2 148-2C212-2 234 2 248 17C274 44 278 125 278 263C278 263 276 662 276 756ZM107 466C115 472 133 475 150 475C166 475 183 473 190 465C201 453 209 349 209 261C209 227 208 86 201 62C190 56 175 55 163 55C150 55 129 58 121 67C102 88 103 223 103 263C103 290 104 445 107 466Z\",\"advanceWidth\":316,\"leftSideBearing\":35},{\"path\":\"M155-3C193-3 215-1 235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C89 0 115-3 155-3Z\",\"advanceWidth\":288,\"leftSideBearing\":41},{\"path\":\"M-9 723C-9 692-8 681-8 681C-6 680 61 686 107 689L108 4C111 3 118 2 149 2C177 2 182 8 182 28L181 689C288 681 295 680 298 683C300 685 300 687 300 723C300 741 300 744 299 748L148 749C-5 749-2 749-6 745C-8 743-9 739-9 723Z\",\"advanceWidth\":291,\"leftSideBearing\":-9},{\"path\":\"M76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M155-3C193-3 215-1 235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C89 0 115-3 155-3Z\",\"advanceWidth\":300,\"leftSideBearing\":41},{\"path\":\"M49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":277,\"leftSideBearing\":49},{\"path\":\"M50 723C50 636 52 505 52 373C53 236 51 98 51 4C54 3 61 2 92 2C120 2 125 8 125 28C125 41 123 199 123 363C148 364 177 364 206 364L285 362C286 229 284 96 284 4C287 3 294 2 325 2C353 2 358 8 358 28C358 41 356 208 356 377C355 553 357 732 357 746C355 747 350 749 334 749C289 749 283 748 283 723C283 648 285 539 285 425C257 424 227 423 207 423C179 423 148 424 123 425C122 584 124 733 124 746C122 747 117 749 101 749C56 749 50 748 50 723Z\",\"advanceWidth\":408,\"leftSideBearing\":50},{\"path\":\"M73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M348 272C330 271 315 270 297 267C274 263 268 257 268 221C268 130 263 99 255 78C244 67 225 64 200 64C163 64 158 69 148 82C135 99 133 117 130 383C128 591 133 652 149 676C159 683 164 686 197 686C222 686 235 681 245 671C256 660 263 629 266 531C275 529 299 527 315 529C335 531 345 536 343 573C339 651 326 695 306 724C286 741 259 753 199 753C118 753 107 742 90 721C60 684 48 657 50 381C52 152 58 72 76 39C94 17 131-2 194-3C254-4 303 15 318 36C338 64 346 95 348 272Z\",\"advanceWidth\":400,\"leftSideBearing\":49},{\"path\":\"M348 272C330 271 315 270 297 267C274 263 268 257 268 221C268 130 263 99 255 78C244 67 225 64 200 64C163 64 158 69 148 82C135 99 133 117 130 383C128 591 133 652 149 676C159 683 164 686 197 686C222 686 235 681 245 671C256 660 263 629 266 531C275 529 299 527 315 529C335 531 345 536 343 573C339 651 326 695 306 724C286 741 259 753 199 753C118 753 107 742 90 721C60 684 48 657 50 381C52 152 58 72 76 39C94 17 131-2 194-3C254-4 303 15 318 36C338 64 346 95 348 272Z\",\"advanceWidth\":400,\"leftSideBearing\":49},{\"path\":\"M-31 750C-39 750-37 694-37 681C-26 683 25 685 79 685C80 536 81 43 79 0C94 0 156 0 156 5C156 77 151 491 153 685C214 684 267 681 270 681C270 681 276 726 273 751C245 744-8 750-31 750Z\",\"advanceWidth\":239,\"leftSideBearing\":-38},{\"path\":\"M49 723C49 636 51 505 51 373C51 236 50 101 50 7C54 4 81 3 174 3C255 3 281 13 303 35C326 58 338 87 338 380C338 608 327 678 298 724C278 741 249 750 179 750C54 750 49 747 49 723ZM127 377L127 679C134 682 134 683 177 683C212 683 226 679 236 669C249 656 258 604 258 375C258 153 256 122 246 88C238 79 224 71 180 71C150 71 136 74 129 80C128 144 127 258 127 377Z\",\"advanceWidth\":386,\"leftSideBearing\":49},{\"path\":\"M19 271C19 252 20 243 21 240C24 239 26 239 107 239C107 158 107 151 108 148C111 147 116 147 136 147C153 147 168 147 170 149C171 150 172 154 172 239C257 239 261 240 262 241C264 243 264 254 264 271C264 291 264 293 263 296C260 297 253 297 172 297C172 385 172 387 171 390C168 391 155 392 136 392C122 392 113 391 111 389C108 386 107 382 107 297C29 297 25 296 22 293C20 291 19 285 19 271Z\",\"advanceWidth\":285,\"leftSideBearing\":19},{\"path\":\"M263 335C263 355 263 357 262 360C259 361 252 361 141 361C33 361 24 360 21 357C19 355 18 349 18 335C18 316 19 307 20 304C23 303 28 303 140 303C255 303 260 304 261 305C262 306 263 318 263 335ZM265 215C265 235 265 237 264 240C261 241 254 241 143 241C35 241 26 240 23 237C21 235 20 229 20 215C20 196 21 187 22 184C25 183 30 183 142 183C257 183 262 184 263 185C264 186 265 198 265 215Z\",\"advanceWidth\":277,\"leftSideBearing\":18},{\"path\":\"M265 269C265 289 265 291 264 294C261 295 254 295 143 295C35 295 26 294 23 291C21 289 20 283 20 269C20 251 21 242 22 239C25 238 30 238 142 238C257 238 262 239 263 240C264 241 265 253 265 269Z\",\"advanceWidth\":280,\"leftSideBearing\":20},{\"path\":\"M152 598C166 625 205 705 216 727L190 737C168 745 150 753 147 751C143 748 143 744 124 674C115 641 107 610 105 604L122 597C144 589 148 590 152 598Z\",\"advanceWidth\":320,\"leftSideBearing\":105},{\"path\":\"M139 592C141 592 154 597 162 600C178 606 181 610 179 617L146 747C144 747 137 745 116 737C94 729 82 723 79 720C77 718 78 714 102 666C122 626 130 611 139 592ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M182 595C196 622 235 702 246 724L220 734C198 742 180 750 177 748C173 745 173 741 154 671C145 638 137 607 135 601L152 594C174 586 178 587 182 595ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M164 595C178 622 217 702 228 724L202 734C180 742 162 750 159 748C155 745 155 741 136 671C127 638 119 607 117 601L134 594C156 586 160 587 164 595ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M179 595C193 622 232 702 243 724L217 734C195 742 177 750 174 748C170 745 170 741 151 671C142 638 134 607 132 601L149 594C171 586 175 587 179 595ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M184 595C198 622 237 702 248 724L222 734C200 742 182 750 179 748C175 745 175 741 156 671C147 638 139 607 137 601L154 594C176 586 180 587 184 595ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M172 3C253 3 279 13 301 35C324 58 336 99 336 202C336 293 326 353 302 391C297 400 286 410 279 414C304 438 314 468 314 586C314 645 304 688 282 722C253 745 224 754 176 753C92 751 52 751 48 748C43 745 49 633 49 560C50 333 51 24 50 10C56 6 79 3 172 3ZM214 431C204 429 132 428 127 429C126 447 126 522 126 568C126 609 127 641 127 677C134 682 144 684 170 684C198 684 210 681 220 671C231 660 234 645 234 563C234 464 225 438 214 431ZM127 80C120 89 125 346 127 357C134 361 144 363 166 363C210 362 224 358 234 348C248 334 257 307 257 199C257 150 255 121 244 88C236 77 222 72 175 70C149 69 133 72 127 80Z\",\"advanceWidth\":371,\"leftSideBearing\":46},{\"path\":\"M218 355C218 375 218 377 217 380C214 381 167 381 116 381C58 381 19 380 16 377C14 375 13 369 13 355C13 336 14 327 15 324C18 323 21 323 115 323C190 323 215 324 216 325C218 327 218 338 218 355Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M162 598C176 625 215 705 226 727L200 737C178 745 160 753 157 751C153 748 153 744 134 674C125 641 117 610 115 604L132 597C154 589 158 590 162 598ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M142 768C167 784 231 824 252 838L234 859C219 877 207 893 204 893C199 892 198 888 145 838C131 824 109 801 104 797C105 795 112 786 115 782C129 763 134 763 142 768Z\",\"advanceWidth\":320,\"leftSideBearing\":104},{\"path\":\"M190 768C215 784 279 824 300 838L282 859C267 877 255 893 252 893C247 892 246 888 193 838C179 824 157 801 152 797C153 795 160 786 163 782C177 763 182 763 190 768ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M138 595C140 595 153 600 161 603C177 609 180 613 178 620L145 750C143 750 136 748 115 740C93 732 81 726 78 723C76 721 77 717 101 669C121 629 129 614 138 595ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M98 593C100 593 113 598 121 601C137 607 140 611 138 618L105 748C103 748 96 746 75 738C53 730 41 724 38 721C36 719 37 715 61 667C81 627 89 612 98 593Z\",\"advanceWidth\":180,\"leftSideBearing\":37},{\"path\":\"M25 609L41 600C61 590 66 589 71 599C77 610 93 647 100 665C102 670 102 671 102 671L104 671C104 671 104 670 106 665C117 640 136 601 142 589L164 600C180 608 182 612 179 619C167 653 134 750 134 750L113 750C82 750 80 750 78 748C76 746 68 726 53 686Z\",\"advanceWidth\":211,\"leftSideBearing\":25},{\"path\":\"M75 599L91 590C111 580 116 579 121 589C127 600 143 637 150 655C152 660 152 661 152 661L154 661C154 661 154 660 156 655C167 630 186 591 192 579L214 590C230 598 232 602 229 609C217 643 184 740 184 740L163 740C132 740 130 740 128 738C126 736 118 716 103 676ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M438 185L408 185C373 185 371 183 371 159C371 147 373 96 368 65C357 59 343 57 331 57C310 57 297 59 290 66C283 73 277 123 273 171C273 193 273 220 272 251C284 249 309 246 330 246C350 246 388 249 408 269C426 287 438 304 438 387C438 456 420 511 409 522C403 528 382 533 319 532C301 532 262 530 241 520C240 520 240 521 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C194 463 200 444 203 380C202 357 202 330 202 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3C187-3 217-1 236 13C237 11 238 10 239 9C246 3 276-3 326-3C363-3 394 0 413 19C435 41 439 61 438 185ZM278 470C287 472 334 485 357 463C374 446 370 331 364 308C350 302 288 297 274 311C265 320 272 446 278 470ZM205 162C205 123 204 92 200 62C188 58 169 56 159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C199 234 201 229 203 215C203 200 204 186 205 174Z\",\"advanceWidth\":473,\"leftSideBearing\":37},{\"path\":\"M141 592C143 592 156 597 164 600C180 606 183 610 181 617L148 747C146 747 139 745 118 737C96 729 84 723 81 720C79 718 80 714 104 666C124 626 132 611 141 592ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M76 605L92 596C112 586 117 585 122 595C128 606 144 643 151 661C153 666 153 667 153 667L155 667C155 667 155 666 157 661C168 636 187 597 193 585L215 596C231 604 233 608 230 615C218 649 185 746 185 746L164 746C133 746 131 746 129 744C127 742 119 722 104 682ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M66 593C68 593 81 598 89 601C105 607 108 611 106 618L73 748C71 748 64 746 43 738C21 730 9 724 6 721C4 719 5 715 29 667C49 627 57 612 66 593ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":5},{\"path\":\"M101 598C115 625 154 705 165 727L139 737C117 745 99 753 96 751C92 748 92 744 73 674C64 641 56 610 54 604L71 597C93 589 97 590 101 598ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":40},{\"path\":\"M-2 609L14 600C34 590 39 589 44 599C50 610 66 647 73 665C75 670 75 671 75 671L77 671C77 671 77 670 79 665C90 640 109 601 115 589L137 600C153 608 155 612 152 619C140 653 107 750 107 750L86 750C55 750 53 750 51 748C49 746 41 726 26 686ZM112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":-2},{\"path\":\"M80 608L96 599C116 589 121 588 126 598C132 609 148 646 155 664C157 669 157 670 157 670L159 670C159 670 159 669 161 664C172 639 191 600 197 588L219 599C235 607 237 611 234 618C222 652 189 749 189 749L168 749C137 749 135 749 133 747C131 745 123 725 108 685ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M134 593C136 593 149 598 157 601C173 607 176 611 174 618L141 748C139 748 132 746 111 738C89 730 77 724 74 721C72 719 73 715 97 667C117 627 125 612 134 593ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M78 608L94 599C114 589 119 588 124 598C130 609 146 646 153 664C155 669 155 670 155 670L157 670C157 670 157 669 159 664C170 639 189 600 195 588L217 599C233 607 235 611 232 618C220 652 187 749 187 749L166 749C135 749 133 749 131 747C129 745 121 725 106 685ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M181 729L165 738C145 748 140 749 135 739C129 728 113 691 106 673C104 668 104 667 104 667L102 667C102 667 102 668 100 673C89 698 70 737 64 749L42 738C26 730 24 726 27 719C39 685 72 588 72 588L93 588C124 588 126 588 128 590C130 592 138 612 153 652Z\",\"advanceWidth\":216,\"leftSideBearing\":25},{\"path\":\"M225 722L209 731C189 741 184 742 179 732C173 721 157 684 150 666C148 661 148 660 148 660L146 660C146 660 146 661 144 666C133 691 114 730 108 742L86 731C70 723 68 719 71 712C83 678 116 581 116 581L137 581C168 581 170 581 172 583C174 585 182 605 197 645ZM52 10C59 4 80-4 134-3C177-2 208 1 227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10Z\",\"advanceWidth\":296,\"leftSideBearing\":25},{\"path\":\"M175 729L159 738C139 748 134 749 129 739C123 728 107 691 100 673C98 668 98 667 98 667L96 667C96 667 96 668 94 673C83 698 64 737 58 749L36 738C20 730 18 726 21 719C33 685 66 588 66 588L87 588C118 588 120 588 122 590C124 592 132 612 147 652ZM0 0L158 0C184 0 190 9 190 32C190 44 190 58 190 63L78 62C70 62 73 68 75 74L184 468C187 476 184 529 184 529L31 530C10 530 4 527 4 506C4 497 4 484 4 467L106 467C114 467 117 465 115 460C112 453 0 44 0 44Z\",\"advanceWidth\":192,\"leftSideBearing\":0},{\"path\":\"M112 26L111 527C109 528 104 530 88 530C43 530 40 526 40 504C40 327 41 187 41 2C44 1 48 0 79 0C107 0 112 6 112 26Z\",\"advanceWidth\":152,\"leftSideBearing\":40},{\"path\":\"M178 614C184 614 195 614 208 615C236 617 237 618 241 622C244 625 245 648 245 678C245 694 244 724 243 729C238 729 230 729 217 728C183 725 178 724 175 721C172 718 171 712 173 671C174 650 177 618 178 614ZM70 614C86 611 130 611 133 614C135 616 136 639 136 671L135 725C130 725 125 725 110 724C73 722 73 721 69 717C65 713 64 706 66 670C67 646 69 618 70 614ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M178 615C184 615 195 615 208 616C236 618 237 619 241 623C244 626 245 649 245 679C245 695 244 725 243 730C238 730 230 730 217 729C183 726 178 725 175 722C172 719 171 713 173 672C174 651 177 619 178 615ZM70 615C86 612 130 612 133 615C135 617 136 640 136 672L135 726C130 726 125 726 110 725C73 723 73 722 69 718C65 714 64 707 66 671C67 647 69 619 70 615Z\",\"advanceWidth\":331,\"leftSideBearing\":65},{\"path\":\"M178 615C184 615 195 615 208 616C236 618 237 619 241 623C244 626 245 649 245 679C245 695 244 725 243 730C238 730 230 730 217 729C183 726 178 725 175 722C172 719 171 713 173 672C174 651 177 619 178 615ZM70 615C86 612 130 612 133 615C135 617 136 640 136 672L135 726C130 726 125 726 110 725C73 723 73 722 69 718C65 714 64 707 66 671C67 647 69 619 70 615ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M172 615C178 615 189 615 202 616C230 618 231 619 235 623C238 626 239 649 239 679C239 695 238 725 237 730C232 730 224 730 211 729C177 726 172 725 169 722C166 719 165 713 167 672C168 651 171 619 172 615ZM64 615C80 612 124 612 127 615C129 617 130 640 130 672L129 726C124 726 119 726 104 725C67 723 67 722 63 718C59 714 58 707 60 671C61 647 63 619 64 615ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M176 615C182 615 193 615 206 616C234 618 235 619 239 623C242 626 243 649 243 679C243 695 242 725 241 730C236 730 228 730 215 729C181 726 176 725 173 722C170 719 169 713 171 672C172 651 175 619 176 615ZM68 615C84 612 128 612 131 615C133 617 134 640 134 672L133 726C128 726 123 726 108 725C71 723 71 722 67 718C63 714 62 707 64 671C65 647 67 619 68 615ZM275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M163 615C169 615 180 615 193 616C221 618 222 619 226 623C229 626 230 649 230 679C230 695 229 725 228 730C223 730 215 730 202 729C168 726 163 725 160 722C157 719 156 713 158 672C159 651 162 619 163 615ZM55 615C71 612 115 612 118 615C120 617 121 640 121 672L120 726C115 726 110 726 95 725C58 723 58 722 54 718C50 714 49 707 51 671C52 647 54 619 55 615ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M123 615C129 615 140 615 153 616C181 618 182 619 186 623C189 626 190 649 190 679C190 695 189 725 188 730C183 730 175 730 162 729C128 726 123 725 120 722C117 719 116 713 118 672C119 651 122 619 123 615ZM15 615C31 612 75 612 78 615C80 617 81 640 81 672L80 726C75 726 70 726 55 725C18 723 18 722 14 718C10 714 9 707 11 671C12 647 14 619 15 615ZM138 26L137 527C135 528 130 530 114 530C69 530 66 526 66 504C66 327 67 187 67 2C70 1 74 0 105 0C133 0 138 6 138 26Z\",\"advanceWidth\":200,\"leftSideBearing\":10},{\"path\":\"M123 768C148 784 212 824 233 838L215 859C200 877 188 893 185 893C180 892 179 888 126 838C112 824 90 801 85 797C86 795 93 786 96 782C110 763 115 763 123 768ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M181 779C187 779 198 779 211 780C239 782 240 783 244 787C247 790 248 813 248 843C248 859 247 889 246 894C241 894 233 894 220 893C186 890 181 889 178 886C175 883 174 877 176 836C177 815 180 783 181 779ZM73 779C89 776 133 776 136 779C138 781 139 804 139 836L138 890C133 890 128 890 113 889C76 887 76 886 72 882C68 878 67 871 69 835C70 811 72 783 73 779ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M77 768C102 784 166 824 187 838L169 859C154 877 142 893 139 893C134 892 133 888 80 838C66 824 44 801 39 797C40 795 47 786 50 782C64 763 69 763 77 768ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":39},{\"path\":\"M189 768C214 784 278 824 299 838L281 859C266 877 254 893 251 893C246 892 245 888 192 838C178 824 156 801 151 797C152 795 159 786 162 782C176 763 181 763 189 768ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M219 783C225 783 236 783 249 784C277 786 278 787 282 791C285 794 286 817 286 847C286 863 285 893 284 898C279 898 271 898 258 897C224 894 219 893 216 890C213 887 212 881 214 840C215 819 218 787 219 783ZM111 783C127 780 171 780 174 783C176 785 177 808 177 840L176 894C171 894 166 894 151 893C114 891 114 890 110 886C106 882 105 875 107 839C108 815 110 787 111 783ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M30 67C18 70 13 67 9 54C6 38 3 22 3 6C21-1 31-3 61-3C131-4 180 15 195 36C219 69 221 106 221 380C221 579 225 738 225 747L169 747C150 747 145 745 145 714C145 625 148 574 148 375C148 153 143 109 132 78C121 67 102 64 67 64C51 64 39 65 30 67Z\",\"advanceWidth\":270,\"leftSideBearing\":3},{\"path\":\"M281 720C259 742 237 752 175 750C138 749 119 749 99 749C54 749 48 744 48 723C48 481 47 445 47 374C47 453 49 67 49 4C52 3 59 2 90 2C118 2 123 8 123 28C123 40 120 176 119 326L166 326C217 326 256 335 276 352C305 398 316 432 316 565C316 598 304 697 281 720ZM221 400C215 393 199 390 164 390C138 390 128 394 121 397L121 568C121 597 122 651 123 675C130 681 138 684 169 684C203 684 216 676 224 667C234 643 239 591 239 559C239 427 231 412 221 400ZM47 374C47 369 47 362 47 353Z\",\"advanceWidth\":332,\"leftSideBearing\":47},{\"path\":\"M110 778C116 778 127 778 140 779C168 781 169 782 173 786C176 789 177 812 177 842C177 858 176 888 175 893C170 893 162 893 149 892C115 889 110 888 107 885C104 882 103 876 105 835C106 814 109 782 110 778ZM2 778C18 775 62 775 65 778C67 780 68 803 68 835L67 889C62 889 57 889 42 888C5 886 5 885 1 881C-3 877-4 870-2 834C-1 810 1 782 2 778ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":-3},{\"path\":\"M223 786C229 786 240 786 253 787C281 789 282 790 286 794C289 797 290 820 290 850C290 866 289 896 288 901C283 901 275 901 262 900C228 897 223 896 220 893C217 890 216 884 218 843C219 822 222 790 223 786ZM115 786C131 783 175 783 178 786C180 788 181 811 181 843L180 897C175 897 170 897 155 896C118 894 118 893 114 889C110 885 109 878 111 842C112 818 114 790 115 786ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M281 720C259 742 237 752 175 750C138 749 119 749 99 749C54 749 48 744 48 723C48 481 47 445 47 374C47 453 49 67 49 4C52 3 59 2 90 2C118 2 123 8 123 28C123 40 120 176 119 326L166 326C217 326 256 335 276 352C305 398 316 432 316 565C316 598 304 697 281 720ZM221 400C215 393 199 390 164 390C138 390 128 394 121 397L121 568C121 597 122 651 123 675C130 681 138 684 169 684C203 684 216 676 224 667C234 643 239 591 239 559C239 427 231 412 221 400ZM47 374C47 369 47 362 47 353Z\",\"advanceWidth\":332,\"leftSideBearing\":47},{\"path\":\"M172 3C253 3 279 13 301 35C324 58 336 99 336 202C336 293 326 353 302 391C297 400 286 410 279 414C304 438 314 468 314 586C314 645 304 688 282 722C253 745 224 754 176 753C92 751 52 751 48 748C43 745 49 633 49 560C50 333 51 24 50 10C56 6 79 3 172 3ZM214 431C204 429 132 428 127 429C126 447 126 522 126 568C126 609 127 641 127 677C134 682 144 684 170 684C198 684 210 681 220 671C231 660 234 645 234 563C234 464 225 438 214 431ZM127 80C120 89 125 346 127 357C134 361 144 363 166 363C210 362 224 358 234 348C248 334 257 307 257 199C257 150 255 121 244 88C236 77 222 72 175 70C149 69 133 72 127 80Z\",\"advanceWidth\":371,\"leftSideBearing\":46},{\"path\":\"M107 770C109 771 117 779 123 786C135 800 134 804 129 810L45 896L24 872C8 854 2 843 1 839C0 834 4 830 50 803C77 787 104 771 107 770Z\",\"advanceWidth\":180,\"leftSideBearing\":1},{\"path\":\"M183 768C208 784 272 824 293 838L275 859C260 877 248 893 245 893C240 892 239 888 186 838C172 824 150 801 145 797C146 795 153 786 156 782C170 763 175 763 183 768ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M183 770C185 771 193 779 199 786C211 800 210 804 205 810L121 896L100 872C84 854 78 843 77 839C76 834 80 830 126 803C153 787 180 771 183 770ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M97 770C99 771 107 779 113 786C125 800 124 804 119 810L35 896L14 872C-2 854-8 843-9 839C-10 834-6 830 40 803C67 787 94 771 97 770ZM126 28C126 41 124 208 124 377C123 553 125 732 125 746C123 747 118 749 102 749C57 749 51 748 51 723C51 636 53 505 53 373C54 236 52 98 52 4C55 3 62 2 93 2C121 2 126 8 126 28Z\",\"advanceWidth\":175,\"leftSideBearing\":-9},{\"path\":\"M207 769C209 770 217 778 223 785C235 799 234 803 229 809L145 895L124 871C108 853 102 842 101 838C100 833 104 829 150 802C177 786 204 770 207 769ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M215 770C217 771 225 779 231 786C243 800 242 804 237 810L153 896L132 872C116 854 110 843 109 839C108 834 112 830 158 803C185 787 212 771 215 770ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M288 3C292 0 307 0 333 0C345 0 363 1 377 5C344 83 276 294 262 356C303 390 319 443 319 561C319 637 301 696 277 722C257 739 206 750 162 750C54 750 49 735 49 704L48 30C48 5 51 1 60 0C77-1 115-1 132 1C126 63 124 120 124 336C145 333 172 332 190 335C228 229 280 10 288 3ZM129 412C123 417 122 420 121 543C120 655 121 664 126 678C136 682 153 684 172 684C192 684 206 681 215 674C228 664 238 622 239 559C240 500 237 447 226 416C216 406 195 401 170 401C151 401 141 402 129 412Z\",\"advanceWidth\":361,\"leftSideBearing\":48},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 443 125 439L125 575C125 612 123 652 123 686L123 688C184 689 302 690 315 684C319 709 312 751 312 751C308 751 192 749 116 749L116 750C113 750 110 750 107 749C80 749 58 750 49 751L49 740C49 575 51 22 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 374L183 374C229 374 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":365,\"leftSideBearing\":49},{\"path\":\"M94-3C193-3 246 39 246 257C246 342 205 385 166 406C195 436 222 485 222 564C222 650 194 753 105 753C48 753 5 749 8 731L16 684C130 716 145 636 145 560C145 540 145 433 94 427L57 423C51 417 45 383 45 374C101 386 169 368 169 246C169 97 150 59 105 59C94 59 33 56 8 64L9 0C26 0 72-3 94-3Z\",\"advanceWidth\":267,\"leftSideBearing\":8},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 453 125 449L125 575C125 612 123 652 122 749C53 749 15 751-8 751C-15 751-14 697-14 684C-1 686 24 687 49 686C49 473 51 20 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":342,\"leftSideBearing\":-14},{\"path\":\"M50 3C53 1 76 0 100 0C128 0 129 1 129 38C129 64 128 204 129 355L174 361C179 362 282 10 282 5C287 1 296 0 327 0C350 0 364 2 366 4C367 5 366 11 358 33C343 75 314 155 294 220C271 292 250 360 241 401C241 409 263 490 288 571C314 654 343 738 347 747L277 747C263 747 259 743 256 730C240 659 186 437 164 424C155 419 139 418 129 419L129 437C129 590 133 727 133 747C126 748 85 748 70 748C52 748 50 746 51 726C54 660 53 571 52 429C51 279 50 76 50 3Z\",\"advanceWidth\":384,\"leftSideBearing\":50},{\"path\":\"\",\"advanceWidth\":0,\"leftSideBearing\":0},{\"path\":\"M62 753C31 753 23 750 26 727C33 676 50 558 60 404C67 301 73 130 73 49C73 37 77 28 83 21C96 6 124 3 188 3C249 3 261 4 267 6C297 57 346 325 342 541C341 610 341 686 338 755L305 755C268 755 264 748 266 721C269 686 270 609 271 522C273 337 243 151 223 89C221 80 218 74 216 70C212 68 205 67 187 67C170 67 160 69 154 73C151 77 150 83 150 90C150 157 145 281 137 405C128 542 115 683 105 748C98 751 83 753 62 753Z\",\"advanceWidth\":378,\"leftSideBearing\":25},{\"path\":\"M146 0C215 0 243 46 273 148C284 186 287 232 289 248L292 248C292 233 286 136 282 57C281 37 282 23 289 16C303 3 316 0 379 0C434 0 440 0 452 2C497 38 536 299 536 547C536 752 524 746 527 746C522 747 501 750 483 750C459 750 451 746 452 737C455 711 463 643 464 522C466 247 424 65 416 63C409 61 393 59 382 60C360 62 348 71 348 85C348 325 336 581 310 746C301 748 282 750 265 750C239 750 232 746 234 736C237 715 251 582 251 473C251 238 208 71 161 61C144 61 134 57 134 82C134 223 110 621 91 746C78 748 58 750 42 750C17 750 6 746 8 735C33 561 60 210 60 46C60 7 77 0 146 0Z\",\"advanceWidth\":567,\"leftSideBearing\":7},{\"path\":\"M7 4C11 1 19 0 40 0C129 0 150 121 150 356C150 573 171 638 199 677C216 682 270 683 269 663C266 611 264 518 264 364C264 244 274 67 286 3C292 1 304 0 315 0C341 0 352 2 359 9C364 14 364 19 358 61C350 120 343 268 342 369C341 486 340 546 342 603C343 640 345 684 347 720C307 740 275 747 191 747C168 747 155 746 147 736C99 680 76 601 72 350C69 155 57 72 25 72C15 72 7 71 5 69C2 66 0 59 0 42C0 27 3 12 7 4Z\",\"advanceWidth\":409,\"leftSideBearing\":0},{\"path\":\"M-35-115C-20-115 38-117 38-108C38-69 39-27 39 0C125 0 237-4 329-4C348-4 337-88 337-112C337-126 407-110 407-104C406-11 415 59 410 58C410 58 379 58 335 59C324 197 317 515 324 707C326 758 152 755 135 743C78 732 63 140 21 60L-18 60C-50 60-25-111-35-115ZM254 59C205 59 147 60 99 60L102 60C141 121 152 669 189 687C206 687 253 691 252 666C246 541 245 220 254 59Z\",\"advanceWidth\":382,\"leftSideBearing\":-35},{\"path\":\"M255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M40-196L40-219C40-218 47-220 63-220C108-220 111-216 111-194L108 1C117-1 127-3 169-3C210-3 237 3 254 20C274 40 282 61 281 270C280 470 257 511 246 522C239 527 219 533 168 533C104 533 82 529 68 514C42 487 38 406 38 268C38 268 40-102 40-196ZM209 65C201 59 183 56 166 56C150 56 133 58 126 66C115 78 107 182 107 270C107 304 108 445 115 469C126 475 141 476 153 476C166 476 187 473 195 464C213 442 213 308 213 268C213 241 212 86 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":38},{\"path\":\"M43 10C46 7 50 6 91 6C107 6 113 14 112 41C111 74 107 163 114 357C121 549 130 659 138 679C144 684 148 686 158 686C166 686 169 685 171 683C185 592 187 541 201 334C208 231 211 130 211 49C211 12 243 3 298 3C359 3 371 4 377 6C407 57 448 329 448 545C448 611 447 654 446 685C452 688 459 689 471 689C479 689 504 689 508 685C511 682 512 646 513 627C517 547 517 433 517 322C517 160 514 16 515 8C520 6 523 6 572 6C590 6 592 9 592 34C592 80 596 192 594 329C592 452 587 613 586 741C569 748 533 753 481 753C377 753 371 747 373 719C376 684 378 609 379 522C381 311 344 100 324 71C321 70 318 70 308 70C295 70 286 74 286 90C286 231 262 621 243 746C235 750 206 753 169 753C113 753 101 749 87 736C60 711 52 558 45 351C38 146 41 12 43 10Z\",\"advanceWidth\":648,\"leftSideBearing\":40},{\"path\":\"M48 723L49 4C52 3 59 2 90 2C118 2 123 8 123 28L122 686L186 685C236 684 287 681 289 683C291 685 291 690 290 724C289 742 289 745 288 749L89 749C51 749 48 746 48 723Z\",\"advanceWidth\":277,\"leftSideBearing\":48},{\"path\":\"M58 329C56 192 60 80 60 34C60 9 62 6 80 6C125 6 119 6 124 8C123 16 120 160 120 322C120 433 117 547 121 627C122 646 123 682 126 687C133 689 137 689 143 689C152 689 161 685 161 678C163 424 199 175 240 44C253 3 265 0 328 0C342 0 372 4 381 15C387 37 385 151 387 371C388 464 389 582 395 743C388 745 379 746 360 746C329 746 327 744 326 715C324 643 324 505 320 368C318 301 317 165 317 99C317 88 316 84 309 84C267 218 241 471 241 670C241 680 240 732 238 741C231 745 203 748 148 748C96 748 79 746 67 736C61 731 59 721 59 714C59 590 60 445 58 329Z\",\"advanceWidth\":445,\"leftSideBearing\":57},{\"path\":\"M45 4C49 0 53 0 86 0C123 0 126 2 126 32C126 60 126 212 123 323C135 328 169 353 210 394C243 427 255 444 263 459L263 380C263 275 262 86 261 4C264 0 269 0 307 0C339 0 341 2 341 32C341 65 341 245 338 387C337 434 339 722 341 740C326 747 277 753 265 739C258 731 261 745 262 561C257 550 231 510 193 466C162 430 134 408 121 402C120 472 123 724 126 741C110 748 65 750 50 740C41 734 47 698 47 380C47 275 46 86 45 4Z\",\"advanceWidth\":383,\"leftSideBearing\":45},{\"path\":\"M200 753C230 753 254 760 271 778C289 798 295 839 295 883C291 886 284 888 260 888C244 888 238 886 238 875C238 849 237 823 237 818C226 811 214 809 205 809C193 809 182 811 175 818C168 825 167 867 166 887C161 888 142 889 129 889C105 889 101 883 101 874C101 832 114 788 130 771C140 763 154 753 200 753ZM52 4C56 0 60 0 93 0C130 0 133 2 133 32C133 60 133 212 130 323C142 328 176 353 217 394C250 427 262 444 270 459L270 380C270 275 269 86 268 4C271 0 276 0 314 0C346 0 348 2 348 32C348 65 348 245 345 387C344 434 346 722 348 740C333 747 284 753 272 739C265 731 268 745 269 561C264 550 238 510 200 466C169 430 141 408 128 402C127 472 130 724 133 741C117 748 72 750 57 740C48 734 54 698 54 380C54 275 53 86 52 4Z\",\"advanceWidth\":400,\"leftSideBearing\":52},{\"path\":\"M7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M181 779C187 779 198 779 211 780C239 782 240 783 244 787C247 790 248 813 248 843C248 859 247 889 246 894C241 894 233 894 220 893C186 890 181 889 178 886C175 883 174 877 176 836C177 815 180 783 181 779ZM73 779C89 776 133 776 136 779C138 781 139 804 139 836L138 890C133 890 128 890 113 889C76 887 76 886 72 882C68 878 67 871 69 835C70 811 72 783 73 779ZM49 725C49 611 51 496 51 382C51 257 51 20 50 6C53 5 57 4 123 4C280 4 278 4 282 8C284 10 285 14 285 30C285 61 284 72 284 72C274 70 186 64 144 62C127 61 123 64 123 77C123 124 122 260 122 356L165 356C256 356 261 357 265 361C267 363 270 385 270 396C270 414 269 419 268 421L122 421C122 510 123 599 123 688L163 687C220 686 271 683 273 685C275 687 276 692 274 726C273 744 273 747 272 751C266 752 186 751 66 751C53 751 56 751 52 747C50 745 49 741 49 725Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M176 615C182 615 193 615 206 616C234 618 235 619 239 623C242 626 243 649 243 679C243 695 242 725 241 730C236 730 228 730 215 729C181 726 176 725 173 722C170 719 169 713 171 672C172 651 175 619 176 615ZM68 615C84 612 128 612 131 615C133 617 134 640 134 672L133 726C128 726 123 726 108 725C71 723 71 722 67 718C63 714 62 707 64 671C65 647 67 619 68 615ZM76 9C83 3 113-3 163-3C200-3 231 0 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9ZM201 308C187 302 125 297 111 311C102 320 109 446 115 470C124 472 171 485 194 463C211 446 207 331 201 308Z\",\"advanceWidth\":312,\"leftSideBearing\":39},{\"path\":\"M50 723L51 4C54 3 61 2 92 2C120 2 125 8 125 28L124 686C161 689 199 691 206 691L285 686L286 4C289 3 296 2 327 2C355 2 360 8 360 28L359 746C350 748 318 749 207 749L75 749C55 748 55 747 53 745C51 743 50 739 50 723Z\",\"advanceWidth\":410,\"leftSideBearing\":50},{\"path\":\"M374 753C252 753 234 702 226 436C202 432 144 435 125 436C125 641 118 697 126 750C73 749 49 747 49 742C50 490 50 264 50 0C63 0 111-1 126 6C126 9 125 72 125 371C157 374 210 372 226 371L226 350C226 56 269-2 377-3C492-4 532 44 532 387C532 713 488 752 374 753ZM384 54C310 54 305 155 305 353C305 610 309 696 375 696C439 696 455 625 455 384C455 131 439 54 384 54Z\",\"advanceWidth\":575,\"leftSideBearing\":49},{\"path\":\"M429 58C429 58 398 58 356 59C355 192 354 729 355 748C340 748 279 750 279 741L280 173C280 135 281 95 281 61C251 59 180 60 126 62C125 200 124 729 125 748C110 748 49 750 49 741L50 173C50 105 54 26 49-2C169 2 335-3 359-3C359-40 358-85 358-109C358-123 428-107 428-101C428 17 432 58 429 58Z\",\"advanceWidth\":448,\"leftSideBearing\":49},{\"path\":\"M589 748C574 748 513 750 513 741L514 173C514 135 515 95 515 61C484 59 409 60 355 62C354 200 353 729 354 748C339 748 279 750 279 741L280 173C280 135 281 95 281 61C251 59 180 60 126 62C125 200 124 729 125 748C110 748 49 750 49 741L50 173C50 105 54 26 49-2C401 2 590-8 590 6C590 12 588 727 589 748Z\",\"advanceWidth\":640,\"leftSideBearing\":49},{\"path\":\"M669 62C669 62 636 62 590 61C589 197 588 729 589 748C574 748 513 750 513 741L514 173C514 135 515 95 515 61C484 59 410 60 356 62C355 200 354 729 355 748C347 748 326 749 309 748C296 747 284 746 280 743C279 743 279 742 279 741L280 173L280 142C280 114 281 86 281 61C250 59 180 60 126 62C125 200 124 729 125 748C110 748 55 750 49 742L49 741L51 27C51 15 50 5 49-2C280-2 488-3 599-1C599-38 598-84 598-107C598-121 668-105 668-99C668 19 672 62 669 62Z\",\"advanceWidth\":683,\"leftSideBearing\":49},{\"path\":\"M172-1C281-1 323 29 323 257C323 419 246 453 125 449L125 575C125 612 123 652 122 749C91 748 57 750 49 751C49 575 51 22 50 3C50 3 76-1 172-1ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":347,\"leftSideBearing\":49},{\"path\":\"M125 449L125 575C125 612 123 652 122 749C91 748 57 750 49 751C49 575 51 22 50 3C50 3 76-1 172-1C281-1 323 29 323 257C323 419 246 453 125 449ZM458 750C444 750 381 748 381 742C381 736 383 21 382 0C397 0 458-2 458 7L457 575C457 643 453 722 458 750ZM223 62C212 55 125 50 125 68L125 384L183 384C229 384 246 341 246 246C246 219 255 94 223 62Z\",\"advanceWidth\":508,\"leftSideBearing\":49},{\"path\":\"M52 11C60 4 86-6 150-5C202-4 233 0 256 23C282 49 288 67 288 226C288 374 91 484 91 577C91 610 90 649 91 676C110 684 127 685 137 685C146 685 164 684 175 673C191 657 188 571 187 554L210 554C260 554 266 561 266 575C266 661 251 728 238 742C230 748 178 754 148 754C110 754 64 750 40 726C12 698 16 614 16 559C16 445 210 347 210 211C210 159 209 78 209 71C196 64 183 62 160 62C135 62 122 64 113 72C98 86 101 236 107 253L63 253C33 253 25 246 25 229C25 61 44 18 52 11Z\",\"advanceWidth\":296,\"leftSideBearing\":15},{\"path\":\"M61 748C43 748 20 744 18 742C15 739 17 727 64 552C84 478 105 402 106 392C105 377 84 284 61 205C39 131 4 14 0 3C4 1 12 0 43 0C73 0 78 2 84 23C89 40 168 344 171 352L178 352C183 352 184 351 186 343C200 287 282 9 277 4C288 1 295 0 342 0C361 0 365 0 367 2C368 3 365 11 358 33C344 76 320 149 301 214C281 283 259 351 249 392C250 402 266 481 286 565C306 648 327 735 331 744C322 745 307 747 270 747C256 747 252 743 249 730C235 659 191 427 182 412L178 412C173 412 171 416 168 427C160 456 146 521 132 582C116 654 100 742 100 744C97 746 89 748 61 748Z\",\"advanceWidth\":367,\"leftSideBearing\":0},{\"path\":\"M72 9C79 3 102-3 162-3C200-3 244 0 264 19C286 40 291 184 291 374C291 467 283 702 256 737C249 742 242 748 164 748C136 748 80 745 64 729C37 702 34 625 34 391C34 190 57 21 72 9ZM170 62C148 62 131 64 124 71C113 82 101 305 101 393C101 427 102 655 108 679C117 684 145 686 159 686C176 686 193 688 205 674C224 652 224 431 224 383C224 343 227 167 220 70C212 64 187 62 170 62Z\",\"advanceWidth\":329,\"leftSideBearing\":34},{\"path\":\"M164-3C215-3 235 3 255 23C273 41 283 96 283 242C283 352 261 414 252 425C238 433 221 442 204 442C217 443 232 449 240 457C252 469 271 538 271 596C271 670 257 714 246 733C225 748 193 752 162 752C122 752 92 747 74 729C57 712 55 663 55 596C55 504 70 471 82 457C92 450 106 444 118 443C110 442 82 439 66 423C50 407 39 327 40 238C42 35 71 15 78 9C85 3 105-3 164-3ZM163 475C117 490 117 527 115 595C114 626 113 674 117 687C130 694 147 695 155 695C175 695 187 696 195 688C205 678 207 652 208 593C209 529 204 490 163 475ZM170 62C151 62 138 61 128 72C113 89 109 137 110 242C111 329 114 368 121 381C130 388 148 396 160 399C173 397 185 392 196 381C215 362 216 269 216 237C216 168 216 97 211 70C200 64 188 62 170 62Z\",\"advanceWidth\":314,\"leftSideBearing\":40},{\"path\":\"M80 0L273 0L272 59L209 59L209 750C209 750 143 749 139 747C135 746 67 669 67 669C67 669 65 599 67 599C71 599 128 667 137 675L155 696L156 696C156 696 139 676 139 674L141 59L80 58Z\",\"advanceWidth\":320,\"leftSideBearing\":66},{\"path\":\"M155-3C192-3 226 0 245 19C267 41 271 61 272 247C273 421 266 450 238 478C222 494 206 501 159 501C181 535 215 607 237 649C250 674 259 687 259 703L259 754L68 754C53 754 46 747 46 728C46 714 46 692 46 687L190 687C186 681 96 513 77 483C70 472 76 440 76 440C137 442 171 446 186 431C205 412 205 398 205 244C205 219 209 102 200 65C190 59 177 57 164 57C139 57 129 59 122 66C110 78 115 261 118 269C108 270 97 270 89 270C62 270 47 261 47 243C47 125 56 15 63 9C70 3 95-3 155-3Z\",\"advanceWidth\":354,\"leftSideBearing\":46},{\"path\":\"M57 610C53 642 53 666 67 666C84 666 88 610 133 610C170 610 197 653 197 722C197 729 195 731 176 731C166 731 155 730 155 730C159 697 153 671 139 671C119 671 122 730 70 730C31 730 15 695 15 621C15 611 23 610 38 610Z\",\"advanceWidth\":203,\"leftSideBearing\":15},{\"path\":\"M152 778C148 810 148 834 162 834C179 834 183 778 228 778C265 778 292 821 292 890C292 897 290 899 271 899C261 899 250 898 250 898C254 865 248 839 234 839C214 839 217 898 165 898C126 898 110 863 110 789C110 779 118 778 133 778ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M173 780C169 812 169 836 183 836C200 836 204 780 249 780C286 780 313 823 313 892C313 899 311 901 292 901C282 901 271 900 271 900C275 867 269 841 255 841C235 841 238 900 186 900C147 900 131 865 131 791C131 781 139 780 154 780ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M183 780C179 812 179 836 193 836C210 836 214 780 259 780C296 780 323 823 323 892C323 899 321 901 302 901C292 901 281 900 281 900C285 867 279 841 265 841C245 841 248 900 196 900C157 900 141 865 141 791C141 781 149 780 164 780ZM51 329C49 192 53 80 53 34C53 9 55 6 73 6C118 6 112 6 117 8C116 16 113 160 113 322C113 433 110 547 114 627C115 646 116 682 119 687C126 689 130 689 136 689C145 689 154 685 154 678C156 424 192 175 233 44C246 3 258 0 321 0C335 0 365 4 374 15C380 37 378 151 380 371C381 464 382 582 388 743C381 745 372 746 353 746C322 746 320 744 319 715C317 643 317 505 313 368C311 301 310 165 310 99C310 88 309 84 302 84C260 218 234 471 234 670C234 680 233 732 231 741C224 745 196 748 141 748C89 748 72 746 60 736C54 731 52 721 52 714C52 590 53 445 51 329Z\",\"advanceWidth\":438,\"leftSideBearing\":50},{\"path\":\"M100 602C96 634 96 658 110 658C127 658 131 602 176 602C213 602 240 645 240 714C240 721 238 723 219 723C209 723 198 722 198 722C202 689 196 663 182 663C162 663 165 722 113 722C74 722 58 687 58 613C58 603 66 602 81 602ZM152-3C192-3 225 0 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3ZM159 56C146 56 125 57 118 64C105 77 103 140 103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M95 610C91 642 91 666 105 666C122 666 126 610 171 610C208 610 235 653 235 722C235 729 233 731 214 731C204 731 193 730 193 730C197 697 191 671 177 671C157 671 160 730 108 730C69 730 53 695 53 621C53 611 61 610 76 610ZM40 2C43 0 47 0 78 0C110 0 111 1 111 26C111 42 111 156 110 268L110 470C118 475 135 477 150 477C170 477 179 473 187 464C200 449 205 386 205 262C205 142 206 12 205 2C208 0 213 0 244 0C274 0 276 2 276 26L275 266C275 466 252 512 242 522C236 528 195 533 156 533C136 533 51 530 44 525C38 520 42 415 42 263C42 192 41 72 40 2Z\",\"advanceWidth\":315,\"leftSideBearing\":40},{\"path\":\"M101 610C97 642 97 666 111 666C128 666 132 610 177 610C214 610 241 653 241 722C241 729 239 731 220 731C210 731 199 730 199 730C203 697 197 671 183 671C163 671 166 730 114 730C75 730 59 695 59 621C59 611 67 610 82 610ZM76 9C83 3 103-3 163-3C201-3 234 0 253 19C275 41 281 61 281 270C281 458 257 511 246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C213 442 213 308 213 266C213 226 216 102 209 65Z\",\"advanceWidth\":322,\"leftSideBearing\":38},{\"path\":\"M34 883C31 881 26 877 22 873C10 861 12 855 25 844C84 794 115 768 117 767L226 851C223 858 221 860 216 867C207 879 202 881 193 877C164 863 137 849 119 841C109 845 65 868 34 883ZM7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M115 193C117 203 122 309 128 418C141 660 144 675 140 679C134 685 90 689 55 688C55 631 56 566 56 448C56 210 58 201 63 194C66 190 106 191 115 193ZM58 17C73 15 109 18 114 22C120 27 122 103 118 110C101 119 56 116 53 113C50 110 54 30 58 17Z\",\"advanceWidth\":195,\"leftSideBearing\":51},{\"path\":\"M60 364C76 361 120 365 125 369C131 374 133 446 129 453C126 457 111 465 105 466C85 466 54 461 51 456C46 448 55 377 60 364ZM57-104C59-106 70-106 74-106C88-106 96-106 98-104C101-101 102-100 117-50C128-14 137 24 139 33C141 44 141 78 137 117C136 119 118 130 113 129C100 130 63 124 60 119C61 108 71 54 74 22C70-19 65-45 57-104Z\",\"advanceWidth\":152,\"leftSideBearing\":49},{\"path\":\"M49 365C65 362 109 366 114 370C120 375 122 447 118 454C115 458 100 466 94 467C74 467 43 462 40 457C35 449 44 378 49 365ZM48 18C64 15 108 19 113 23C119 28 121 100 117 107C114 111 99 119 93 120C73 120 42 115 39 110C34 102 43 31 48 18Z\",\"advanceWidth\":152,\"leftSideBearing\":37},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M235 770C237 771 245 779 251 786C263 800 262 804 257 810L173 896L152 872C136 854 130 843 129 839C128 834 132 830 178 803C205 787 232 771 235 770ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M133 776C149 773 193 773 196 776C198 778 199 801 199 833L198 887C193 887 188 887 173 886C136 884 136 883 132 879C128 875 127 868 129 832C130 808 132 780 133 776ZM232 774C238 773 249 772 262 771C290 769 291 772 297 775C301 777 302 801 306 831C308 847 310 876 309 881C304 882 296 883 283 884C249 887 244 884 240 880C237 877 236 872 234 831ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M14 513C16 511 27 511 31 511C41 511 51 511 53 513C56 516 57 517 72 567C83 603 89 631 91 640C93 651 89 714 89 735C78 737 21 734 16 726C12 719 25 661 28 629C24 588 22 572 14 513Z\",\"advanceWidth\":152,\"leftSideBearing\":14},{\"path\":\"M14 513C16 511 27 511 31 511C41 511 49 511 51 513C54 516 55 517 70 567C81 603 87 631 89 640C91 651 87 714 87 735C76 737 21 734 16 726C12 719 25 661 28 629C24 588 22 572 14 513ZM114 513C116 511 125 511 129 511C139 511 149 511 151 513C154 516 155 517 170 567C181 603 187 631 189 640C191 651 187 714 187 735C176 737 121 734 116 726C112 719 125 661 128 629C124 588 122 572 114 513Z\",\"advanceWidth\":152,\"leftSideBearing\":14},{\"path\":\"M88 754C86 756 77 756 73 756C63 756 53 756 51 754C48 751 47 750 32 700C21 664 15 636 13 627C11 616 15 553 15 532C26 530 81 533 86 541C90 548 77 606 74 638C78 679 80 695 88 754ZM188 754C186 756 175 756 171 756C161 756 153 756 151 754C148 751 147 750 132 700C121 664 115 636 113 627C111 616 115 553 115 532C126 530 181 533 186 541C190 548 177 606 174 638C178 679 180 695 188 754Z\",\"advanceWidth\":208,\"leftSideBearing\":12},{\"path\":\"M30 513C32 511 43 511 47 511C57 511 65 511 67 513C70 516 71 517 86 567C97 603 103 631 105 640C107 651 103 714 103 735C92 737 37 734 32 726C28 719 41 661 44 629C40 588 38 572 30 513ZM130 513C132 511 141 511 145 511C155 511 165 511 167 513C170 516 171 517 186 567C197 603 203 631 205 640C207 651 203 714 203 735C192 737 137 734 132 726C128 719 141 661 144 629C140 588 138 572 130 513Z\",\"advanceWidth\":168,\"leftSideBearing\":30},{\"path\":\"M32-146C34-148 45-148 49-148C59-148 67-148 69-146C72-143 73-142 88-92C99-56 105-28 107-19C109-8 105 55 105 76C94 78 39 75 34 67C30 60 43 2 46-30C42-71 40-87 32-146ZM132-146C134-148 143-148 147-148C157-148 167-148 169-146C172-143 173-142 188-92C199-56 205-28 207-19C209-8 205 55 205 76C194 78 139 75 134 67C130 60 143 2 146-30C142-71 140-87 132-146Z\",\"advanceWidth\":152,\"leftSideBearing\":32},{\"path\":\"M163-156C161-152 148-115 144-101C112 11 89 162 90 339C91 557 154 738 179 774C176 779 166 786 158 789C134 798 122 799 115 790C100 770 27 552 27 316C27 85 65-91 103-172C125-184 166-162 163-156Z\",\"advanceWidth\":219,\"leftSideBearing\":27},{\"path\":\"M53 775C55 771 68 734 72 720C104 608 127 457 126 280C125 62 62-119 37-155C40-160 50-167 58-170C82-179 94-180 101-171C116-151 189 67 189 303C189 534 151 710 113 791C91 803 50 781 53 775Z\",\"advanceWidth\":219,\"leftSideBearing\":37},{\"path\":\"M180-179C201-179 206-176 206-152C206-139 205-130 204-125C173-125 151-125 120-125L119 575C119 615 117 708 117 743L187 743C203 743 206 746 206 771C206 787 205 797 205 797C187 800 116 799 78 799C58 799 55 798 55 783C55 777 57-156 56-177C64-178 86-179 121-179Z\",\"advanceWidth\":233,\"leftSideBearing\":55},{\"path\":\"M52 800C31 800 26 797 26 773C26 760 27 751 28 746C59 746 81 746 112 746L113 46C113 6 115-87 115-122L45-122C29-122 26-125 26-150C26-166 27-176 27-176C45-179 116-178 154-178C174-178 177-177 177-162C177-156 175 777 176 798C168 799 146 800 111 800Z\",\"advanceWidth\":233,\"leftSideBearing\":26},{\"path\":\"M281-207C281-187 281-185 280-182C276-181 214-181 148-181C72-181 21-182 17-185C14-187 13-193 13-207C13-226 14-235 16-238C20-239 23-239 146-239C244-239 277-238 278-237C281-235 281-224 281-207Z\",\"advanceWidth\":237,\"leftSideBearing\":13},{\"path\":\"M125-150L124 794C122 795 117 797 101 797C54 797 58 793 58 771L59-174C62-175 59-176 92-176C120-176 125-170 125-150Z\",\"advanceWidth\":152,\"leftSideBearing\":58},{\"path\":\"M88 758C86 760 75 760 71 760C61 760 51 760 49 758C46 755 45 754 30 704C19 668 13 640 11 631C9 620 13 557 13 536C24 534 81 537 86 545C90 552 77 610 74 642C78 683 80 699 88 758Z\",\"advanceWidth\":132,\"leftSideBearing\":10},{\"path\":\"M42 513C44 511 55 511 59 511C69 511 79 511 81 513C84 516 85 517 100 567C111 603 117 631 119 640C121 651 117 714 117 735C106 737 49 734 44 726C40 719 53 661 56 629C52 588 50 572 42 513Z\",\"advanceWidth\":180,\"leftSideBearing\":42},{\"path\":\"M194 2C205 0 231 0 246 0C253 0 257 3 258 13C265 81 273 148 280 216L313 216C324 216 328 220 329 232C330 249 330 259 326 276C319 274 315 274 286 274L302 441L332 441C345 441 354 446 355 458C356 470 356 489 353 503C348 501 331 499 308 499C317 588 324 666 327 710C320 710 305 710 291 709C268 707 265 705 263 678C260 644 254 578 246 499L158 499C167 589 174 667 177 711C170 711 154 711 141 710C120 708 117 702 116 687C114 656 107 585 99 500L55 502C48 502 44 497 43 487C41 471 42 449 43 441L93 441L77 275C59 276 44 277 34 277C25 277 21 273 20 267C17 251 17 225 18 216L70 216C58 101 49 10 47 1C52 0 78 0 92 0C105 0 107 3 108 11C113 49 123 148 130 216L218 216C206 100 196 11 194 2ZM136 274L152 441L240 441L224 274Z\",\"advanceWidth\":373,\"leftSideBearing\":17},{\"path\":\"M119 390L118 795C116 795 111 797 97 797C56 797 54 794 54 778C54 653 55 504 55 373C57 372 61 372 89 372C114 372 119 376 119 390ZM118-158L117 247C115 247 110 249 96 249C55 249 53 246 53 230C53 105 54-44 54-175C56-176 60-176 88-176C113-176 118-172 118-158Z\",\"advanceWidth\":137,\"leftSideBearing\":53},{\"path\":\"M-3-179C0-180 19-181 35-181C57-181 61-178 65-162C92-49 261 672 284 792C278 795 262 797 242 797C217 797 216 795 212 779C194 685 35-14-3-179Z\",\"advanceWidth\":279,\"leftSideBearing\":-3},{\"path\":\"M242 0L478 0C478 0 485 42 481 67C468 60 380 59 316 61C316 121 313 230 313 350C372 350 456 348 459 348C459 348 466 390 462 415C450 408 368 409 313 411C317 611 315 651 315 686L315 687C376 688 456 689 469 683C473 708 466 750 466 750C408 746 185 753 126 747C87 736 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 108 114 229C114 243 114 258 115 272C151 273 210 272 242 271C241 26 242 7 242 0ZM119 334C136 548 155 683 174 694C179 695 241 701 241 676C241 606 242 464 243 334C188 331 146 333 119 334Z\",\"advanceWidth\":513,\"leftSideBearing\":35},{\"path\":\"M-1 793C37 628 196-71 214-165C218-181 219-183 244-183C264-183 280-181 286-178C263-58 94 663 67 776C63 792 59 795 37 795C21 795 2 794-1 793Z\",\"advanceWidth\":279,\"leftSideBearing\":-1},{\"path\":\"M526 71C516 69 428 63 386 61C369 60 365 63 365 76L364 254C365 283 365 316 365 353L413 353C494 353 501 354 504 357C506 359 509 383 509 394C509 412 508 417 507 419L365 419C365 442 365 464 364 483C364 551 365 619 365 687L405 686C455 685 506 682 508 684C510 686 511 691 509 725C508 743 508 746 507 750C501 751 428 750 308 750C299 750 295 749 293 742C274 749 247 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39C91 17 138-2 201-3C217-3 232-2 246-1C281 1 320 3 365 3C522 3 520 3 524 7C526 9 527 13 527 29C527 60 526 71 526 71ZM145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 293 604 293 375C293 153 283 109 272 78C261 67 242 64 207 64C170 64 155 69 145 82Z\",\"advanceWidth\":572,\"leftSideBearing\":46},{\"path\":\"M447 185L417 185C382 185 380 183 380 159C380 147 382 96 377 65C366 59 352 57 340 57C319 57 306 59 299 66C291 74 284 140 281 194L281 251C292 249 317 246 339 246C359 246 397 249 417 269C435 287 447 304 447 387C447 456 429 511 418 522C412 528 391 533 328 532C310 532 269 530 248 520L246 522C239 527 219 533 157 533C129 533 83 529 68 514C42 487 38 420 38 268C38 67 69 15 76 9C83 3 103-3 163-3C196-3 226-1 245 13C246 11 247 10 248 9C255 3 285-3 335-3C372-3 403 0 422 19C444 41 448 61 447 185ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 182 107 270C107 304 108 445 115 470C123 474 139 476 153 476C170 476 181 477 192 465C204 452 209 405 211 359L211 268C211 234 212 205 214 179C214 134 213 86 209 65ZM287 470C296 472 343 485 366 463C383 446 379 331 373 308C359 302 297 297 283 311C282 312 281 315 280 319C280 334 279 348 279 361C279 402 283 455 287 470Z\",\"advanceWidth\":482,\"leftSideBearing\":38},{\"path\":\"M98 438C98 438 172 425 173 441C173 458 164 525 162 580L281 487C281 487 329 544 315 553C300 562 235 591 186 617L324 675C324 675 299 745 284 737C269 729 213 685 167 656L187 807C187 807 113 820 112 804C112 786 121 714 123 658L4 751C4 751-44 694-30 685C-15 676 50 648 99 622L-38 564C-38 564-13 494 2 502C16 509 71 552 117 582Z\",\"advanceWidth\":292,\"leftSideBearing\":-38},{\"path\":\"M185 780C188 782 193 786 197 790C209 802 207 808 194 819C135 869 104 895 102 896L-7 812C-4 805-2 803 3 796C12 784 17 782 26 786C55 800 82 814 100 822C110 818 154 795 185 780Z\",\"advanceWidth\":199,\"leftSideBearing\":-7},{\"path\":\"M302 780C305 782 310 786 314 790C326 802 324 808 311 819C252 869 221 895 219 896L110 812C113 805 115 803 120 796C129 784 134 782 143 786C172 800 199 814 217 822C227 818 271 795 302 780ZM255 2C266 0 277 0 315 0C330 0 332 4 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2ZM124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534C243 463 241 423 242 334C193 332 151 334 124 334Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M243 780C246 782 251 786 255 790C267 802 265 808 252 819C193 869 162 895 160 896L51 812C54 805 56 803 61 796C70 784 75 782 84 786C113 800 140 814 158 822C168 818 212 795 243 780ZM49 721C49 607 51 492 51 378C51 253 51 16 50 2C53 1 57 0 123 0C280 0 278 0 282 4C284 6 285 10 285 26C285 57 284 68 284 68C274 66 186 60 144 58C127 57 123 60 123 73C123 120 122 256 122 352L165 352C256 352 261 353 265 357C267 359 270 381 270 392C270 410 269 415 268 417L122 417C122 506 123 595 123 684L163 683C220 682 271 679 273 681C275 683 276 688 274 722C273 740 273 743 272 747C266 748 186 747 66 747C53 747 56 747 52 743C50 741 49 737 49 721Z\",\"advanceWidth\":306,\"leftSideBearing\":49},{\"path\":\"M174 779C177 781 182 785 186 789C198 801 196 807 183 818C124 868 93 894 91 895L-18 811C-15 804-13 802-8 795C1 783 6 781 15 785C44 799 71 813 89 821C99 817 143 794 174 779ZM126 26C126 39 124 206 124 375C123 551 125 730 125 744C123 745 118 747 102 747C57 747 51 746 51 721C51 634 53 503 53 371C54 234 52 96 52 2C55 1 62 0 93 0C121 0 126 6 126 26Z\",\"advanceWidth\":175,\"leftSideBearing\":-18},{\"path\":\"M289 780C292 782 297 786 301 790C313 802 311 808 298 819C239 869 208 895 206 896L97 812C100 805 102 803 107 796C116 784 121 782 130 786C159 800 186 814 204 822C214 818 258 795 289 780ZM73 39C91 17 138-2 201-3C271-4 320 15 335 36C359 69 365 106 365 380C365 608 356 678 323 724C303 741 276 753 206 753C125 753 104 742 87 721C57 684 45 657 47 381C49 152 55 72 73 39ZM272 78C261 67 242 64 207 64C170 64 155 69 145 82C132 99 129 117 127 383C125 591 130 652 146 676C156 683 171 686 204 686C239 686 252 681 262 671C277 655 285 604 285 375C285 153 283 109 272 78Z\",\"advanceWidth\":400,\"leftSideBearing\":46},{\"path\":\"M282 780C285 782 290 786 294 790C306 802 304 808 291 819C232 869 201 895 199 896L90 812C93 805 95 803 100 796C109 784 114 782 123 786C152 800 179 814 197 822C207 818 251 795 282 780ZM344 749C331 750 326 750 309 750C273 750 271 747 271 716C271 623 273 433 273 365C273 143 271 109 260 78C249 67 230 64 203 64C166 64 151 69 141 82C128 99 125 127 123 393C122 479 123 705 124 750L76 750C44 750 41 746 41 699L41 391C41 140 49 72 67 39C85 17 134-2 197-3C259-4 303 15 318 36C342 69 348 96 348 370C348 455 346 699 344 749Z\",\"advanceWidth\":400,\"leftSideBearing\":41},{\"path\":\"M148 768C173 784 237 824 258 838L240 859C225 877 213 893 210 893C205 892 204 888 151 838C137 824 115 801 110 797C111 795 118 786 121 782C135 763 140 763 148 768ZM26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M181 775C187 775 198 775 211 776C239 778 240 779 244 783C247 786 248 809 248 839C248 855 247 885 246 890C241 890 233 890 220 889C186 886 181 885 178 882C175 879 174 873 176 832C177 811 180 779 181 775ZM73 775C89 772 133 772 136 775C138 777 139 800 139 832L138 886C133 886 128 886 113 885C76 883 76 882 72 878C68 874 67 867 69 831C70 807 72 779 73 775ZM26 716C31 685 35 663 51 521C68 367 76 308 87 290C98 280 116 272 136 270C137 229 137 176 137 151L136 1C139 0 146-1 177-1C205-1 210 5 210 25L208 155C207 187 208 233 208 270C221 273 232 279 242 289C274 321 289 369 292 582C293 663 290 741 288 750C284 751 278 751 254 751C223 751 219 747 219 731C219 712 224 647 225 561C227 406 218 365 202 335C194 330 193 329 178 329C158 329 153 331 148 336C134 350 121 522 120 530C105 661 101 720 99 749C88 750 73 750 60 749C27 746 22 743 26 716Z\",\"advanceWidth\":317,\"leftSideBearing\":24},{\"path\":\"M20 881C17 879 12 875 8 871C-4 859-2 853 11 842C70 792 101 766 103 765L212 849C209 856 207 858 202 865C193 877 188 879 179 875C150 861 123 847 105 839C95 843 51 866 20 881Z\",\"advanceWidth\":199,\"leftSideBearing\":0},{\"path\":\"M30 183C43 170 50 164 53 163C56 164 59 167 117 225C174 167 179 162 182 161C185 162 186 164 200 178C212 190 223 201 223 204C223 205 221 209 161 269C221 329 223 332 223 334C223 337 215 344 203 356C189 370 187 372 185 373C182 372 177 367 120 310C57 372 56 373 53 375C50 373 40 365 27 351C17 341 13 336 13 334C13 329 16 326 76 266C20 211 16 205 16 201C16 198 20 193 30 183Z\",\"advanceWidth\":285,\"leftSideBearing\":13},{\"path\":\"\",\"advanceWidth\":833,\"leftSideBearing\":0},{\"path\":\"M19 311C19 292 20 283 21 280C24 279 26 279 107 279C107 198 107 191 108 188C111 187 116 187 136 187C153 187 168 187 170 189C171 190 172 194 172 279C257 279 261 280 262 281C264 283 264 294 264 311C264 331 264 333 263 336C260 337 253 337 172 337C172 425 172 427 171 430C168 431 155 432 136 432C122 432 113 431 111 429C108 426 107 422 107 337C29 337 25 336 22 333C20 331 19 325 19 311ZM265 129C265 149 265 151 264 154C261 155 254 155 143 155C35 155 26 154 23 151C21 149 20 143 20 129C20 111 21 102 22 99C25 98 30 98 142 98C257 98 262 99 263 100C264 101 265 113 265 129Z\",\"advanceWidth\":285,\"leftSideBearing\":19},{\"path\":\"M61 745C43 745 20 741 18 739C15 736 17 724 64 549C84 475 105 399 106 389C105 374 84 281 61 202C39 128 4 11 0 0C4-2 12-3 43-3C73-3 78-1 84 20C89 37 168 341 171 349L178 349C183 349 184 348 186 340C200 284 282 6 277 1C288-2 295-3 342-3C361-3 365-3 367-1C368 0 365 8 358 30C344 73 320 146 301 211C281 280 259 348 249 389C250 399 266 478 286 562C306 645 327 732 331 741C322 742 307 744 270 744C256 744 252 740 249 727C235 656 191 424 182 409L178 409C173 409 171 413 168 424C160 453 146 518 132 579C116 651 100 739 100 741C97 743 89 745 61 745Z\",\"advanceWidth\":373,\"leftSideBearing\":0},{\"path\":\"M52 522C45 517 50 414 50 262C50 175 49 72 48 3C51 0 55 0 87 0C118 0 120 2 120 26C120 53 118 150 117 268C117 337 116 440 119 473C126 476 134 477 178 477C237 477 244 475 250 474C253 480 257 518 252 523C248 527 226 530 182 530C89 530 59 527 52 522Z\",\"advanceWidth\":239,\"leftSideBearing\":48},{\"path\":\"M6 508C6 494 8 483 12 469C18 471 57 474 102 475C102 395 104 320 105 245C105 168 103 90 103 2C106 1 110 0 141 0C169 0 174 6 174 26C174 38 171 138 171 246C170 331 171 421 172 476C256 473 259 468 263 472C268 477 271 511 268 525C264 529 240 530 145 530L35 530C16 530 12 529 9 526C6 523 6 515 6 508Z\",\"advanceWidth\":275,\"leftSideBearing\":6},{\"path\":\"M43 507C43 420 45 342 45 263C46 182 44 96 44 2C47 1 51 0 82 0C110 0 115 6 115 26C115 40 113 151 112 264L112 270L168 270L216 270L216 261C217 180 215 95 215 2C218 1 222 0 253 0C281 0 286 6 286 26L284 298C283 409 285 514 285 530C283 531 278 533 262 533C217 533 214 532 214 507C214 443 215 384 216 326C202 325 187 324 171 324C147 324 127 325 112 325L114 530C112 531 107 533 91 533C46 533 43 532 43 507Z\",\"advanceWidth\":323,\"leftSideBearing\":43},{\"path\":\"M43 507C43 420 45 342 45 263C45 182 44 96 44 2C47 1 51 0 82 0C110 0 115 6 115 26C115 40 113 151 112 264C111 343 113 424 113 478C128 479 144 480 161 480C182 480 200 480 214 479C214 402 216 332 216 261C216 180 215 95 215 2C218 1 222 0 253 0C281 0 286 6 286 26C286 39 284 153 284 267C284 374 286 513 283 529C275 533 271 534 164 534L64 534C58 534 54 532 51 530C44 524 43 520 43 507Z\",\"advanceWidth\":312,\"leftSideBearing\":43},{\"path\":\"M38 504C38 425 40 353 40 282C41 193 39 104 39 2C46 0 84 0 238 0L398 0C426 0 431 6 431 26L429 304C429 408 430 506 430 527C428 528 423 530 407 530C362 530 359 529 359 504C359 428 361 358 361 289C362 215 361 140 360 59C331 57 298 55 270 54C269 100 268 197 267 296C267 402 269 512 269 530C267 531 262 533 246 533C201 533 199 532 199 507C199 429 201 358 201 287C202 212 201 137 200 54C160 55 131 56 110 57L107 288C107 401 109 512 109 527C107 528 102 530 86 530C41 530 38 529 38 504Z\",\"advanceWidth\":467,\"leftSideBearing\":38},{\"path\":\"M174-3C284-6 324 42 324 399C324 693 278 754 186 755C94 756 41 711 41 566C86 570 111 566 111 593C111 666 130 696 178 696C225 696 242 646 244 421C181 420 107 422 93 422C86 422 87 365 87 352C105 362 181 363 244 362C243 67 227 56 181 56C131 56 100 99 107 231C100 231 34 234 34 215C34 75 75 0 174-3Z\",\"advanceWidth\":363,\"leftSideBearing\":34},{\"path\":\"M38 504C38 425 40 353 40 282C41 193 39 104 39 2C46 0 84 0 238 0L431 0C432-25 432-57 432-85C435-89 442-91 458-91C486-91 491-89 491-65L490 56C488 57 483 58 467 58L431 58L429 304C429 408 430 506 430 527C428 528 423 530 407 530C362 530 359 529 359 504C359 428 361 358 361 289C362 215 361 140 360 59C331 57 298 55 270 54C269 100 268 197 267 296C267 402 269 512 269 530C267 531 262 533 246 533C201 533 199 532 199 507C199 429 201 358 201 287C202 212 201 137 200 54C160 55 131 56 110 57L107 288C107 401 109 512 109 527C107 528 102 530 86 530C41 530 38 529 38 504Z\",\"advanceWidth\":467,\"leftSideBearing\":38},{\"path\":\"M42 241C42 183 40 20 40 3C42 1 47 0 163 0L281 0C282-25 282-57 282-85C285-89 292-91 308-91C339-91 341-89 341-65C341-26 341 52 339 55C336 57 333 57 307 57L272 57L271 528C267 529 262 530 248 530C203 530 200 529 200 504C200 352 201 217 201 67C201 61 201 59 199 57C196 54 175 52 159 52C142 52 120 52 112 54L111 531C108 532 104 533 88 533C44 533 41 532 41 507C41 352 42 275 42 241Z\",\"advanceWidth\":354,\"leftSideBearing\":40},{\"path\":\"M7 1C9 0 15 0 34 0C81 0 91 1 94 4C96 6 197 361 202 361L250 361L251 362L249 2C252 0 274-1 300-1C328-1 328 0 328 38C328 64 327 208 328 361L374 361C379 361 482 9 482 4C488 1 495 0 542 0C561 0 565 0 567 2C568 3 566 11 558 33C543 74 514 155 494 220C472 292 450 360 441 401C444 408 463 490 488 571C514 654 543 738 547 747L477 747C463 747 459 743 456 730C440 659 387 438 364 424C355 419 338 418 328 418L328 432C329 585 332 727 332 747C325 748 283 748 268 748C250 748 249 746 250 726C253 660 252 571 251 429L251 418C241 417 217 417 207 422C203 428 177 503 155 578C133 655 114 735 112 743C106 745 96 747 76 747C37 747 32 741 37 724C47 692 68 631 87 571C112 490 132 408 135 401C126 360 106 292 83 220C67 169 41 93 7 1Z\",\"advanceWidth\":575,\"leftSideBearing\":7},{\"path\":\"M0 3C1 1 7 0 32 0C53 0 57 2 63 8C72 16 128 185 134 201L135 205L136 201C156 132 198 6 199 3C201 1 223 0 242 0C260 0 271 2 272 3C273 4 272 6 268 18C246 83 181 259 176 276C179 284 253 499 258 508C257 510 243 519 229 525C218 530 207 531 202 524C198 519 161 395 145 350L143 343L141 350C133 375 80 527 79 530C73 531 64 530 47 523C17 511 19 501 28 477C52 413 97 285 100 277C93 256 8 23 0 3Z\",\"advanceWidth\":275,\"leftSideBearing\":0},{\"path\":\"M290 750C276 750 213 748 213 742C213 739 213 585 214 418C204 412 87 399 87 463C87 511 85 732 90 752C90 752 10 755 10 745C10 584 12 598 12 457C12 397 57 350 131 350C192 350 210 353 214 353L214 0C229 0 290-2 290 7L289 575C289 643 285 722 290 750Z\",\"advanceWidth\":333,\"leftSideBearing\":10},{\"path\":\"M145-3C219-3 232 1 251 20C273 42 279 72 279 151C279 209 274 241 255 265C247 275 236 279 223 280C231 282 237 286 244 294C259 311 263 327 263 398C263 444 254 485 225 509C208 524 183 533 149 533C78 533 64 530 55 521C42 508 46 381 46 291C46 186 43 147 43 103C43 33 54 20 62 12C79 0 100-3 145-3ZM186 306C181 304 175 304 154 304C125 304 115 303 113 305C105 313 107 355 107 394C107 423 109 454 110 473C119 477 131 479 145 479C157 479 170 479 180 469C190 459 195 453 195 396C195 319 191 313 186 306ZM207 66C196 60 183 57 163 57C142 57 118 57 113 62C107 68 105 113 105 149C105 165 106 222 113 247C121 251 132 251 149 251C167 251 182 248 190 241C208 225 211 197 211 147C211 137 211 80 207 66Z\",\"advanceWidth\":301,\"leftSideBearing\":43},{\"path\":\"M-26-98C-19-100-7-101 9-101C43-101 46-99 46-69C46-44 49-14 49 0L253 0C284 0 288-4 289-22C290-48 290-86 290-97C290-101 306-103 323-102C353-101 358-96 358-78C358-14 354 58 349 57L305 57C299 57 294 60 293 73C290 112 284 207 282 294C279 398 281 499 282 508C266 519 241 528 202 530C165 532 131 530 120 526C87 478 69 360 62 282C52 164 33 83 32 58L7 58C-5 58-13 51-16 24C-21-23-23-91-26-98ZM225 57L115 57C105 57 105 61 108 74C116 109 125 194 131 270C139 373 147 442 165 471C176 474 204 474 215 464C224 456 218 346 218 275C218 201 220 115 225 57Z\",\"advanceWidth\":361,\"leftSideBearing\":-26},{\"path\":\"M183 2C186 1 190 0 221 0C249 0 254 6 254 26C254 139 251 448 253 527C251 528 246 530 219 530C185 530 182 526 182 504C182 502 182 331 181 314C170 307 157 304 140 304C121 304 104 306 97 313C88 321 85 504 86 528C82 530 76 531 54 531C23 531 20 527 20 506C20 355 31 271 43 259C53 249 75 244 135 244C159 244 178 247 184 249Z\",\"advanceWidth\":291,\"leftSideBearing\":20},{\"path\":\"M139-3C177-3 206 1 225 20C247 42 253 72 253 151C253 209 250 247 229 270C218 282 208 284 196 284L196 286C203 287 210 290 218 298C233 313 237 331 235 401C233 474 214 511 205 522C196 527 157 533 127 533C78 533 54 520 45 511C28 494 21 444 21 376L43 376C79 376 87 381 87 395C87 418 87 451 89 470C97 474 108 476 124 476C134 476 146 475 154 469C164 461 168 452 169 396C170 342 169 337 165 324C154 316 136 313 118 313C101 313 98 310 98 267C98 262 99 257 101 255C108 257 118 257 126 257C148 257 154 256 164 246C181 229 185 197 185 147C185 137 185 80 181 66C170 60 157 57 137 57C121 57 98 56 92 62C87 67 83 139 83 177L59 177C27 177 18 171 18 155C18 126 30 14 38 9C48 1 78-3 139-3Z\",\"advanceWidth\":276,\"leftSideBearing\":18},{\"path\":\"M180-3C218-3 251 1 270 20C292 42 298 72 298 151C298 229 274 298 263 309C256 314 236 320 174 320C146 320 130 316 127 316C126 332 127 459 127 530C60 530 23 531 1 531C-11 531-13 529-13 501L-13 468C0 470 54 471 55 470C56 469 59 352 60 280L60 138C61 68 72 25 86 8C93 2 120-3 180-3ZM226 66C215 59 204 57 182 57C151 57 138 60 134 64C131 67 124 113 124 151C124 165 125 228 132 253C136 255 154 258 171 259C187 260 200 258 209 248C225 230 230 197 230 147C230 137 230 80 226 66Z\",\"advanceWidth\":313,\"leftSideBearing\":-13},{\"path\":\"M165-3C203-3 236 1 255 20C277 42 279 78 279 157C279 235 260 291 249 302C236 312 227 318 165 318C137 318 115 312 112 312C111 328 112 459 112 530L89 530C47 530 41 527 41 511C41 497 45 336 45 290C45 158 45 36 71 9C78 3 98-3 165-3ZM211 66C200 59 189 57 167 57C136 57 125 59 121 63C118 66 109 108 109 151C109 165 109 228 116 253C120 255 139 258 156 259C172 260 185 258 194 248C210 230 215 197 215 147C215 137 215 80 211 66Z\",\"advanceWidth\":308,\"leftSideBearing\":41},{\"path\":\"M402 26L401 527C399 528 394 530 378 530C333 530 330 526 330 504C330 327 331 187 331 2C334 1 338 0 369 0C397 0 402 6 402 26ZM164-3C202-3 235 1 254 20C276 42 278 78 278 157C278 235 259 291 248 302C235 312 226 318 164 318C136 318 114 312 111 312C110 328 111 459 111 530L88 530C46 530 40 527 40 511C40 497 44 336 44 290C44 158 44 36 70 9C77 3 97-3 164-3ZM210 66C199 59 188 57 166 57C135 57 124 59 120 63C117 66 108 108 108 151C108 165 108 228 115 253C119 255 138 258 155 259C171 260 184 258 193 248C209 230 214 197 214 147C214 137 214 80 210 66Z\",\"advanceWidth\":442,\"leftSideBearing\":40},{\"path\":\"M40 504C40 460 43 382 43 279C44 176 41 46 40 1C43 0 47-1 78-1C106-1 111 5 111 25L111 255C125 253 178 254 190 256C190 249 190 205 191 184C198 51 221 14 227 9C234 3 254-3 314-3C352-3 385 0 404 19C426 41 432 61 432 270C432 433 410 508 397 522C390 527 370 533 308 533L304 533L303 533L300 533C272 532 233 528 219 514C201 496 194 461 191 395C190 372 189 349 189 318C178 315 171 314 148 314C118 314 114 315 112 317C107 322 110 395 110 436L110 527C108 528 103 530 87 530C42 530 40 526 40 504ZM258 270C258 304 259 445 266 470C274 474 290 476 304 476C321 476 332 477 343 465C364 442 364 308 364 266C364 226 367 102 360 65C349 59 336 57 319 57C298 57 285 59 278 66C266 78 258 182 258 270Z\",\"advanceWidth\":469,\"leftSideBearing\":40},{\"path\":\"M2 3C5 1 12 0 29 0C103 0 125 85 125 253C125 370 138 437 162 470C176 474 215 475 214 458C211 415 210 337 210 260C210 160 218 56 228 3C233 1 249 0 258 0C280 0 289 2 295 8C299 12 299 16 294 51C287 100 283 180 281 264C280 311 279 361 281 408C282 439 283 477 285 507C252 524 225 530 155 530C136 530 125 529 118 521C81 478 59 403 56 248C53 91 43 60 17 60C8 60 2 59 0 57C-2 55-4 49-4 35C-4 22-2 10 2 3Z\",\"advanceWidth\":327,\"leftSideBearing\":-4},{\"path\":\"M36 163C36 74 55 19 66 8C73 3 113-3 151-3C182-3 229 4 244 19C271 46 272 125 273 262C274 463 243 515 236 521C225 530 189 533 149 533C96 533 79 526 62 509C43 490 37 474 37 371L44 371C96 371 102 378 102 392C102 407 99 428 105 464C112 469 123 473 143 473C163 473 177 472 185 464C195 454 204 390 206 300L122 300C84 300 82 294 82 271L82 242C85 242 112 243 174 243L206 243C206 175 204 69 197 60C189 56 173 54 156 54C135 54 124 55 117 61C102 74 101 124 102 175C98 179 36 179 36 163Z\",\"advanceWidth\":309,\"leftSideBearing\":36},{\"path\":\"M40 3C43 0 47 0 76 0C107 0 109 2 109 27C109 50 109 121 107 213C127 224 154 244 196 283C206 292 211 299 215 306L215 262C215 175 214 72 213 3C216 0 220 0 252 0C280 0 282 2 282 27C282 54 282 150 279 268C278 307 280 508 282 523C269 529 227 534 217 522C212 515 213 499 214 385C210 376 197 361 165 331C135 303 117 289 106 282C105 341 107 509 109 523C96 529 57 531 44 522C37 517 42 488 42 262C42 175 41 72 40 3Z\",\"advanceWidth\":322,\"leftSideBearing\":40},{\"path\":\"M38 711C52 629 71 533 84 285C85 266 86 216 90 199C93 186 99 173 108 164C117 155 132 150 150 150C200 150 233 159 251 177C236 136 204 30 83 30C65 30 63-38 63-38C236-38 352 47 340 574C337 709 337 736 335 747C324 749 284 755 269 747C263 744 263 741 263 737C263 713 273 657 273 554C273 348 267 278 252 248C235 228 220 224 197 224C166 224 159 229 159 239C159 397 133 639 112 746C99 748 81 749 65 749C33 749 32 745 38 711Z\",\"advanceWidth\":381,\"leftSideBearing\":35},{\"path\":\"M162 603C192 603 216 610 233 628C251 648 257 689 257 733C253 736 246 738 222 738C206 738 200 736 200 725C200 699 199 673 199 668C188 661 176 659 167 659C155 659 144 661 137 668C130 675 129 717 128 737C123 738 104 739 91 739C67 739 63 733 63 724C63 682 76 638 92 621C102 613 116 603 162 603ZM40 3C43 0 47 0 76 0C107 0 109 2 109 27C109 50 109 121 107 213C127 224 154 244 196 283C206 292 211 299 215 306L215 262C215 175 214 72 213 3C216 0 220 0 252 0C280 0 282 2 282 27C282 54 282 150 279 268C278 307 280 508 282 523C269 529 227 534 217 522C212 515 213 499 214 385C210 376 197 361 165 331C135 303 117 289 106 282C105 341 107 509 109 523C96 529 57 531 44 522C37 517 42 488 42 262C42 175 41 72 40 3Z\",\"advanceWidth\":328,\"leftSideBearing\":40},{\"path\":\"M163-3C201-3 233 0 252 19C272 40 279 87 279 272C279 404 261 471 248 497C234 507 216 512 164 512C138 512 133 511 116 508C116 529 122 651 137 678C172 696 201 704 263 713C270 714 274 719 278 739C282 759 283 779 283 783C224 781 109 744 81 712C44 669 40 336 40 268C39 62 69 15 76 9C83 3 103-3 163-3ZM209 65C198 59 185 57 168 57C147 57 134 59 127 66C115 78 107 163 107 270C107 302 108 424 113 449C121 453 139 454 153 454C174 454 183 452 192 443C208 427 213 307 213 266C213 248 216 102 209 65Z\",\"advanceWidth\":316,\"leftSideBearing\":40},{\"path\":\"M15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M294 4C295 5 295 7 290 19C262 86 184 261 185 278C185 283 278 498 283 507C282 509 268 517 251 525C232 534 223 533 217 527C214 524 202 489 193 463C171 399 126 286 117 286C116 286 115 270 118 270C118 270 215 9 216 5C218 2 224 1 262 1C280 1 293 3 294 4ZM41 3C46 2 50 1 76 1C108 1 113 4 113 24C113 69 109 132 109 290C109 341 110 495 114 529C110 530 97 530 84 530C43 530 40 526 40 504C40 443 44 319 44 287C44 148 42 96 41 3Z\",\"advanceWidth\":306,\"leftSideBearing\":40},{\"path\":\"M187-220L225-220C253-220 258-214 258-194C258-149 258-90 258-3L303-3C341-3 364 0 383 19C405 41 408 61 411 270C414 457 397 500 383 519C371 527 352 533 298 533C279 533 270 533 258 529C258 649 257 741 257 747C255 748 250 750 234 750C189 750 186 746 186 724L186 530C174 531 150 533 135 533C105 533 75 527 59 512C34 488 33 429 33 268C33 66 62 15 68 9C75 3 97-3 130-3L187-3ZM185 61C175 57 165 57 152 57C131 57 124 59 117 66C105 78 101 182 101 270C101 304 100 445 107 470C115 474 123 476 151 476C174 476 180 475 184 471C187 468 187 407 187 266C187 200 187 99 185 61ZM259 62C253 86 256 448 263 473C268 474 279 476 293 476C316 476 325 473 331 466C343 451 343 438 343 266C343 181 346 101 339 65C328 59 317 57 304 57C271 57 265 57 259 62Z\",\"advanceWidth\":445,\"leftSideBearing\":33},{\"path\":\"M20 1L42 1C81 1 91 1 94 4C96 6 180 251 184 251L222 251L223 252L221 2C224 1 242 0 264 0C287 0 287 1 287 32C287 54 286 124 287 251L323 251C328 251 413 8 413 4C418 1 426 1 465 1C481 1 485 1 486 2C487 3 486 10 479 28C466 63 444 116 425 164C413 194 387 251 379 285C382 291 394 332 418 396C439 453 464 523 468 530L411 530C400 530 397 527 394 516C376 456 332 317 318 303C313 298 295 299 287 299L287 311C287 408 290 513 290 530C285 531 250 531 237 531C222 531 221 529 222 513C225 458 223 396 223 308L223 299C215 298 195 298 186 302C183 307 165 343 144 402C126 453 109 520 107 527C102 528 94 530 77 530C45 530 40 525 45 511C55 484 72 433 86 396C110 333 124 291 126 285C119 251 96 195 83 164C66 122 48 78 20 1Z\",\"advanceWidth\":506,\"leftSideBearing\":20},{\"path\":\"M33 4C36 1 38 1 73 1C86 1 91 7 90 30C89 57 88 102 92 243C95 359 105 451 112 467C117 472 120 473 128 473C135 473 137 472 139 471C151 395 154 352 164 224C171 138 172 94 172 36C172 6 199-2 245-2C285-2 295-1 300 1C332 43 359 176 359 356C359 411 358 447 357 472C362 475 368 476 378 476C385 476 405 476 409 472C411 470 412 440 413 424C417 357 416 266 416 214C416 79 414 9 413 2C417 1 422 1 462 1C477 1 479 3 479 24C479 62 483 106 481 220C480 278 475 412 474 519C460 525 430 529 387 529C300 529 295 524 297 501C300 472 301 409 302 337C304 161 272 69 267 55C264 54 262 54 253 54C243 54 235 55 235 61C235 178 215 419 199 523C193 527 168 529 138 529C91 529 81 526 69 515C47 494 39 367 34 238C27 67 31 6 33 4Z\",\"advanceWidth\":522,\"leftSideBearing\":30},{\"path\":\"M7 0L87 0C93 3 149 230 167 339C176 336 223 340 234 344C234 128 232 63 226 1C253-3 310 1 310 5C310 168 308 730 309 749C309 749 267 753 171 753C71 753 37 710 37 553C37 463 68 355 101 353C90 290 16 17 6 3C6 3 5 0 7 0ZM234 406C223 403 145 391 127 429C107 472 105 633 135 689C176 697 237 700 237 670Z\",\"advanceWidth\":359,\"leftSideBearing\":5},{\"path\":\"M6 9C10 7 16 6 56 6C74 6 77 7 81 17C95 51 125 153 140 217C144 216 155 217 166 217C176 217 190 220 195 221C195 70 194 46 189 7C200 6 210 6 225 6C261 6 262 7 262 27C262 86 260 194 260 284C260 476 254 493 237 518C230 524 211 533 148 533C110 533 78 528 59 509C38 488 27 441 28 388C29 299 41 268 64 239C68 234 76 229 80 229C66 172 12 19 6 9ZM192 280C184 276 175 274 157 274C130 274 122 277 113 286C103 296 95 331 95 379C95 415 96 431 102 463C113 469 126 471 143 471C164 471 177 469 184 462C196 450 197 388 197 362C197 330 198 307 192 280Z\",\"advanceWidth\":300,\"leftSideBearing\":6},{\"path\":\"M498 15C492 149 490 599 490 602C490 667 489 718 489 745C488 767 442 757 422 757C422 757 422 755 421 753C421 745 421 728 421 708L421 694C421 630 425 604 422 604C286 604 243 528 243 364C243 347 411 352 420 353C422 242 426 57 425 6C442 2 502-6 498 15ZM273 285C273 285 237 287 201 287C190 287 153 287 129 285C129 362 130 448 131 533L139 534C245 545 324 683 324 749L240 752C251 701 200 605 133 605C134 656 135 706 137 753C86 752 50 750 50 750C61 737 52 173 52 5C52 1 108-3 135 1C132 35 130 117 129 222L208 224C223 224 268 6 268 1L348 1C350 1 349 4 349 4C337 36 282 267 273 285ZM420 417C365 414 343 416 316 417C326 507 348 546 421 545C421 435 420 507 420 417Z\",\"advanceWidth\":548,\"leftSideBearing\":50},{\"path\":\"M447 409C476 439 503 488 503 567C503 653 475 753 386 754C376 754 331 755 294 752L280 752C221 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 211 252 243 251C244 215 244 182 245 152C245 70 244 12 244 6C244 6 256-1 352-1C488-1 526 55 526 211C526 342 486 388 447 409ZM426 563C426 543 427 459 386 431C361 430 329 430 319 432L319 578C319 619 317 662 317 698L350 698C408 698 426 639 426 563ZM243 314C188 311 146 313 119 314C136 528 155 678 174 689C179 690 244 702 244 686C244 616 242 444 243 314ZM427 71C416 64 319 53 319 71L319 367L370 367C418 367 451 339 451 205C451 178 450 97 427 71Z\",\"advanceWidth\":371,\"leftSideBearing\":35},{\"path\":\"M562 3C539 23 435 406 426 424C434 438 514 740 541 749L450 749C455 743 379 454 354 439C343 432 320 433 312 430C312 524 313 620 316 709C318 766 129 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 211 252 243 251C245 140 248 57 254 4C271 0 335-6 331 15C322 92 315 229 313 378L361 383C385 386 468 5 468 0L561 0C563 0 562 3 562 3ZM247 672C244 602 242 444 243 314C188 311 146 313 119 314C136 528 155 678 174 689C179 690 248 697 247 672Z\",\"advanceWidth\":597,\"leftSideBearing\":35},{\"path\":\"M316 316L316 456C436 455 499 523 499 616C499 690 471 753 382 753C374 753 344 754 314 752L314 753C306 753 298 753 291 752L279 752C220 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 210 252 242 251L240 5C240 5 242 3 272 1C288 0 312-1 349-1C485-1 523 38 523 165C523 288 459 313 316 316ZM422 612C422 592 418 543 388 522C364 521 327 519 316 521L316 578C316 602 315 626 315 650C315 666 316 682 316 697L346 697C404 697 422 686 422 612ZM119 314C136 528 155 678 174 689C179 690 241 701 244 687L244 617C243 553 243 469 243 389C243 364 242 339 242 314C188 311 146 313 119 314ZM424 71C414 65 334 55 318 67C318 80 317 95 316 110L316 251L367 251C415 251 448 203 448 159C448 132 447 97 424 71Z\",\"advanceWidth\":545,\"leftSideBearing\":35},{\"path\":\"M320-1L321 0C331 2 332 6 330 19C321 92 315 208 313 337C311 457 310 679 313 721C288 739 242 750 202 750C143 750 132 746 118 733C91 708 53 513 46 306C39 101 39 6 41 4C44 1 42 0 83 0C108 0 110 1 109 28C108 61 110 127 110 229C110 243 110 258 111 272C141 273 190 272 223 272C240 272 242 267 242 255C242 150 248 21 255 2L256 2C234-20 216-44 197-68C153-123 144-170 172-200C184-213 206-220 263-220C299-220 318-215 324-208C329-202 313-169 309-161C294-168 284-171 265-172C241-173 232-171 219-161C214-144 216-131 250-82C270-53 292-29 320-1ZM245 534C243 463 241 423 242 334C193 332 151 334 124 334C117 334 115 338 116 348C122 409 126 474 131 521C141 617 156 672 163 681C169 686 180 688 195 688C220 688 236 683 242 677C248 671 245 567 245 534Z\",\"advanceWidth\":377,\"leftSideBearing\":39},{\"path\":\"M82 768C107 784 171 824 192 838L174 859C159 877 147 893 144 893C139 892 138 888 85 838C71 824 49 801 44 797C45 795 52 786 55 782C69 763 74 763 82 768ZM7 0L207 0C224 0 226 4 226 14C226 57 226 61 222 66C216 67 132 62 99 59C87 58 85 61 87 68L213 684C215 696 214 735 210 747C192 746 106 747 57 747C27 747 18 745 18 728C18 693 18 684 20 681L125 689C138 690 139 689 136 677C94 477 54 281 12 81C7 57 7 39 7 0Z\",\"advanceWidth\":229,\"leftSideBearing\":7},{\"path\":\"M229 8L230 9C235 12 240 15 244 19C266 41 277 61 272 270C267 456 252 503 240 521C227 531 196 533 153 533C115 533 75 531 59 514C41 494 36 392 38 357C42 356 53 356 60 356C94 356 101 362 101 379C101 390 99 445 109 473C116 477 132 479 149 479C162 479 180 477 188 469C196 461 204 430 204 300L154 300C115 300 85 298 65 281C44 263 37 234 37 154C37 81 55 18 65 9C72 3 94-3 152-3C136-21 121-40 106-59C62-114 53-161 81-191C93-204 115-211 172-211C208-211 227-206 233-199C238-193 222-160 218-152C203-159 193-162 174-163C150-164 141-162 128-152C123-135 125-122 159-73C179-44 201-20 229 8ZM103 159C103 191 104 218 109 239C121 244 136 246 160 246C182 246 190 243 196 237C201 232 205 220 205 162C205 123 204 92 200 62C188 58 169 56 159 56C146 56 125 57 118 64C105 77 103 140 103 159Z\",\"advanceWidth\":313,\"leftSideBearing\":37},{\"path\":\"M235 19C256 40 263 66 263 196L256 196C204 196 195 189 195 175C195 160 198 102 192 66C185 61 176 57 161 57C141 57 137 58 129 66C117 78 108 161 108 273C108 339 110 460 117 470C125 474 131 476 148 476C159 476 170 475 177 469C192 456 193 424 192 373C196 369 258 369 258 385C258 474 239 511 228 522C221 527 181 532 153 532C122 532 85 526 70 511C43 484 42 405 41 268C40 67 71 15 78 9C86 2 103-1 127-2C113-18 95-39 95-54C95-74 133-108 149-119C140-128 114-150 104-158C101-165 104-177 113-190C126-208 134-211 147-200C160-189 177-173 199-150C219-130 219-104 189-69C183-62 171-52 162-42C166-35 187-12 199 0C213 3 224 8 235 19Z\",\"advanceWidth\":300,\"leftSideBearing\":41},{\"path\":\"M235 8C241 11 246 15 250 19C272 41 276 61 275 185L245 185C210 185 208 183 208 159C208 147 210 96 205 65C194 59 180 57 168 57C147 57 134 59 127 66C115 78 106 208 107 251C117 249 144 246 167 246C187 246 225 249 245 269C263 287 275 304 275 387C275 456 257 511 246 522C240 528 219 533 156 532C135 532 83 529 68 514C41 487 38 420 39 268C40 67 69 15 76 9C83 3 111-3 158-3C142-21 127-40 112-59C68-114 59-161 87-191C99-204 121-211 178-211C214-211 233-206 239-199C244-193 228-160 224-152C209-159 199-162 180-163C156-164 147-162 134-152C129-135 131-122 165-73C185-44 207-20 235 8ZM115 470C124 472 171 485 194 463C211 446 207 331 201 308C187 302 125 297 111 311C102 320 109 446 115 470Z\",\"advanceWidth\":315,\"leftSideBearing\":39},{\"path\":\"M227 20C249 42 254 57 254 189C254 299 93 331 93 386C93 413 92 446 93 468C109 475 123 476 131 476C139 476 154 475 163 466C176 453 174 383 173 369L192 369C237 369 240 375 240 387C240 458 228 512 217 523C210 528 165 533 140 533C109 533 70 530 50 510C28 487 27 417 27 371C27 283 184 252 184 177C184 133 183 72 183 66C172 60 161 58 142 58C121 58 110 60 103 67C91 79 93 182 98 196L57 196C32 196 25 190 25 176C25 36 45 16 52 10C58 5 76-2 117-3C103-19 87-39 87-53C87-73 125-107 141-118C132-127 106-149 96-157C93-164 96-176 105-189C118-207 126-210 139-199C152-188 169-172 191-149C211-129 211-103 181-68C175-61 163-51 154-41C158-34 181-9 192 2C206 6 218 11 227 20Z\",\"advanceWidth\":306,\"leftSideBearing\":25},{\"path\":\"M275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C145 53 136 57 128 66C116 80 109 144 109 268C109 388 110 518 110 528C107 530 103 530 72 530C42 530 40 528 40 504L40 264C40 64 63 18 73 8C79 2 120-3 159-3C165-3 178-3 193-2C173-23 155-46 138-68C94-123 85-170 113-200C125-213 147-220 204-220C240-220 259-215 265-208C270-202 254-169 250-161C235-168 225-171 206-172C182-173 173-171 160-161C155-144 157-131 191-82C211-53 233-29 261-1L265 3C268 3 270 4 271 5C277 10 273 115 273 267C273 338 274 458 275 528Z\",\"advanceWidth\":313,\"leftSideBearing\":40},{\"path\":\"M65 609L81 600C101 590 106 589 111 599C117 610 133 647 140 665C142 670 142 671 142 671L144 671C144 671 144 670 146 665C157 640 176 601 182 589L204 600C220 608 222 612 219 619C207 653 174 750 174 750L153 750C122 750 120 750 118 748C116 746 108 726 93 686ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M133 593C135 593 148 598 156 601C172 607 175 611 173 618L140 748C138 748 131 746 110 738C88 730 76 724 73 721C71 719 72 715 96 667C116 627 124 612 133 593ZM15 499C27 431 40 317 53 111C54 95 55 53 58 39C60 28 66 17 73 10C81 2 93-2 108-2C140-2 181 6 191 33C160-133 114-157 51-157C36-157 34-218 34-218C178-218 273-147 273 385C273 496 271 518 269 527C260 529 213 534 201 527C196 525 196 522 196 519C199 499 204 454 204 368C204 163 187 109 169 84C155 65 145 60 135 60C128 60 122 64 122 72C122 204 101 439 83 528C72 530 57 531 44 531C11 531 10 527 15 499Z\",\"advanceWidth\":309,\"leftSideBearing\":12},{\"path\":\"M122 598C136 625 175 705 186 727L160 737C138 745 120 753 117 751C113 748 113 744 94 674C85 641 77 610 75 604L92 597C114 589 118 590 122 598ZM20 0L178 0C204 0 210 9 210 32C210 44 210 58 210 63L98 62C90 62 93 68 95 74L204 468C207 476 204 529 204 529L51 530C30 530 24 527 24 506C24 497 24 484 24 467L126 467C134 467 137 465 135 460C132 453 20 44 20 44Z\",\"advanceWidth\":230,\"leftSideBearing\":20},{\"path\":\"M1 469C4 469 43 472 45 470C47 468 45 341 45 258L42 0L71 0C107 0 111 3 111 26C111 44 111 149 110 257L110 470C118 471 155 471 159 471C162 471 202 472 204 470C206 468 204 341 204 258C204 147 201 13 201 0L230 0C266 0 270 3 270 26C270 44 270 149 269 257C268 340 269 423 269 470C277 471 314 470 318 470C325 470 326 526 325 528C311 527 277 527 269 527C267 641 269 693 276 718C284 722 297 724 312 724C324 724 331 723 336 722C344 720 347 721 353 742C357 756 361 773 361 775C354 778 336 781 317 781C263 781 241 774 229 762C202 735 203 668 203 527L171 527L110 527C108 641 110 693 117 718C125 722 131 724 146 724C158 724 165 723 170 722C178 720 181 721 187 742C191 756 195 773 195 775C188 778 170 781 151 781C97 781 82 774 70 762C43 735 44 668 44 527L12 527C2 527 1 525 1 480Z\",\"advanceWidth\":338,\"leftSideBearing\":1},{\"path\":\"M54 0L83 0C119 0 123 3 123 26C123 44 123 149 122 257L122 470C128 471 200 473 203 470C205 468 206 373 206 260C206 174 204 77 204 2C207 1 211 0 242 0C270 0 275 6 275 26C275 90 273 178 273 261C273 396 275 521 274 527C265 530 151 529 122 529C120 643 122 691 129 716C137 720 150 722 165 722C190 722 210 721 229 720C237 720 241 722 246 740C250 754 254 771 254 773C247 776 229 780 170 780C116 780 94 772 82 760C55 733 56 668 56 527L24 527C14 527 13 525 13 480L13 469C16 469 55 472 57 470C59 468 57 341 57 258Z\",\"advanceWidth\":315,\"leftSideBearing\":13},{\"path\":\"M20 466C20 466 54 469 54 467L52 268C52 67 83 15 90 9C112 0 125-3 185-3C221-3 238-1 246 2C247 53 233 56 229 56L187 56C158 56 148 58 140 66C131 75 125 117 125 266C125 331 124 405 127 466C130 466 157 467 186 467C214 467 235 467 235 466L233 268C234 60 264 15 271 9C298-3 322-3 353-3C391-3 424 0 443 19C455 31 471 61 466 323L439 323C406 323 397 318 397 290C397 245 402 81 393 61C393 61 389 56 358 56C339 56 329 58 321 66C312 75 306 117 306 266C306 331 305 405 308 466L443 465C450 465 456 465 456 477C456 495 458 526 457 530C411 526 306 527 308 529C308 529 307 615 310 630L276 630C238 630 236 629 236 618L235 528L223 528C193 528 126 528 127 529C127 529 126 615 129 630L95 630C57 630 55 629 55 618L54 528L42 528C23 528 20 526 20 497Z\",\"advanceWidth\":491,\"leftSideBearing\":20},{\"path\":\"M316 316L316 461C459 461 499 523 499 616C499 690 471 753 382 753C374 753 344 754 314 752L314 753C306 753 298 753 291 752L279 752C220 753 128 751 126 749C87 738 46 411 39 204C31-1 39 5 39 5C44 3 118-7 115 12C111 38 110 88 114 209C114 223 114 238 115 252C151 253 210 252 242 251L240 5C240 5 242 3 272 1C288 0 312-1 349-1C485-1 523 38 523 165C523 288 459 313 316 316ZM422 612C422 592 422 541 398 527C377 521 327 515 316 520L316 578C316 602 315 626 315 650C315 666 316 682 316 697L346 697C404 697 422 686 422 612ZM119 314C136 528 155 678 174 689C179 690 241 701 244 687L244 617C243 553 243 469 243 389C243 364 242 339 242 314C188 311 146 313 119 314ZM424 71C414 65 334 55 318 67C318 80 317 95 316 110L316 251L367 251C415 251 448 203 448 159C448 132 447 97 424 71Z\",\"advanceWidth\":371,\"leftSideBearing\":35},{\"path\":\"M116 246L116 496C236 495 309 540 309 636C309 690 271 753 182 753C174 753 144 754 114 752L114 753C106 753 98 753 91 752C68 751 46 753 45 749C44 749 44 748 44 748C44 595 41 24 40 5C40 5 42 3 72 1C88 0 112-1 149-1C285-1 323 48 323 125C323 236 259 243 116 246ZM473 12C457 146 463 526 463 529C463 594 462 709 462 736C461 758 415 748 395 748C395 748 395 746 394 744C394 736 394 719 394 699L394 685C395 621 398 531 395 531C259 531 216 455 216 291C216 274 384 279 393 280C395 169 398 56 404 3C421-1 477-9 473 12ZM232 632C232 587 224 577 203 567C179 566 128 559 116 561L116 588C116 629 114 661 114 697L146 697C204 697 232 686 232 632ZM393 344C338 341 316 343 289 344C299 434 321 473 394 472C394 362 393 434 393 344ZM116 71L116 181L167 181C215 181 248 155 248 119C248 54 116 58 116 71Z\",\"advanceWidth\":545,\"leftSideBearing\":40},{\"path\":\"M196-3C317-3 351 57 351 151C306 147 271 151 271 124C271 82 254 61 203 61C157 61 128 104 128 355C128 637 144 696 207 696C250 696 270 679 272 610C279 610 346 608 346 627C346 705 308 753 209 753C89 753 49 697 49 350C49 58 89-3 196-3ZM298 199C365 199 400 223 400 381C400 534 362 558 301 558C238 558 198 520 198 368C198 236 231 200 298 199ZM301 259C266 259 256 294 256 373C256 465 263 498 297 498C337 498 344 462 343 378C342 299 337 259 301 259Z\",\"advanceWidth\":445,\"leftSideBearing\":49},{\"path\":\"M478 685C609 684 662 681 665 681C665 681 671 726 668 751C640 744 237 750 214 750C206 750 208 694 208 681C219 683 270 685 404 685C405 536 406 43 404 0C419 0 481 0 481 5C481 77 476 491 478 685ZM266 192C266 120 254 55 198 55C149 55 119 101 119 351C119 493 145 566 198 566C241 566 261 519 263 410C270 410 337 408 337 427C337 565 299 622 200 623C86 624 40 552 40 348C40 54 85-4 187-5C308-6 342 65 342 219C297 215 266 219 266 192ZM668 622C653 624 592 624 592 615C592 609 594 22 593 1C608-1 669-1 669 8L668 448C668 516 667 594 668 622Z\",\"advanceWidth\":719,\"leftSideBearing\":40},{\"path\":\"M255 372C255 369 255 264 256 244C255 245 255 245 255 246C178 241 151 245 125 246L125 385C125 453 121 722 126 750C112 750 49 748 49 742C49 736 51 21 50 0C65 0 123-2 126 6C126 12 125 47 125 182C169 186 251 181 256 181L256 0C271 0 331-2 332 7C332 14 331 101 331 205C331 273 327 352 332 380C318 380 255 378 255 372ZM546 750C532 750 469 748 469 742C469 739 469 661 470 574C469 575 469 575 469 576C392 571 355 575 329 576L329 655C329 723 325 722 330 750C316 750 253 748 253 742C253 736 255 421 254 400C269 400 328 398 330 407C330 411 329 458 329 512C373 516 465 511 470 511L470 0C485 0 546-2 546 7L545 655C545 723 541 722 546 750ZM330 407C330 406 330 406 330 407ZM126 7C126 7 126 7 126 6ZM332 7C332 6 332 6 332 7Z\",\"advanceWidth\":596,\"leftSideBearing\":49},{\"path\":\"M46-1L393-1C393-1 401 43 396 68C389 64 244 63 203 63C176 63 147 63 121 64C120 84 121 106 121 133C119 319 123 638 125 749C111 749 40 743 46 742C52 740 50 154 46-1ZM200 155L394 155C394 155 402 197 397 222C390 218 375 217 334 217C307 217 301 217 275 218C274 238 275 262 275 289C273 475 277 637 279 748C265 748 194 742 200 741C206 739 204 310 200 155Z\",\"advanceWidth\":424,\"leftSideBearing\":45},{\"path\":\"M286 0C302 0 383-2 389 9C399 28 417 684 418 750C379 751 339 748 339 740L340 131C340 131 336 130 330 130C323 191 247 595 224 723C215 766 73 746 54 749C57 712 53 373 53 340C68 337 129 336 129 345C129 400 124 573 125 689C128 689 150 693 152 683C190 492 245 204 286 0ZM97-40C164-40 199 4 199 132C199 275 161 299 100 299C37 299-3 261-3 119C-3 7 30-39 97-40ZM100 20C65 20 55 45 55 124C55 206 62 239 96 239C136 239 143 203 142 129C141 50 136 20 100 20Z\",\"advanceWidth\":448,\"leftSideBearing\":-3},{\"path\":\"M267 175C252 185 171 180 125 178C124 254 124 359 124 503C252 503 301 537 301 635C301 704 260 753 187 753C91 753 51 749 51 749C52 730 50 138 50 5C50 1 105-3 132 1C129 27 128 64 126 122L207 124C222 124 262 6 262 1L342 1C344 1 343 4 343 4C331 36 274 157 267 175ZM169 695C202 695 229 678 229 630C229 604 218 573 202 566C193 563 151 560 124 562L122 691C135 693 156 695 169 695ZM359 277C359 255 354 244 354 244C294 239 279 237 279 330C294 331 359 325 359 337L359 377C337 375 290 380 279 377C275 387 278 446 284 465C334 479 357 467 359 410C383 409 409 410 409 418C409 481 370 519 320 519C268 519 223 481 223 422L223 284C223 216 283 188 318 188C383 188 412 227 415 300C370 298 359 291 359 277Z\",\"advanceWidth\":395,\"leftSideBearing\":50},{\"path\":\"M288 3C292 0 307 0 333 0C345 0 363 1 377 5C344 83 276 294 262 356C303 390 319 443 319 561C319 637 301 696 277 722C257 739 206 750 162 750C54 750 49 735 49 704L48 30C48 5 51 1 60 0C77-1 115-1 132 1C126 63 124 120 124 336C145 333 172 332 190 335C228 229 280 10 288 3ZM649 3C653 0 668 0 694 0C706 0 724 1 738 5C705 83 637 294 623 356C664 390 680 443 680 561C680 637 662 696 638 722C618 739 567 750 523 750C415 750 410 735 410 704L409 30C409 5 412 1 421 0C438-1 476-1 493 1C487 63 485 120 485 336C506 333 533 332 551 335C589 229 641 10 649 3ZM129 412C123 417 122 420 121 543C120 655 121 664 126 678C136 682 153 684 172 684C192 684 206 681 215 674C228 664 238 622 239 559C240 500 237 447 226 416C216 406 195 401 170 401C151 401 141 402 129 412ZM490 412C484 417 483 420 482 543C481 655 482 664 487 678C497 682 514 684 533 684C553 684 567 681 576 674C589 664 599 622 600 559C601 500 598 447 587 416C577 406 556 401 531 401C512 401 502 402 490 412Z\",\"advanceWidth\":722,\"leftSideBearing\":48},{\"path\":\"M128 352C158 352 192 354 210 374C226 391 232 426 232 534C232 631 223 677 204 706C190 714 162 718 129 718C106 718 72 715 54 699C36 683 31 661 33 626C37 625 48 625 55 625C89 625 92 632 92 648C92 673 146 672 156 661C163 653 170 628 170 573C170 573 144 576 130 576C101 576 76 571 56 554C35 536 30 508 30 458C30 425 39 397 52 375C62 365 86 352 128 352ZM169 410C148 402 110 400 99 411C86 424 85 485 93 517C115 526 152 527 165 514C175 504 174 426 169 410Z\",\"advanceWidth\":272,\"leftSideBearing\":30},{\"path\":\"M44 522C37 517 42 414 42 262C42 175 41 72 40 3C43 0 47 0 79 0C110 0 112 2 112 26C112 53 110 150 109 268C109 337 108 437 111 470C128 477 189 474 208 472C219 471 221 473 222 479C224 493 224 520 222 525C214 528 206 530 154 530C61 530 51 527 44 522ZM231 508C231 494 234 479 237 465C244 468 259 474 304 475C304 395 306 320 307 245C308 168 305 90 305 2C308 1 312 0 343 0C371 0 376 6 376 26C376 38 373 138 373 246C372 331 373 421 374 476C458 473 460 464 464 468C469 473 473 511 470 525C466 529 442 530 347 530L260 530C241 530 237 529 234 526C231 523 231 515 231 508Z\",\"advanceWidth\":476,\"leftSideBearing\":40},{\"path\":\"M124 191C140 191 177 190 183 194L183 344C183 410 270 458 269 547C268 616 260 652 242 671C225 689 183 690 164 690C133 690 85 685 67 667C50 650 47 505 54 490C58 488 63 487 71 487C101 487 117 493 117 504C117 511 108 612 117 629C135 637 170 636 181 626C196 613 199 592 199 539C199 463 120 442 120 341C120 329 124 200 124 191ZM129 17C144 15 180 18 185 22C191 27 193 103 189 110C171 118 127 116 124 113C121 110 125 30 129 17Z\",\"advanceWidth\":319,\"leftSideBearing\":50},{\"path\":\"M409 79C382 127 318 231 282 294L401 462C416 483 418 492 397 505L366 525C364 523 288 416 279 403C233 337 216 313 208 302C201 293 202 284 208 273C221 249 345 48 358 24C360 24 365 25 379 33C418 55 420 59 409 79ZM259 70C232 118 168 222 132 285L251 453C266 474 268 482 247 496L216 517C214 515 138 408 129 395C83 329 66 305 58 294C51 285 52 276 58 265C71 241 195 39 208 15C210 15 215 16 229 24C268 46 270 50 259 70Z\",\"advanceWidth\":475,\"leftSideBearing\":53},{\"path\":\"M216 463C243 415 307 311 343 248L224 80C209 59 207 51 228 37L259 16C261 18 337 125 346 138C392 204 409 228 417 239C424 248 423 257 417 268C404 292 280 494 267 518C265 518 260 517 246 509C207 487 205 483 216 463ZM66 454C93 406 157 302 193 239L74 71C59 50 57 41 78 28L109 8C111 10 187 117 196 130C242 196 259 220 267 231C274 240 273 249 267 260C254 284 130 485 117 509C115 509 110 508 96 500C57 478 55 474 66 454Z\",\"advanceWidth\":475,\"leftSideBearing\":60},{\"path\":\"M110 343C125 340 162 344 167 348C173 353 175 412 171 419C160 434 108 434 101 422C96 414 105 356 110 343ZM265 269C265 289 265 291 264 294C261 295 254 295 143 295C35 295 26 294 23 291C21 289 20 283 20 269C20 251 21 242 22 239C25 238 30 238 142 238C257 238 262 239 263 240C264 241 265 253 265 269ZM118 101C133 98 170 102 175 106C181 111 183 170 179 177C168 192 116 192 109 180C104 172 113 114 118 101Z\",\"advanceWidth\":280,\"leftSideBearing\":20},{\"path\":\"M158 98C169 87 173 85 175 85C181 85 187 85 360 258C367 265 368 268 368 271L206 435C192 449 184 450 164 430C142 408 138 403 137 400C174 362 254 281 272 263C213 207 118 118 130 127C132 126 140 116 158 98Z\",\"advanceWidth\":359,\"leftSideBearing\":128},{\"path\":\"M270 433C259 444 255 446 253 446C247 446 241 446 68 273C61 266 60 263 60 260L222 96C236 82 244 81 264 101C286 123 290 128 291 131C254 169 174 250 156 268C215 324 310 413 298 404C296 405 288 415 270 433Z\",\"advanceWidth\":359,\"leftSideBearing\":60},{\"path\":\"M35 294C35 273 36 262 36 260C41 261 85 262 85 262L214 262C214 240 215 239 215 194C218 193 224 193 250 193C274 193 278 198 278 215L277 315C276 316 273 317 264 317L95 317C45 317 41 316 38 313C36 311 35 308 35 294Z\",\"advanceWidth\":323,\"leftSideBearing\":35},{\"path\":\"M38 504C38 454 41 221 41 215L42 127C43-12 40-155 39-248C44-249 48-250 74-250C106-250 111-247 111-227C111-193 109-103 108 10C118 1 134-3 159-3C179-3 264-1 271 5C277 10 273 115 273 267C273 338 274 458 275 528C272 530 268 530 237 530C205 530 204 529 204 504C204 488 204 374 205 262C206 184 205 110 205 60C197 55 180 53 165 53C130 53 109 60 109 268L110 486C110 506 111 521 112 529C108 530 95 530 82 530L80 530L72 530C54 530 46 529 43 524C39 520 38 514 38 504Z\",\"advanceWidth\":313,\"leftSideBearing\":38},{\"path\":\"M39 368C51 354 82 340 201 340C324 340 356 352 367 366C384 388 387 413 387 532C387 634 381 681 359 712C345 719 327 731 204 731C73 731 59 724 48 710C28 685 20 660 21 533C22 417 27 390 39 368ZM344 385C335 377 320 369 204 369C89 369 74 378 67 388C58 401 53 415 52 534C51 639 55 671 67 689C77 693 90 703 202 703C318 703 328 692 337 684C351 671 356 634 356 527C356 441 355 408 344 385ZM241 413C244 410 250 411 266 411C273 411 284 411 291 414C272 459 266 477 256 512C275 530 279 555 279 591C279 615 273 636 259 651C247 660 218 668 197 668C134 668 132 659 132 640C132 607 132 580 132 534L131 428C131 414 134 410 138 410C148 410 170 409 179 410C176 422 176 484 176 504C189 502 204 502 214 504C223 472 237 417 241 413ZM177 544C173 548 172 611 176 626C189 629 212 632 223 623C236 612 235 562 226 546C218 538 184 537 177 544Z\",\"advanceWidth\":400,\"leftSideBearing\":21},{\"path\":\"M76 484C83 478 103 472 163 472C201 472 234 475 253 494C275 516 281 564 281 603C281 651 257 711 246 722C239 727 219 733 157 733C129 733 83 729 68 714C41 687 41 634 41 602C41 551 56 507 76 484ZM209 535C189 524 132 522 119 535C101 553 98 653 115 670C131 678 183 687 198 670C220 646 221 565 209 535Z\",\"advanceWidth\":322,\"leftSideBearing\":41},{\"path\":\"M162 606C192 606 216 613 233 631C251 651 257 692 257 736C253 739 246 741 222 741C206 741 200 739 200 728C200 702 199 676 199 671C188 664 176 662 167 662C155 662 144 664 137 671C130 678 129 720 128 740C123 741 104 742 91 742C67 742 63 736 63 727C63 685 76 641 92 624C102 616 116 606 162 606Z\",\"advanceWidth\":328,\"leftSideBearing\":63},{\"path\":\"M177 8L108 9C94-7 67-35 67-53C67-73 105-107 121-118C112-127 86-149 76-157C73-164 76-176 85-189C98-207 106-210 119-199C132-188 149-172 171-149C191-129 191-103 161-68C155-61 143-51 134-41C139-32 173 3 177 8Z\",\"advanceWidth\":232,\"leftSideBearing\":67},{\"path\":\"M199 3C177-19 158-44 139-68C95-123 86-170 114-200C126-213 148-220 205-220C241-220 260-215 266-208C271-202 255-169 251-161C236-168 226-171 207-172C183-173 174-171 161-161C156-144 158-131 192-82C212-53 234-29 262-1C264 1 267 4 268 7C265 6 249 3 243 3C224 2 211 2 199 3Z\",\"advanceWidth\":297,\"leftSideBearing\":98},{\"path\":\"M267 175C252 185 171 180 125 178C124 254 124 359 124 503C252 503 301 537 301 635C301 704 260 753 187 753C91 753 51 749 51 749C52 730 50 138 50 5C50 1 105-3 132 1C129 27 128 64 126 122L207 124C222 124 262 6 262 1L342 1C344 1 343 4 343 4C331 36 274 157 267 175ZM2262 740L2263 131C2263 131 2259 130 2253 130C2246 191 2170 595 2147 723C2138 766 1996 746 1977 749C1980 712 1976 373 1976 340C1991 337 2052 336 2052 345C2052 400 2047 573 2048 689C2051 689 2073 693 2075 683C2113 492 2168 204 2209 0C2225 0 2306-2 2312 9C2322 28 2340 684 2341 750C2302 751 2262 748 2262 740ZM1682 685C1813 684 1866 681 1869 681C1869 681 1875 726 1872 751C1844 744 1441 750 1418 750C1410 750 1412 694 1412 681C1423 683 1474 685 1608 685C1609 536 1610 43 1608 0C1623 0 1685 0 1685 5C1685 77 1680 491 1682 685ZM574 750C449 750 444 747 444 723C444 636 446 505 446 373C446 236 445 101 445 7C449 4 476 3 569 3C650 3 676 13 698 35C721 58 733 87 733 380C733 608 722 678 693 724C673 741 644 750 574 750ZM1110 750C1074 750 1072 747 1072 716C1072 623 1074 433 1074 365C1074 143 1072 109 1061 78C1050 67 1031 64 1004 64C967 64 952 69 942 82C929 99 926 127 924 393C923 479 924 705 925 750L877 750C845 750 842 746 842 699L842 391C842 140 850 72 868 39C886 17 935-2 998-3C1060-4 1104 15 1119 36C1143 69 1149 96 1149 370C1149 455 1147 699 1145 749C1132 750 1127 750 1110 750ZM169 695C202 695 229 678 229 630C229 604 218 573 202 566C193 563 151 560 124 562L122 691C135 693 156 695 169 695ZM641 88C633 79 619 71 575 71C545 71 531 74 524 80C523 144 522 258 522 377L522 679C529 682 529 683 572 683C607 683 621 679 631 669C644 656 653 604 653 375C653 153 651 122 641 88ZM1470 192C1470 120 1458 55 1402 55C1353 55 1323 101 1323 351C1323 493 1349 566 1402 566C1445 566 1465 519 1467 410C1474 410 1541 408 1541 427C1541 565 1503 622 1404 623C1290 624 1244 552 1244 348C1244 54 1289-4 1391-5C1512-6 1546 65 1546 219C1501 215 1470 219 1470 192ZM1872 622C1857 624 1796 624 1796 615C1796 609 1798 22 1797 1C1812-1 1873-1 1873 8L1872 448C1872 516 1871 594 1872 622ZM359 277C359 255 354 244 354 244C294 239 279 237 279 330C294 331 359 325 359 337L359 377C337 375 290 380 279 377C275 387 278 446 284 465C334 479 357 467 359 410C383 409 409 410 409 418C409 481 370 519 320 519C268 519 223 481 223 422L223 284C223 216 283 188 318 188C383 188 412 227 415 300C370 298 359 291 359 277ZM2023 299C1960 299 1920 261 1920 119C1920 7 1953-39 2020-40C2087-40 2122 4 2122 132C2122 275 2084 299 2023 299ZM2065 129C2064 50 2059 20 2023 20C1988 20 1978 45 1978 124C1978 206 1985 239 2019 239C2059 239 2066 203 2065 129Z\",\"advanceWidth\":2371,\"leftSideBearing\":50},{\"path\":\"M0 780L0-220L694-220C694-182 725-152 763-152C800-152 831-182 831-220L1000-220L1000 142L958 177L958 499L1000 534L1000 780Z\",\"advanceWidth\":1000,\"leftSideBearing\":0}],\"ascender\":780,\"descender\":-220,\"xHeight\":530,\"capHeight\":750,\"unitsPerEm\":1000,\"ligatures\":[{\"sub\":[5,5],\"by\":252},{\"sub\":[5,8],\"by\":253},{\"sub\":[19,19],\"by\":254}],\"kerning\":[{\"posFormat\":1,\"coverage\":{\"format\":1,\"glyphs\":[5,17]},\"valueFormat1\":4,\"valueFormat2\":0,\"pairSets\":[[{\"secondGlyph\":172,\"value1\":{\"xAdvance\":20}}],[{\"secondGlyph\":37,\"value1\":{\"xAdvance\":-53}}]]},{\"posFormat\":2,\"coverage\":{\"format\":1,\"glyphs\":[48,56,113]},\"valueFormat1\":4,\"valueFormat2\":0,\"classDef1\":{\"format\":1,\"startGlyph\":56,\"classes\":[1]},\"classDef2\":{\"format\":2,\"ranges\":[{\"start\":4,\"end\":4,\"classId\":1},{\"start\":14,\"end\":14,\"classId\":1},{\"start\":41,\"end\":41,\"classId\":1}]},\"class1Count\":2,\"class2Count\":2,\"classRecords\":[[{\"value1\":{\"xAdvance\":0}},{\"value1\":{\"xAdvance\":-25}}],[{\"value1\":{\"xAdvance\":0}},{\"value1\":{\"xAdvance\":-40}}]]}]}\n'));
+
+var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$fragment2d = {'src': '\n        precision mediump float;\n        uniform vec3 color;\n        void main () {\n            gl_FragColor = vec4(color, 1.0);\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$vertex2d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        void main () {\n            gl_Position = projection * transform * vec4(position, 1.0);\n        }\n    '};
+var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$view = function (_p0) {
+	var _p1 = _p0;
+	var _p5 = _p1.width;
+	var _p4 = _p1.height;
+	var projection = A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0, _p5, 0 - _p4, 0);
+	var glyphToEntity = function (_p2) {
+		var _p3 = _p2;
+		return A4(
+			_elm_community$webgl$WebGL$entity,
+			_w0rm$rendering_text_with_webgl$Custom_Ivernifont$vertex2d,
+			_w0rm$rendering_text_with_webgl$Custom_Ivernifont$fragment2d,
+			_p3.mesh,
+			{projection: projection, color: _p1.color, transform: _p3.transform});
+	};
+	var devicePixelRatio = 2;
+	var style = {font: _w0rm$rendering_text_with_webgl$Iverni$font, fontSize: _p1.fontSize, lineHeight: _p1.lineHeight, width: _p5, features: _p1.features, cache: _elm_lang$core$Dict$empty};
+	var renderedText = _elm_lang$core$Tuple$first(
+		A2(_w0rm$rendering_text_with_webgl$Font_Text$text2d, style, _p1.text));
+	return A2(
+		_elm_community$webgl$WebGL$toHtml,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$width(
+				_elm_lang$core$Basics$round(_p5 * devicePixelRatio)),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$height(
+					_elm_lang$core$Basics$round(_p4 * devicePixelRatio)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'width',
+									_1: A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(_p5),
+										'px')
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'height',
+										_1: A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(_p4),
+											'px')
+									},
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		A2(_elm_lang$core$List$map, glyphToEntity, renderedText));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$Options = F7(
+	function (a, b, c, d, e, f, g) {
+		return {text: a, fontSize: b, lineHeight: c, width: d, color: e, height: f, features: g};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$Uniforms2d = F3(
+	function (a, b, c) {
+		return {projection: a, transform: b, color: c};
+	});
+
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$viewGlyph = F2(
+	function (k, _p0) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$svg$Svg$path,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$fill('#bbb'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$transform(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'scale(',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString(k),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										',',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(0 - k),
+											')'))))),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{ctor: '[]'});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$label = F3(
+	function (_p2, anchor, str) {
+		var _p3 = _p2;
+		return A2(
+			_elm_lang$svg$Svg$text_,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(_p3._0)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$y(
+						_elm_lang$core$Basics$toString(_p3._1)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$textAnchor(anchor),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg$text(str),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$viewMetrics = F2(
+	function (k, _p4) {
+		var _p5 = _p4;
+		var _p7 = _p5.leftSideBearing;
+		var _p6 = _p5.advanceWidth;
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$circle,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$r('5'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('black'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$line,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x1(
+								_elm_lang$core$Basics$toString((0 - k) * 400)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x2(
+									_elm_lang$core$Basics$toString(k * (_p6 + 400))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
+							{ctor: '_Tuple2', _0: (k * (_p6 + 400)) - 30, _1: -20},
+							'end',
+							'baseline'),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
+								{ctor: '_Tuple2', _0: k * (_p6 + 400), _1: k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) - 50)},
+								'middle',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'units per em = ',
+									_elm_lang$core$Basics$toString(_w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm))),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$circle,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$r('5'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('black'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$cx(
+													_elm_lang$core$Basics$toString(k * _p6)),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$line,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y1(
+												_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50))),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$x1(
+													_elm_lang$core$Basics$toString(k * _p6)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$x2(
+														_elm_lang$core$Basics$toString(k * _p6)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$svg$Svg$line,
+											{
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$y1(
+													_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 20))),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$y2(
+														_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 20))),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$x2(
+															_elm_lang$core$Basics$toString(k * _p6)),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
+												{ctor: '_Tuple2', _0: 0, _1: (k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50)) + 30},
+												'start',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'advance width = ',
+													_elm_lang$core$Basics$toString(_p6))),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$svg$Svg$line,
+													{
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$y1(
+															_elm_lang$core$Basics$toString(k * (((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2) - 50))),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$x1(
+																_elm_lang$core$Basics$toString(k * _p7)),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$x2(
+																	_elm_lang$core$Basics$toString(k * _p7)),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
+															}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$svg$Svg$line,
+														{
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$y1(
+																_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2))),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$y2(
+																	_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2))),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$x2(
+																		_elm_lang$core$Basics$toString(k * _p7)),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+																			_1: {
+																				ctor: '::',
+																				_0: (_elm_lang$core$Native_Utils.cmp(
+																					_elm_lang$core$Basics$abs(_p7),
+																					30) > -1) ? _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)') : _elm_lang$svg$Svg_Attributes$markerEnd(''),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A3(
+															_w0rm$rendering_text_with_webgl$Custom_Metrics$label,
+															{
+																ctor: '_Tuple2',
+																_0: A2(_elm_lang$core$Basics$min, 0, k * _p7) - 20,
+																_1: (k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) / 2)) + 8
+															},
+															'end',
+															A2(
+																_elm_lang$core$Basics_ops['++'],
+																'left bearing = ',
+																_elm_lang$core$Basics$toString(_p7))),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$svg$Svg$line,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$y1(
+																		_elm_lang$core$Basics$toString(k * ((0 - _w0rm$rendering_text_with_webgl$Iverni$font.descender) + 50))),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$y2(
+																			_elm_lang$core$Basics$toString((0 - k) * (_w0rm$rendering_text_with_webgl$Iverni$font.ascender + 50))),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																},
+																{ctor: '[]'}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$view = function (_p8) {
+	var _p9 = _p8;
+	var _p13 = _p9.width;
+	var _p12 = _p9.height;
+	var _p11 = _p9.glyph;
+	var k = _p9.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
+	var _p10 = {ctor: '_Tuple2', _0: (_p13 - (k * _p11.advanceWidth)) / 2, _1: (_p12 / 2) - (((_w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm / 2) - _w0rm$rendering_text_with_webgl$Iverni$font.ascender) * k)};
+	var centerX = _p10._0;
+	var centerY = _p10._1;
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(_p13)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height(
+						_elm_lang$core$Basics$toString(_p12)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$g,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$transform(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'translate(',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(centerX),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									',',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(centerY),
+										')'))))),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(_w0rm$rendering_text_with_webgl$Custom_Metrics$viewGlyph, k, _p11),
+					_1: {
+						ctor: '::',
+						_0: A2(_w0rm$rendering_text_with_webgl$Custom_Metrics$viewMetrics, k, _p11),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$update = F2(
+	function (action, model) {
+		var _p14 = action;
+		var glyph = A2(
+			_elm_lang$core$Maybe$withDefault,
+			_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+			A2(
+				_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
+				_w0rm$rendering_text_with_webgl$Iverni$font,
+				_elm_lang$core$Char$fromCode(_p14._0)));
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{glyph: glyph}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$initial = function (options) {
+	var glyph = A2(
+		_elm_lang$core$Maybe$withDefault,
+		_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+		A2(
+			_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
+			_w0rm$rendering_text_with_webgl$Iverni$font,
+			_elm_lang$core$Native_Utils.chr('H')));
+	return {glyph: glyph, fontSize: options.fontSize, width: options.width, height: options.height};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$Model = F4(
+	function (a, b, c, d) {
+		return {glyph: a, fontSize: b, width: c, height: d};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$Options = F3(
+	function (a, b, c) {
+		return {fontSize: a, width: b, height: c};
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress = function (a) {
+	return {ctor: 'KeyPress', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Custom_Metrics$subscriptions = function (_p15) {
+	return _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress);
+};
+
+var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
+	function (x, y, k, _p0) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$transform(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'translate(',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(x),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								',',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString(y),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										') scale(',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(k),
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												',',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(0 - k),
+													')'))))))))),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$path,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+										_elm_lang$core$Basics$toString(2 / k)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p2) {
+	var _p3 = _p2;
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(_p3.width)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height(
+						_elm_lang$core$Basics$toString(_p3.height)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		function (_) {
+			return _.paths;
+		}(
+			A3(
+				_elm_lang$core$List$foldl,
+				F2(
+					function ($char, _p4) {
+						var _p5 = _p4;
+						var _p6 = _p5.advance;
+						var glyph = A2(
+							_elm_lang$core$Maybe$withDefault,
+							_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+							A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyph, _w0rm$rendering_text_with_webgl$Iverni$font, $char));
+						var k = _p3.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
+						return {
+							advance: _p6 + (glyph.advanceWidth * k),
+							paths: {
+								ctor: '::',
+								_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph, _p6, _p3.top + (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k), k, glyph),
+								_1: _p5.paths
+							}
+						};
+					}),
+				{
+					advance: _p3.left,
+					paths: {ctor: '[]'}
+				},
+				_elm_lang$core$String$toList(_p3.text))));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Outline$Options = F6(
+	function (a, b, c, d, e, f) {
+		return {fontSize: a, text: b, width: c, height: d, left: e, top: f};
+	});
 
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$samples = 3;
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$circle = F4(
@@ -27449,276 +28157,6 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions = function (
 		});
 };
 
-var _w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal = F3(
-	function (p0, p1, p2) {
-		var _p0 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
-		var x2 = _p0._0;
-		var y2 = _p0._1;
-		var _p1 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
-		var x1 = _p1._0;
-		var y1 = _p1._1;
-		var n2 = _elm_community$linear_algebra$Math_Vector3$normalize(
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, y2 - y1, 0 - (x2 - x1), 0));
-		var _p2 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p0);
-		var x0 = _p2._0;
-		var y0 = _p2._1;
-		var n1 = _elm_community$linear_algebra$Math_Vector3$normalize(
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, y1 - y0, 0 - (x1 - x0), 0));
-		return A2(
-			_elm_community$linear_algebra$Math_Vector3$scale,
-			0.5,
-			A2(_elm_community$linear_algebra$Math_Vector3$add, n1, n2));
-	});
-var _w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices = F4(
-	function (p0, p1, p2, p3) {
-		var n2 = A3(_w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal, p1, p2, p3);
-		var _p3 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
-		var x2 = _p3._0;
-		var y2 = _p3._1;
-		var n1 = A3(_w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal, p0, p1, p2);
-		var _p4 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
-		var x1 = _p4._0;
-		var y1 = _p4._1;
-		return F2(
-			function (x, y) {
-				return A2(_elm_lang$core$Basics_ops['++'], x, y);
-			})(
-			{
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple3',
-					_0: {
-						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, -0.5),
-						normal: n2
-					},
-					_1: {
-						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
-						normal: n1
-					},
-					_2: {
-						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
-						normal: n2
-					}
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple3',
-						_0: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
-							normal: n2
-						},
-						_1: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
-							normal: n1
-						},
-						_2: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0.5),
-							normal: n1
-						}
-					},
-					_1: {ctor: '[]'}
-				}
-			});
-	});
-var _w0rm$rendering_text_with_webgl$Font_Mesh$edgesHelp = F5(
-	function (first, second, third, points, result) {
-		edgesHelp:
-		while (true) {
-			var _p5 = points;
-			if (_p5.ctor === '::') {
-				if (_p5._1.ctor === '::') {
-					if (_p5._1._1.ctor === '::') {
-						if (_p5._1._1._1.ctor === '::') {
-							var _p8 = _p5._1._1._1._0;
-							var _p7 = _p5._1._1._0;
-							var _p6 = _p5._1._0;
-							var _v1 = first,
-								_v2 = second,
-								_v3 = third,
-								_v4 = {
-								ctor: '::',
-								_0: _p6,
-								_1: {
-									ctor: '::',
-									_0: _p7,
-									_1: {ctor: '::', _0: _p8, _1: _p5._1._1._1._1}
-								}
-							},
-								_v5 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p6, _p7, _p8, result);
-							first = _v1;
-							second = _v2;
-							third = _v3;
-							points = _v4;
-							result = _v5;
-							continue edgesHelp;
-						} else {
-							var _p10 = _p5._1._1._0;
-							var _p9 = _p5._1._0;
-							var _v6 = first,
-								_v7 = second,
-								_v8 = third,
-								_v9 = {
-								ctor: '::',
-								_0: _p9,
-								_1: {
-									ctor: '::',
-									_0: _p10,
-									_1: {ctor: '[]'}
-								}
-							},
-								_v10 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p9, _p10, first, result);
-							first = _v6;
-							second = _v7;
-							third = _v8;
-							points = _v9;
-							result = _v10;
-							continue edgesHelp;
-						}
-					} else {
-						var _p11 = _p5._1._0;
-						var _v11 = first,
-							_v12 = second,
-							_v13 = third,
-							_v14 = {
-							ctor: '::',
-							_0: _p11,
-							_1: {ctor: '[]'}
-						},
-							_v15 = A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, _p11, first, second, result);
-						first = _v11;
-						second = _v12;
-						third = _v13;
-						points = _v14;
-						result = _v15;
-						continue edgesHelp;
-					}
-				} else {
-					return A5(_w0rm$rendering_text_with_webgl$Font_Mesh$addEdgeVertices, _p5._0, first, second, third, result);
-				}
-			} else {
-				return result;
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
-var _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1);
-var _w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d = function (outlines) {
-	var edges = A3(
-		_elm_lang$core$List$foldl,
-		function (outline) {
-			var _p12 = outline;
-			if (((_p12.ctor === '::') && (_p12._1.ctor === '::')) && (_p12._1._1.ctor === '::')) {
-				return A4(_w0rm$rendering_text_with_webgl$Font_Mesh$edgesHelp, _p12._0, _p12._1._0, _p12._1._1._0, outline);
-			} else {
-				return _elm_lang$core$Basics$identity;
-			}
-		},
-		{ctor: '[]'},
-		outlines);
-	var triangles = _w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate(outlines);
-	return _elm_community$webgl$WebGL$triangles(
-		A3(
-			_elm_lang$core$List$foldl,
-			function (_p13) {
-				var _p14 = _p13;
-				var _p15 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._2);
-				var x3 = _p15._0;
-				var y3 = _p15._1;
-				var _p16 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._1);
-				var x2 = _p16._0;
-				var y2 = _p16._1;
-				var _p17 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p14._0);
-				var x1 = _p17._0;
-				var y1 = _p17._1;
-				return F2(
-					function (x, y) {
-						return A2(_elm_lang$core$Basics_ops['++'], x, y);
-					})(
-					{
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple3',
-							_0: {
-								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, -0.5),
-								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
-							},
-							_1: {
-								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, -0.5),
-								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
-							},
-							_2: {
-								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, -0.5),
-								normal: _w0rm$rendering_text_with_webgl$Font_Mesh$frontNormal
-							}
-						},
-						_1: {
-							ctor: '::',
-							_0: {
-								ctor: '_Tuple3',
-								_0: {
-									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0.5),
-									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
-								},
-								_1: {
-									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, 0.5),
-									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
-								},
-								_2: {
-									position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0.5),
-									normal: _w0rm$rendering_text_with_webgl$Font_Mesh$backNormal
-								}
-							},
-							_1: {ctor: '[]'}
-						}
-					});
-			},
-			edges,
-			triangles));
-};
-var _w0rm$rendering_text_with_webgl$Font_Mesh$mesh2d = function (outlines) {
-	return _elm_community$webgl$WebGL$triangles(
-		A3(
-			_elm_lang$core$List$foldl,
-			function (_p18) {
-				var _p19 = _p18;
-				var _p20 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._2);
-				var x3 = _p20._0;
-				var y3 = _p20._1;
-				var _p21 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._1);
-				var x2 = _p21._0;
-				var y2 = _p21._1;
-				var _p22 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(_p19._0);
-				var x1 = _p22._0;
-				var y1 = _p22._1;
-				return F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					})(
-					{
-						ctor: '_Tuple3',
-						_0: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x1, y1, 0)
-						},
-						_1: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x2, y2, 0)
-						},
-						_2: {
-							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x3, y3, 0)
-						}
-					});
-			},
-			{ctor: '[]'},
-			_w0rm$rendering_text_with_webgl$Font_PathCommand$triangulate(outlines)));
-};
-var _w0rm$rendering_text_with_webgl$Font_Mesh$Attributes3d = F2(
-	function (a, b) {
-		return {position: a, normal: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Mesh$Attributes2d = function (a) {
-	return {position: a};
-};
-
 var _w0rm$rendering_text_with_webgl$Custom_Sort$fragment3d = {'src': '\n        precision mediump float;\n        varying vec3 vcolor;\n        void main () {\n            gl_FragColor = vec4(vcolor, 1.0);\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Sort$vertex3d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        attribute vec3 normal;\n        uniform vec3 color;\n        uniform mat4 camera;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        varying vec3 vcolor;\n\n        float ambientLight = 0.4;\n        float directionalLight = 0.6;\n        vec3 directionalVector = normalize(vec3(0.3, 0.1, 1.0));\n        void main () {\n            gl_Position = projection * camera * transform * vec4(position, 1.0);\n            vec4 transformedNormal = normalize(transform * vec4(normal, 0.0));\n            float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);\n            float vlighting = ambientLight + directional * directionalLight;\n            vcolor = vlighting * color;\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Sort$base = _w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d(
@@ -27964,369 +28402,6 @@ var _w0rm$rendering_text_with_webgl$Custom_Sort$subscriptions = function (_p8) {
 			}
 		});
 };
-
-var _w0rm$rendering_text_with_webgl$Font_Text$findInPairsPositions = F2(
-	function (pairsPositions, rightIndex) {
-		findInPairsPositions:
-		while (true) {
-			var _p0 = pairsPositions;
-			if (_p0.ctor === '::') {
-				if (_elm_lang$core$Native_Utils.eq(_p0._0.secondGlyph, rightIndex)) {
-					return _elm_lang$core$Maybe$Just(_p0._0.xAdvance);
-				} else {
-					var _v1 = _p0._1,
-						_v2 = rightIndex;
-					pairsPositions = _v1;
-					rightIndex = _v2;
-					continue findInPairsPositions;
-				}
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$getKerningValue = F3(
-	function (kerning, leftIndex, rightIndex) {
-		getKerningValue:
-		while (true) {
-			var _p1 = kerning;
-			if (_p1.ctor === '::') {
-				if (_p1._0.ctor === 'KerningPairPosFormat1') {
-					var _p2 = A2(
-						_elm_lang$core$Maybe$andThen,
-						function (pairsPositions) {
-							return A2(_w0rm$rendering_text_with_webgl$Font_Text$findInPairsPositions, pairsPositions, rightIndex);
-						},
-						A2(
-							_elm_lang$core$Maybe$andThen,
-							function (covIndex) {
-								return A2(_Skinney$elm_array_exploration$Array_Hamt$get, covIndex, _p1._0._0.pairSets);
-							},
-							A2(_w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex, _p1._0._0.coverage, leftIndex)));
-					if (_p2.ctor === 'Just') {
-						return _elm_lang$core$Maybe$Just(_p2._0);
-					} else {
-						var _v5 = _p1._1,
-							_v6 = leftIndex,
-							_v7 = rightIndex;
-						kerning = _v5;
-						leftIndex = _v6;
-						rightIndex = _v7;
-						continue getKerningValue;
-					}
-				} else {
-					if (_elm_lang$core$Native_Utils.eq(
-						A2(_w0rm$rendering_text_with_webgl$Font_Font$getCoverageIndex, _p1._0._0.coverage, leftIndex),
-						_elm_lang$core$Maybe$Nothing)) {
-						var _v8 = _p1._1,
-							_v9 = leftIndex,
-							_v10 = rightIndex;
-						kerning = _v8;
-						leftIndex = _v9;
-						rightIndex = _v10;
-						continue getKerningValue;
-					} else {
-						var rightClass = A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass, _p1._0._0.classDef2, rightIndex);
-						var leftClass = A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyphClass, _p1._0._0.classDef1, leftIndex);
-						return A2(
-							_elm_lang$core$Maybe$andThen,
-							_Skinney$elm_array_exploration$Array_Hamt$get(rightClass),
-							A2(_Skinney$elm_array_exploration$Array_Hamt$get, leftClass, _p1._0._0.classRecords));
-					}
-				}
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$findLigature = F2(
-	function (ligatures, text) {
-		findLigature:
-		while (true) {
-			var _p3 = ligatures;
-			if (_p3.ctor === '::') {
-				var _p4 = _p3._0;
-				var ligatureSize = _elm_lang$core$List$length(_p4.sub);
-				var takeFromText = A2(_elm_lang$core$List$take, ligatureSize, text);
-				if (_elm_lang$core$Native_Utils.eq(
-					A2(
-						_elm_lang$core$List$map,
-						function (_) {
-							return _.index;
-						},
-						takeFromText),
-					_p4.sub)) {
-					return _elm_lang$core$Maybe$Just(_p4);
-				} else {
-					var _v12 = _p3._1,
-						_v13 = text;
-					ligatures = _v12;
-					text = _v13;
-					continue findLigature;
-				}
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$ClassifiedGlyph = F2(
-	function (a, b) {
-		return {index: a, $class: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$Context = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return function (m) {
-													return {font: a, size: b, lineHeight: c, width: d, kerning: e, x: f, y: g, cache: h, glyphs: i, xAtLastWordBreak: j, glyphsSinceLastWordBreak: k, nextIndices: l, prevIndices: m};
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var _w0rm$rendering_text_with_webgl$Font_Text$Style = F6(
-	function (a, b, c, d, e, f) {
-		return {font: a, fontSize: b, lineHeight: c, width: d, features: e, cache: f};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$GlyphInfo = F2(
-	function (a, b) {
-		return {mesh: a, transform: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$Kern = {ctor: 'Kern'};
-var _w0rm$rendering_text_with_webgl$Font_Text$contextFromStyle = F2(
-	function (style, glyphIndices) {
-		return {
-			font: style.font,
-			size: style.fontSize / style.font.unitsPerEm,
-			kerning: A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Kern, style.features),
-			lineHeight: style.lineHeight * style.font.unitsPerEm,
-			width: (style.width / style.fontSize) * style.font.unitsPerEm,
-			x: 0,
-			y: 0 - style.font.ascender,
-			cache: style.cache,
-			glyphs: {ctor: '[]'},
-			xAtLastWordBreak: 0,
-			glyphsSinceLastWordBreak: 0,
-			nextIndices: glyphIndices,
-			prevIndices: {ctor: '[]'}
-		};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$Liga = {ctor: 'Liga'};
-var _w0rm$rendering_text_with_webgl$Font_Text$Other = {ctor: 'Other'};
-var _w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp = F3(
-	function (font, text, result) {
-		replaceLigaturesHelp:
-		while (true) {
-			var _p5 = text;
-			if (_p5.ctor === '[]') {
-				return _elm_lang$core$List$reverse(result);
-			} else {
-				var _p6 = A2(_w0rm$rendering_text_with_webgl$Font_Text$findLigature, font.ligatures, text);
-				if (_p6.ctor === 'Just') {
-					var _p7 = _p6._0;
-					var _v16 = font,
-						_v17 = A2(
-						_elm_lang$core$List$drop,
-						_elm_lang$core$List$length(_p7.sub),
-						text),
-						_v18 = {
-						ctor: '::',
-						_0: {index: _p7.by, $class: _w0rm$rendering_text_with_webgl$Font_Text$Other},
-						_1: result
-					};
-					font = _v16;
-					text = _v17;
-					result = _v18;
-					continue replaceLigaturesHelp;
-				} else {
-					var _v19 = font,
-						_v20 = _p5._1,
-						_v21 = {ctor: '::', _0: _p5._0, _1: result};
-					font = _v19;
-					text = _v20;
-					result = _v21;
-					continue replaceLigaturesHelp;
-				}
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$Newline = {ctor: 'Newline'};
-var _w0rm$rendering_text_with_webgl$Font_Text$Space = {ctor: 'Space'};
-var _w0rm$rendering_text_with_webgl$Font_Text$classify = function ($char) {
-	var _p8 = $char;
-	switch (_p8.valueOf()) {
-		case ' ':
-			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
-		case '\t':
-			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
-		case '\n':
-			return _w0rm$rendering_text_with_webgl$Font_Text$Newline;
-		default:
-			return _w0rm$rendering_text_with_webgl$Font_Text$Other;
-	}
-};
-var _w0rm$rendering_text_with_webgl$Font_Text$stringToGlyphIndices = F2(
-	function (font, text) {
-		return A2(
-			_elm_lang$core$List$filterMap,
-			function ($char) {
-				return A2(
-					_elm_lang$core$Maybe$map,
-					function (index) {
-						return {
-							index: index,
-							$class: _w0rm$rendering_text_with_webgl$Font_Text$classify($char)
-						};
-					},
-					A2(
-						_elm_lang$core$Dict$get,
-						_elm_lang$core$Char$toCode($char),
-						font.cmap));
-			},
-			_elm_lang$core$String$toList(text));
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$textHelp = F2(
-	function (meshFn, ctx) {
-		textHelp:
-		while (true) {
-			var _p9 = ctx.nextIndices;
-			if (_p9.ctor === '[]') {
-				return ctx;
-			} else {
-				var _p16 = _p9._1;
-				var _p15 = _p9._0;
-				var cached = A2(_elm_lang$core$Dict$get, _p15.index, ctx.cache);
-				var glyph = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-					A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p15.index, ctx.font.glyphs));
-				var mesh = function () {
-					var _p10 = cached;
-					if (_p10.ctor === 'Just') {
-						return _p10._0;
-					} else {
-						return meshFn(
-							A2(
-								_elm_lang$core$List$map,
-								_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
-								A2(
-									_elm_lang$core$Result$withDefault,
-									{ctor: '[]'},
-									A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
-					}
-				}();
-				var cache = function () {
-					var _p11 = cached;
-					if (_p11.ctor === 'Nothing') {
-						return A3(_elm_lang$core$Dict$insert, _p15.index, mesh, ctx.cache);
-					} else {
-						return ctx.cache;
-					}
-				}();
-				var xAdvance = ctx.kerning ? A2(
-					_elm_lang$core$Maybe$withDefault,
-					0,
-					A2(
-						_elm_lang$core$Maybe$andThen,
-						A2(_w0rm$rendering_text_with_webgl$Font_Text$getKerningValue, ctx.font.kerning, _p15.index),
-						A2(
-							_elm_lang$core$Maybe$map,
-							function (_) {
-								return _.index;
-							},
-							_elm_lang$core$List$head(_p16)))) : 0;
-				var newX = (ctx.x + glyph.advanceWidth) + xAdvance;
-				var _p12 = ((_elm_lang$core$Native_Utils.cmp(newX, ctx.width) > 0) && ((!_elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space)) && (!_elm_lang$core$Native_Utils.eq(ctx.xAtLastWordBreak, 0)))) ? {ctor: '_Tuple3', _0: 0, _1: ctx.y - ctx.lineHeight, _2: true} : {ctor: '_Tuple3', _0: newX, _1: ctx.y, _2: false};
-				var x = _p12._0;
-				var y = _p12._1;
-				var dropWord = _p12._2;
-				var _p13 = _elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space) ? {ctor: '_Tuple2', _0: x, _1: 0} : (dropWord ? {ctor: '_Tuple2', _0: 0, _1: 0} : {ctor: '_Tuple2', _0: ctx.xAtLastWordBreak, _1: ctx.glyphsSinceLastWordBreak + 1});
-				var xAtLastWordBreak = _p13._0;
-				var glyphsSinceLastWordBreak = _p13._1;
-				var _p14 = function () {
-					if (dropWord) {
-						var undoGlyphs = A2(_elm_lang$core$List$take, ctx.glyphsSinceLastWordBreak, ctx.prevIndices);
-						return {
-							ctor: '_Tuple3',
-							_0: A3(
-								_elm_lang$core$List$foldl,
-								F2(
-									function (x, y) {
-										return {ctor: '::', _0: x, _1: y};
-									}),
-								ctx.nextIndices,
-								undoGlyphs),
-							_1: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.prevIndices),
-							_2: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.glyphs)
-						};
-					} else {
-						return {
-							ctor: '_Tuple3',
-							_0: _p16,
-							_1: {ctor: '::', _0: _p15, _1: ctx.prevIndices},
-							_2: {
-								ctor: '::',
-								_0: {
-									mesh: mesh,
-									transform: A2(
-										_elm_community$linear_algebra$Math_Matrix4$mul,
-										A3(_elm_community$linear_algebra$Math_Matrix4$makeScale3, ctx.size, ctx.size, ctx.size),
-										A3(_elm_community$linear_algebra$Math_Matrix4$makeTranslate3, ctx.x, ctx.y, 0))
-								},
-								_1: ctx.glyphs
-							}
-						};
-					}
-				}();
-				var nextIndices = _p14._0;
-				var prevIndices = _p14._1;
-				var glyphs = _p14._2;
-				var _v26 = meshFn,
-					_v27 = _elm_lang$core$Native_Utils.update(
-					ctx,
-					{cache: cache, x: x, y: y, glyphs: glyphs, nextIndices: nextIndices, prevIndices: prevIndices, xAtLastWordBreak: xAtLastWordBreak, glyphsSinceLastWordBreak: glyphsSinceLastWordBreak});
-				meshFn = _v26;
-				ctx = _v27;
-				continue textHelp;
-			}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$text = F3(
-	function (meshFn, style, string) {
-		var indicesList = A2(_w0rm$rendering_text_with_webgl$Font_Text$stringToGlyphIndices, style.font, string);
-		var indicesArray = A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Liga, style.features) ? A3(
-			_w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp,
-			style.font,
-			indicesList,
-			{ctor: '[]'}) : indicesList;
-		var result = A2(
-			_w0rm$rendering_text_with_webgl$Font_Text$textHelp,
-			meshFn,
-			A2(_w0rm$rendering_text_with_webgl$Font_Text$contextFromStyle, style, indicesArray));
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$List$reverse(result.glyphs),
-			_1: result.cache
-		};
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$text2d = _w0rm$rendering_text_with_webgl$Font_Text$text(_w0rm$rendering_text_with_webgl$Font_Mesh$mesh2d);
-var _w0rm$rendering_text_with_webgl$Font_Text$text3d = _w0rm$rendering_text_with_webgl$Font_Text$text(_w0rm$rendering_text_with_webgl$Font_Mesh$mesh3d);
 
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$fragment3d = {'src': '\n        precision mediump float;\n        varying vec3 vcolor;\n        void main () {\n            gl_FragColor = vec4(vcolor, 1.0);\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$vertex3d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        attribute vec3 normal;\n        uniform float elapsed;\n        uniform int index;\n        uniform int start;\n        uniform vec3 color;\n        uniform mat4 camera;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        varying vec3 vcolor;\n\n        float ambientLight = 0.6;\n        float directionalLight = 0.4;\n        vec3 directionalVector = normalize(vec3(0.3, 0.1, 1.0));\n        void main () {\n            vec4 newPosition = transform * vec4(position, 1.0);\n            float n = 5.0;\n            float k = (elapsed / 1000.0 * n - float(index - start)) / n;\n            float clampedK = max(min(k, 1.0), -1.0);\n            float distance = 2000.0 * (0.5 - 0.5 * sin(3.145926 / 2.0 * clampedK));\n            if (index > start) {\n                newPosition.z += distance;\n            }\n            gl_Position = projection * camera * newPosition;\n            vec4 transformedNormal = normalize(transform * vec4(normal, 0.0));\n            float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);\n            float vlighting = ambientLight + directional * directionalLight;\n            if (index > start) {\n                vcolor = vlighting * vec3(0.5, 0.5, 0.5);\n            } else {\n                vcolor = vlighting * color;\n            }\n        }\n    '};
@@ -28602,6 +28677,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$subscriptions = function (_p7) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Zoom$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Custom$ivernifont = function (options) {
+	return _w0rm$elm_slice_show$SliceShow_Content$item(
+		_w0rm$rendering_text_with_webgl$Custom_Ivernifont$view(options));
+};
 var _w0rm$rendering_text_with_webgl$Custom$outline = function (options) {
 	return _w0rm$elm_slice_show$SliceShow_Content$item(
 		_w0rm$rendering_text_with_webgl$Custom_Outline$view(options));
@@ -29555,7 +29634,7 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage = {
 };
 var _w0rm$rendering_text_with_webgl$Slides$iverniFont = {
 	ctor: '::',
-	_0: _w0rm$rendering_text_with_webgl$Formatting$title('Iverni Font'),
+	_0: _w0rm$rendering_text_with_webgl$Formatting$title('Iverni Typeface'),
 	_1: {
 		ctor: '::',
 		_0: _w0rm$rendering_text_with_webgl$Formatting$spacing(20),
@@ -29564,7 +29643,7 @@ var _w0rm$rendering_text_with_webgl$Slides$iverniFont = {
 			_0: _w0rm$rendering_text_with_webgl$Formatting$bullets(
 				{
 					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Designed in OpenType® format'),
+					_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Saved in OpenType® format'),
 					_1: {
 						ctor: '::',
 						_0: _w0rm$rendering_text_with_webgl$Formatting$bullet('Converted to JSON using opentype.js'),
@@ -29579,7 +29658,27 @@ var _w0rm$rendering_text_with_webgl$Slides$iverniFont = {
 						}
 					}
 				}),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_w0rm$rendering_text_with_webgl$Formatting$position,
+					{ctor: '_Tuple2', _0: 850, _1: 15},
+					{
+						ctor: '::',
+						_0: _w0rm$rendering_text_with_webgl$Custom$ivernifont(
+							{
+								features: {ctor: '[]'},
+								fontSize: 115,
+								text: 'ABCDEFGHIJ KLMNOPQR STUVWXYZab cdefghijklmno pqrstuvwxyz 0123456789',
+								lineHeight: 1,
+								width: 430,
+								height: 705,
+								color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5)
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
 		}
 	}
 };
@@ -29826,7 +29925,7 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 			ctor: '::',
 			_0: {
 				ctor: '::',
-				_0: _w0rm$rendering_text_with_webgl$Formatting$shout('Text is User Interface'),
+				_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Text is User Interface>'),
 				_1: {ctor: '[]'}
 			},
 			_1: {

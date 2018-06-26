@@ -120,13 +120,24 @@ fontSrc : String
 
 iverniFont : List Content
 iverniFont =
-    [ title "Iverni Font"
+    [ title "Iverni Typeface"
     , spacing 20
     , bullets
-        [ bullet "Designed in OpenType® format"
+        [ bullet "Saved in OpenType® format"
         , bullet "Converted to JSON using opentype.js"
         , bullet "Decoded into Elm"
         , bullet "Rendered with WebGL"
+        ]
+    , position ( 850, 15 )
+        [ Custom.ivernifont
+            { features = []
+            , fontSize = 115
+            , text = "ABCDEFGHIJ KLMNOPQR STUVWXYZab cdefghijklmno pqrstuvwxyz 0123456789"
+            , lineHeight = 1
+            , width = 430
+            , height = 705
+            , color = vec3 0.5 0.5 0.5
+            }
         ]
     ]
 

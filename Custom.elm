@@ -5,6 +5,7 @@ module Custom
         , Msg
         , Slide
         , cubicglyph
+        , ivernifont
         , metrics
         , outline
         , outlines
@@ -19,6 +20,7 @@ module Custom
         )
 
 import Custom.Cubicglyph as Cubicglyph
+import Custom.Ivernifont as Ivernifont
 import Custom.Metrics as Metrics
 import Custom.Outline as Outline
 import Custom.Outlines as Outlines
@@ -90,6 +92,11 @@ metrics options =
 outline : Outline.Options -> Content
 outline options =
     Content.item (Outline.view options)
+
+
+ivernifont : Ivernifont.Options -> Content
+ivernifont options =
+    Content.item (Ivernifont.view options)
 
 
 outlines : Outlines.Options -> Content
