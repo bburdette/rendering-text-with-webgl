@@ -214,7 +214,7 @@ thankYou =
 slides : List Slide
 slides =
     [ [ padded intro ]
-    , [ shout "<Web Design is 95% Typography>" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
+    , [ shout "<Text is User Interface>" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
     , cssProperties
     , solvedProblem
     , [ padded exploringTheProblem ]
