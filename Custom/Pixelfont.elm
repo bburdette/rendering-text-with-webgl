@@ -113,18 +113,17 @@ view { width, height, maybeTexture, mesh, color, pixelSize } =
         )
 
 
-addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex ) -> List ( Vertex, Vertex, Vertex )
+addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex )
 addLetter { x, y, width, height, textureX, textureY } =
-    (::)
-        ( Vertex (vec2 x -y) (vec2 textureX textureY)
-        , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
-        , Vertex (vec2 (x + width) -y) (vec2 (textureX + width) textureY)
-        )
-        >> (::)
-            ( Vertex (vec2 x -y) (vec2 textureX textureY)
-            , Vertex (vec2 x (-y - height)) (vec2 textureX (textureY + height))
-            , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
-            )
+    [ ( Vertex (vec2 x -y) (vec2 textureX textureY)
+      , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
+      , Vertex (vec2 (x + width) -y) (vec2 (textureX + width) textureY)
+      )
+    , ( Vertex (vec2 x -y) (vec2 textureX textureY)
+      , Vertex (vec2 x (-y - height)) (vec2 textureX (textureY + height))
+      , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
+      )
+    ]
 
 
 
@@ -203,5 +202,5 @@ loadTexture msg =
             , minify = Texture.nearest
             , flipY = False
         }
-        MogeeFont.fontSrc
+        MogeeFont.spriteSrc
         |> Task.attempt msg

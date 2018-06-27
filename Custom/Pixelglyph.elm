@@ -121,7 +121,7 @@ renderBack : Float -> Float -> ( Int, Int ) -> Model -> Svg Msg
 renderBack offsetX offsetY textureSize { width, height, glyph, pixelSize } =
     let
         data =
-            MogeeFont.text (::) (String.fromChar glyph)
+            MogeeFont.text (\l -> [ l ]) (String.fromChar glyph)
                 |> List.head
                 |> Maybe.withDefault { textureX = 0, textureY = 0, width = 0, height = 0, x = 0, y = 0 }
 
@@ -153,7 +153,7 @@ renderBack offsetX offsetY textureSize { width, height, glyph, pixelSize } =
         ]
         [ Svg.image
             [ HtmlAttributes.style crispyEdges
-            , SvgAttributes.xlinkHref MogeeFont.fontSrc
+            , SvgAttributes.xlinkHref MogeeFont.spriteSrc
             , SvgAttributes.width (toString textureWidth)
             , SvgAttributes.height (toString textureHeight)
             , SvgAttributes.x (toString textureLeft)
@@ -194,7 +194,7 @@ renderFront : Float -> Float -> ( Int, Int ) -> Model -> Svg Msg
 renderFront offsetX offsetY textureSize { width, height, glyph, pixelSize } =
     let
         data =
-            MogeeFont.text (::) (String.fromChar glyph)
+            MogeeFont.text (\l -> [ l ]) (String.fromChar glyph)
                 |> List.head
                 |> Maybe.withDefault { textureX = 0, textureY = 0, width = 0, height = 0, x = 0, y = 0 }
 
@@ -310,22 +310,21 @@ renderGlyph offsetX offsetY texture { width, height, mesh, pixelSize } =
         ]
 
 
-addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex ) -> List ( Vertex, Vertex, Vertex )
+addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex )
 addLetter { width, height, textureX, textureY } =
     let
         ( x, y ) =
             ( 0, 0 )
     in
-    (::)
-        ( Vertex (vec2 x -y) (vec2 textureX textureY)
-        , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
-        , Vertex (vec2 (x + width) -y) (vec2 (textureX + width) textureY)
-        )
-        >> (::)
-            ( Vertex (vec2 x -y) (vec2 textureX textureY)
-            , Vertex (vec2 x (-y - height)) (vec2 textureX (textureY + height))
-            , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
-            )
+    [ ( Vertex (vec2 x -y) (vec2 textureX textureY)
+      , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
+      , Vertex (vec2 (x + width) -y) (vec2 (textureX + width) textureY)
+      )
+    , ( Vertex (vec2 x -y) (vec2 textureX textureY)
+      , Vertex (vec2 x (-y - height)) (vec2 textureX (textureY + height))
+      , Vertex (vec2 (x + width) (-y - height)) (vec2 (textureX + width) (textureY + height))
+      )
+    ]
 
 
 
@@ -426,7 +425,7 @@ loadTexture msg =
             , minify = Texture.nearest
             , flipY = False
         }
-        MogeeFont.fontSrc
+        MogeeFont.spriteSrc
         |> Task.attempt msg
 
 

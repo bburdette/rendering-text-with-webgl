@@ -137,11 +137,6 @@ view model =
 renderGlyph : Float -> Float -> Texture -> Model -> Html Msg
 renderGlyph offsetX offsetY texture { elapsed, width, height, text, mesh, pixelSize } =
     let
-        data =
-            MogeeFont.text (::) text
-                |> List.head
-                |> Maybe.withDefault { textureX = 0, textureY = 0, width = 0, height = 0, x = 0, y = 0 }
-
         camera =
             Mat4.makeLookAt
                 (Vec3.vec3 -30 -6 (toFloat -pixelSize / 1.5))
@@ -183,8 +178,8 @@ renderGlyph offsetX offsetY texture { elapsed, width, height, text, mesh, pixelS
         ]
 
 
-addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex ) -> List ( Vertex, Vertex, Vertex )
-addLetter { x, y, width, height, textureX, textureY } letters =
+addLetter : MogeeFont.Letter -> List ( Vertex, Vertex, Vertex )
+addLetter { x, y, width, height, textureX, textureY } =
     List.foldl
         (\dx l ->
             List.foldl
@@ -192,7 +187,7 @@ addLetter { x, y, width, height, textureX, textureY } letters =
                 l
                 (List.range 0 (round height - 1))
         )
-        letters
+        []
         (List.range 0 (round width))
 
 
@@ -333,5 +328,5 @@ loadTexture msg =
             , minify = Texture.nearest
             , flipY = False
         }
-        MogeeFont.fontSrc
+        MogeeFont.spriteSrc
         |> Task.attempt msg

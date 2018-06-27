@@ -15708,7 +15708,7 @@ var _ianmackenzie$elm_triangular_mesh$TriangularMesh$combine = function (meshes)
 	}
 };
 
-var _kuzminadya$mogeefont$FontData$fontSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACAAQAAAADrRVxmAAADeklEQVR4nO2SXWgcVRiGn/my26wh6lZakkBSttWLINhu/CmBhDqtbemVWilaq9TgH4rSFtQ2gtij9aKX4h9UQfdCe9PQJCptaKMZWpqKWhyQxlRMMw2GBDXu5IdksrMznxdJmo0ogtd5Lx/O+Xi+c15LWRrhILrX8773gQAeF0ANTKQBUCPvNT5y4tWfv2zxR7b1Ne90kXOQtLrP5eL9nWZd8uioOFmYsbGiNwIyaHWiBSjPiCZr9uFhIbfR1kLswdhz01u9NEQaRjqjX+VHVFVjFUgAxKQBLGNFQixByvGy2TlVVVVt1+tBxx/b0xCcOHTPS2vO5s83qJiKm81n76K5YGdzuuq4Kx/YRGTpAO1pM4xKS648ePISWcgGUEA8ezZ1/C4AF2WbL9jjRxQyAIrjS/NGrI2X+jTsy9zwJmEG1cOqGqkOxKfbVVUWXpJ1czvI4vOG5zsASyG2rHkWC2KmbumqdIqv153j10+a3AmxC8/IkAMPnKLC/Xg0KQUbTtbn+hPsTqct20idE7q7HtqpEdGmWulHkiaZtZKTs2U0dbvJGz8SscGElakiFxorg1uflcu9IZk/O02DKft8dZMHPVqSUFWc0i4k5kz/1o/5uAA+f4jafHPVH+9o69b+M4CowXe9cvwiFH1WiTs5llrvfTg1dPppJyg6yLXWvdTeO1Zx7ZUdZxjqwjpZjKvWs7LdiZy27+o23SdKWTBmtdqxbajtOeLIbjZXlR1bd4rIhMSNcEg1XnSfUeb+YCF5/Xf168At7puKbH3n7V/AHLvYKD6kyg7qcD3Aj/mX5axL3ejvYS5+rbBqmtQuyXk8deDyBZuguIUobcv9/hT6gs2Vo2yhrN6IpGthNWx4i6/BQTIDTtRa0RFCnPj0jisOqj2qGh1WndEorypgL1qlS001w/T1ri9kUDXhp3X77du/fb46vrs5nN4/IWDV2NbmgKib8pWjJMIvOpkunzw+vELpcS76wuyukV7tetCqMKxJgTBoarBsghysxZ0Ss9awNaik2o6vxolsSu4MHdjQpY634sXIWN3EqodVJ37qKcypJECBVKY+nDeeVVXV4R90/sQ/fcO4GXBLyBODkT9wenE/eXi9pwdKr+R28FuqFPSqKS4ZusdiSaz384+GUSG7SHRQ8yUFUQGkVC4B3LRkxn83aBksg2Xw/8Ff2lQEUVlbcagAAAAASUVORK5CYII=';
+var _kuzminadya$mogeefont$FontData$spriteSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACAAQAAAADrRVxmAAADeklEQVR4nO2SXWgcVRiGn/my26wh6lZakkBSttWLINhu/CmBhDqtbemVWilaq9TgH4rSFtQ2gtij9aKX4h9UQfdCe9PQJCptaKMZWpqKWhyQxlRMMw2GBDXu5IdksrMznxdJmo0ogtd5Lx/O+Xi+c15LWRrhILrX8773gQAeF0ANTKQBUCPvNT5y4tWfv2zxR7b1Ne90kXOQtLrP5eL9nWZd8uioOFmYsbGiNwIyaHWiBSjPiCZr9uFhIbfR1kLswdhz01u9NEQaRjqjX+VHVFVjFUgAxKQBLGNFQixByvGy2TlVVVVt1+tBxx/b0xCcOHTPS2vO5s83qJiKm81n76K5YGdzuuq4Kx/YRGTpAO1pM4xKS648ePISWcgGUEA8ezZ1/C4AF2WbL9jjRxQyAIrjS/NGrI2X+jTsy9zwJmEG1cOqGqkOxKfbVVUWXpJ1czvI4vOG5zsASyG2rHkWC2KmbumqdIqv153j10+a3AmxC8/IkAMPnKLC/Xg0KQUbTtbn+hPsTqct20idE7q7HtqpEdGmWulHkiaZtZKTs2U0dbvJGz8SscGElakiFxorg1uflcu9IZk/O02DKft8dZMHPVqSUFWc0i4k5kz/1o/5uAA+f4jafHPVH+9o69b+M4CowXe9cvwiFH1WiTs5llrvfTg1dPppJyg6yLXWvdTeO1Zx7ZUdZxjqwjpZjKvWs7LdiZy27+o23SdKWTBmtdqxbajtOeLIbjZXlR1bd4rIhMSNcEg1XnSfUeb+YCF5/Xf168At7puKbH3n7V/AHLvYKD6kyg7qcD3Aj/mX5axL3ejvYS5+rbBqmtQuyXk8deDyBZuguIUobcv9/hT6gs2Vo2yhrN6IpGthNWx4i6/BQTIDTtRa0RFCnPj0jisOqj2qGh1WndEorypgL1qlS001w/T1ri9kUDXhp3X77du/fb46vrs5nN4/IWDV2NbmgKib8pWjJMIvOpkunzw+vELpcS76wuyukV7tetCqMKxJgTBoarBsghysxZ0Ss9awNaik2o6vxolsSu4MHdjQpY634sXIWN3EqodVJ37qKcypJECBVKY+nDeeVVXV4R90/sQ/fcO4GXBLyBODkT9wenE/eXi9pwdKr+R28FuqFPSqKS4ZusdiSaz384+GUSG7SHRQ8yUFUQGkVC4B3LRkxn83aBksg2Xw/8Ff2lQEUVlbcagAAAAASUVORK5CYII=';
 var _kuzminadya$mogeefont$FontData$CharInfo = F3(
 	function (a, b, c) {
 		return {x: a, y: b, w: c};
@@ -18573,37 +18573,43 @@ var _kuzminadya$mogeefont$MogeeFont$textMeshHelper = F6(
 						var _p9 = A2(_elm_lang$core$Dict$get, _p11, _kuzminadya$mogeefont$FontData$font);
 						if (_p9.ctor === 'Just') {
 							var _p10 = _p9._0.w;
-							return A2(
-								addLetter,
-								{
-									width: _p10,
-									height: _kuzminadya$mogeefont$MogeeFont$emHeight,
-									textureX: _p9._0.x,
-									textureY: _p9._0.y,
-									x: currentX + A2(_kuzminadya$mogeefont$MogeeFont$letterSpacing, prevChar, _p11),
-									y: currentY
-								},
-								A6(
-									_kuzminadya$mogeefont$MogeeFont$textMeshHelper,
-									addLetter,
-									_elm_lang$core$Maybe$Just(_p11),
-									_p12,
-									(currentX + _p10) + A2(_kuzminadya$mogeefont$MogeeFont$letterSpacing, prevChar, _p11),
-									currentY,
-									list));
-						} else {
 							var _v18 = addLetter,
-								_v19 = prevChar,
+								_v19 = _elm_lang$core$Maybe$Just(_p11),
 								_v20 = _p12,
-								_v21 = currentX,
+								_v21 = (currentX + _p10) + A2(_kuzminadya$mogeefont$MogeeFont$letterSpacing, prevChar, _p11),
 								_v22 = currentY,
-								_v23 = list;
+								_v23 = A2(
+								_elm_lang$core$Basics_ops['++'],
+								addLetter(
+									{
+										width: _p10,
+										height: _kuzminadya$mogeefont$MogeeFont$emHeight,
+										textureX: _p9._0.x,
+										textureY: _p9._0.y,
+										x: currentX + A2(_kuzminadya$mogeefont$MogeeFont$letterSpacing, prevChar, _p11),
+										y: currentY
+									}),
+								list);
 							addLetter = _v18;
 							prevChar = _v19;
 							text = _v20;
 							currentX = _v21;
 							currentY = _v22;
 							list = _v23;
+							continue textMeshHelper;
+						} else {
+							var _v24 = addLetter,
+								_v25 = prevChar,
+								_v26 = _p12,
+								_v27 = currentX,
+								_v28 = currentY,
+								_v29 = list;
+							addLetter = _v24;
+							prevChar = _v25;
+							text = _v26;
+							currentX = _v27;
+							currentY = _v28;
+							list = _v29;
 							continue textMeshHelper;
 						}
 				}
@@ -18612,7 +18618,7 @@ var _kuzminadya$mogeefont$MogeeFont$textMeshHelper = F6(
 			}
 		}
 	});
-var _kuzminadya$mogeefont$MogeeFont$fontSrc = _kuzminadya$mogeefont$FontData$fontSrc;
+var _kuzminadya$mogeefont$MogeeFont$spriteSrc = _kuzminadya$mogeefont$FontData$spriteSrc;
 var _kuzminadya$mogeefont$MogeeFont$text = F2(
 	function (addLetter, string) {
 		var chars = _elm_lang$core$List$reverse(
@@ -22419,7 +22425,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$loadTexture = function (ms
 			_elm_lang$core$Native_Utils.update(
 				_elm_community$webgl$WebGL_Texture$defaultOptions,
 				{magnify: _elm_community$webgl$WebGL_Texture$nearest, minify: _elm_community$webgl$WebGL_Texture$nearest, flipY: false}),
-			_kuzminadya$mogeefont$MogeeFont$fontSrc));
+			_kuzminadya$mogeefont$MogeeFont$spriteSrc));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedFragmentShader = {'src': '\n        precision mediump float;\n        varying vec3 vcolor;\n        void main () {\n            gl_FragColor = vec4(vcolor, 1.0);\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$texturedVertexShader = {'src': '\n        precision mediump float;\n        attribute vec3 color;\n        attribute vec3 position;\n        attribute vec2 texturePosition;\n        uniform sampler2D texture;\n        uniform vec2 textureSize;\n        uniform mat4 projection;\n        uniform mat4 camera;\n        uniform mat4 transform;\n        uniform float depth;\n        varying vec3 vcolor;\n        void main () {\n            vec4 textureColor = texture2D(texture, texturePosition / textureSize);\n            if (dot(textureColor, textureColor) == 4.0) {\n                vec3 pos = vec3(position.xy, position.z + depth);\n                gl_Position = projection * camera * transform * vec4(pos, 1.0);\n                vcolor = color * 0.5;\n            } else {\n                gl_Position = projection * camera * transform * vec4(position, 1.0);\n                vcolor = color;\n            }\n        }\n    '};
@@ -22440,17 +22446,6 @@ var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$renderGlyph = F4(
 				_elm_lang$core$Basics$toFloat(0 - _p1.pixelSize) / 1.5),
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -10, -6, 0),
 			_elm_community$linear_algebra$Math_Vector3$j);
-		var data = A2(
-			_elm_lang$core$Maybe$withDefault,
-			{textureX: 0, textureY: 0, width: 0, height: 0, x: 0, y: 0},
-			_elm_lang$core$List$head(
-				A2(
-					_kuzminadya$mogeefont$MogeeFont$text,
-					F2(
-						function (x, y) {
-							return {ctor: '::', _0: x, _1: y};
-						}),
-					_p1.text)));
 		return A2(
 			_elm_community$webgl$WebGL$toHtml,
 			{
@@ -22667,35 +22662,34 @@ var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addPixel = F4(
 								A7(_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$face, lfb, rfb, rft, lft, texturePosition, grey, _p7))))));
 		};
 	});
-var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter = F2(
-	function (_p8, letters) {
-		var _p9 = _p8;
-		return A3(
-			_elm_lang$core$List$foldl,
-			F2(
-				function (dx, l) {
-					return A3(
-						_elm_lang$core$List$foldl,
-						function (dy) {
-							return A4(
-								_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addPixel,
-								_p9.x + _elm_lang$core$Basics$toFloat(dx),
-								_p9.y + _elm_lang$core$Basics$toFloat(dy),
-								_p9.textureX + _elm_lang$core$Basics$toFloat(dx),
-								_p9.textureY + _elm_lang$core$Basics$toFloat(dy));
-						},
-						l,
-						A2(
-							_elm_lang$core$List$range,
-							0,
-							_elm_lang$core$Basics$round(_p9.height) - 1));
-				}),
-			letters,
-			A2(
-				_elm_lang$core$List$range,
-				0,
-				_elm_lang$core$Basics$round(_p9.width)));
-	});
+var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addLetter = function (_p8) {
+	var _p9 = _p8;
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (dx, l) {
+				return A3(
+					_elm_lang$core$List$foldl,
+					function (dy) {
+						return A4(
+							_w0rm$rendering_text_with_webgl$Custom_Cubicglyph$addPixel,
+							_p9.x + _elm_lang$core$Basics$toFloat(dx),
+							_p9.y + _elm_lang$core$Basics$toFloat(dy),
+							_p9.textureX + _elm_lang$core$Basics$toFloat(dx),
+							_p9.textureY + _elm_lang$core$Basics$toFloat(dy));
+					},
+					l,
+					A2(
+						_elm_lang$core$List$range,
+						0,
+						_elm_lang$core$Basics$round(_p9.height) - 1));
+			}),
+		{ctor: '[]'},
+		A2(
+			_elm_lang$core$List$range,
+			0,
+			_elm_lang$core$Basics$round(_p9.width)));
+};
 var _w0rm$rendering_text_with_webgl$Custom_Cubicglyph$initial = function (options) {
 	return {
 		elapsed: 0,
@@ -27086,7 +27080,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$loadTexture = function (msg
 			_elm_lang$core$Native_Utils.update(
 				_elm_community$webgl$WebGL_Texture$defaultOptions,
 				{magnify: _elm_community$webgl$WebGL_Texture$nearest, minify: _elm_community$webgl$WebGL_Texture$nearest, flipY: false}),
-			_kuzminadya$mogeefont$MogeeFont$fontSrc));
+			_kuzminadya$mogeefont$MogeeFont$spriteSrc));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$texturedFragmentShader = {'src': '\n        precision mediump float;\n        uniform sampler2D texture;\n        uniform vec3 color;\n        uniform vec2 textureSize;\n        varying vec2 texturePos;\n        varying vec2 pixelPos;\n        void main () {\n            vec4 textureColor = texture2D(texture, texturePos / textureSize);\n            gl_FragColor = vec4(color, 1.0);\n\n            // Don\'t draw grid gaps:\n            float gapSize = 0.07;\n            float xDist = pixelPos.x - float(int(pixelPos.x));\n            float yDist = pixelPos.y - float(int(pixelPos.y));\n            if (abs(xDist) < gapSize || abs(yDist) < gapSize ) discard;\n\n            // Don\'t draw transparent pixels:\n            if (dot(textureColor, textureColor) == 4.0) discard;\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$texturedVertexShader = {'src': '\n        precision mediump float;\n        attribute vec2 position;\n        attribute vec2 texPosition;\n        uniform mat4 projection;\n        uniform int pixelSize;\n        varying vec2 texturePos;\n        varying vec2 pixelPos;\n        void main () {\n            gl_Position = projection * vec4(position * float(pixelSize), 0.0, 1.0);\n            texturePos = texPosition;\n            pixelPos = position;\n        }\n    '};
@@ -27186,54 +27180,48 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex = F2(
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$addLetter = function (_p6) {
 	var _p7 = _p6;
-	var _p14 = _p7.y;
-	var _p13 = _p7.x;
-	var _p12 = _p7.width;
-	var _p11 = _p7.textureY;
-	var _p10 = _p7.textureX;
-	var _p9 = _p7.height;
-	return function (_p8) {
-		return A2(
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			{
+	var _p13 = _p7.y;
+	var _p12 = _p7.x;
+	var _p11 = _p7.width;
+	var _p10 = _p7.textureY;
+	var _p9 = _p7.textureX;
+	var _p8 = _p7.height;
+	return {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple3',
+			_0: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12, 0 - _p13),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9, _p10)),
+			_1: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12 + _p11, (0 - _p13) - _p8),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9 + _p11, _p10 + _p8)),
+			_2: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12 + _p11, 0 - _p13),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9 + _p11, _p10))
+		},
+		_1: {
+			ctor: '::',
+			_0: {
 				ctor: '_Tuple3',
 				_0: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13, 0 - _p14),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10, _p11)),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12, 0 - _p13),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9, _p10)),
 				_1: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13, (0 - _p14) - _p9),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10, _p11 + _p9)),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12, (0 - _p13) - _p8),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9, _p10 + _p8)),
 				_2: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13 + _p12, (0 - _p14) - _p9),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10 + _p12, _p11 + _p9))
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p12 + _p11, (0 - _p13) - _p8),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p9 + _p11, _p10 + _p8))
 			},
-			A2(
-				F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					}),
-				{
-					ctor: '_Tuple3',
-					_0: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13, 0 - _p14),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10, _p11)),
-					_1: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13 + _p12, (0 - _p14) - _p9),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10 + _p12, _p11 + _p9)),
-					_2: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p13 + _p12, 0 - _p14),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p10 + _p12, _p11))
-				},
-				_p8));
+			_1: {ctor: '[]'}
+		}
 	};
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$initial = function (options) {
@@ -27261,13 +27249,13 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$LoadTexture = function (a) 
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$update = F2(
 	function (action, model) {
-		var _p15 = action;
-		if (_p15.ctor === 'Animate') {
+		var _p14 = action;
+		if (_p14.ctor === 'Animate') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{elapsed: model.elapsed + _p15._0}),
+					{elapsed: model.elapsed + _p14._0}),
 				_1: _elm_lang$core$Native_Utils.eq(model.elapsed, 0) ? _w0rm$rendering_text_with_webgl$Custom_Pixelfont$loadTexture(_w0rm$rendering_text_with_webgl$Custom_Pixelfont$LoadTexture) : _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -27276,7 +27264,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$update = F2(
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						maybeTexture: _elm_lang$core$Result$toMaybe(_p15._0)
+						maybeTexture: _elm_lang$core$Result$toMaybe(_p14._0)
 					}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
@@ -27285,7 +27273,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$update = F2(
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$subscriptions = function (_p16) {
+var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$subscriptions = function (_p15) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Pixelfont$Animate);
 };
 
@@ -27331,7 +27319,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$loadTexture = function (ms
 			_elm_lang$core$Native_Utils.update(
 				_elm_community$webgl$WebGL_Texture$defaultOptions,
 				{magnify: _elm_community$webgl$WebGL_Texture$nearest, minify: _elm_community$webgl$WebGL_Texture$nearest, flipY: false}),
-			_kuzminadya$mogeefont$MogeeFont$fontSrc));
+			_kuzminadya$mogeefont$MogeeFont$spriteSrc));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$label = F2(
 	function (_p0, str) {
@@ -27460,10 +27448,13 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderFront = F4(
 			_elm_lang$core$List$head(
 				A2(
 					_kuzminadya$mogeefont$MogeeFont$text,
-					F2(
-						function (x, y) {
-							return {ctor: '::', _0: x, _1: y};
-						}),
+					function (l) {
+						return {
+							ctor: '::',
+							_0: l,
+							_1: {ctor: '[]'}
+						};
+					},
 					_elm_lang$core$String$fromChar(_p8.glyph))));
 		var _p11 = {
 			ctor: '_Tuple2',
@@ -27775,10 +27766,13 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderBack = F4(
 			_elm_lang$core$List$head(
 				A2(
 					_kuzminadya$mogeefont$MogeeFont$text,
-					F2(
-						function (x, y) {
-							return {ctor: '::', _0: x, _1: y};
-						}),
+					function (l) {
+						return {
+							ctor: '::',
+							_0: l,
+							_1: {ctor: '[]'}
+						};
+					},
 					_elm_lang$core$String$fromChar(_p16.glyph))));
 		var _p19 = {
 			ctor: '_Tuple2',
@@ -27830,7 +27824,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$renderBack = F4(
 						_0: _elm_lang$html$Html_Attributes$style(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$crispyEdges),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$xlinkHref(_kuzminadya$mogeefont$MogeeFont$fontSrc),
+							_0: _elm_lang$svg$Svg_Attributes$xlinkHref(_kuzminadya$mogeefont$MogeeFont$spriteSrc),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$width(
@@ -28018,55 +28012,49 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex = F2(
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$addLetter = function (_p26) {
 	var _p27 = _p26;
-	var _p33 = _p27.width;
-	var _p32 = _p27.textureY;
-	var _p31 = _p27.textureX;
-	var _p30 = _p27.height;
+	var _p32 = _p27.width;
+	var _p31 = _p27.textureY;
+	var _p30 = _p27.textureX;
+	var _p29 = _p27.height;
 	var _p28 = {ctor: '_Tuple2', _0: 0, _1: 0};
 	var x = _p28._0;
 	var y = _p28._1;
-	return function (_p29) {
-		return A2(
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			{
+	return {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple3',
+			_0: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, 0 - y),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30, _p31)),
+			_1: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p32, (0 - y) - _p29),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30 + _p32, _p31 + _p29)),
+			_2: A2(
+				_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p32, 0 - y),
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30 + _p32, _p31))
+		},
+		_1: {
+			ctor: '::',
+			_0: {
 				ctor: '_Tuple3',
 				_0: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
 					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, 0 - y),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32)),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30, _p31)),
 				_1: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, (0 - y) - _p30),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32 + _p30)),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, (0 - y) - _p29),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30, _p31 + _p29)),
 				_2: A2(
 					_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, (0 - y) - _p30),
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32 + _p30))
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p32, (0 - y) - _p29),
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p30 + _p32, _p31 + _p29))
 			},
-			A2(
-				F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					}),
-				{
-					ctor: '_Tuple3',
-					_0: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x, 0 - y),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31, _p32)),
-					_1: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, (0 - y) - _p30),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32 + _p30)),
-					_2: A2(
-						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Vertex,
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, x + _p33, 0 - y),
-						A2(_elm_community$linear_algebra$Math_Vector2$vec2, _p31 + _p33, _p32))
-				},
-				_p29));
+			_1: {ctor: '[]'}
+		}
 	};
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$initial = function (options) {
@@ -28101,30 +28089,30 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$LoadTexture = function (a)
 };
 var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update = F2(
 	function (action, model) {
-		var _p34 = action;
-		switch (_p34.ctor) {
+		var _p33 = action;
+		switch (_p33.ctor) {
 			case 'Animate':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{elapsed: model.elapsed + _p34._0}),
+						{elapsed: model.elapsed + _p33._0}),
 					_1: _elm_lang$core$Native_Utils.eq(model.elapsed, 0) ? _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$loadTexture(_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$LoadTexture) : _elm_lang$core$Platform_Cmd$none
 				};
 			case 'KeyPress':
-				var _p35 = _p34._0;
+				var _p34 = _p33._0;
 				var mesh = _elm_community$webgl$WebGL$triangles(
 					A2(
 						_kuzminadya$mogeefont$MogeeFont$text,
 						_w0rm$rendering_text_with_webgl$Custom_Pixelglyph$addLetter,
 						_elm_lang$core$String$fromChar(
-							_elm_lang$core$Char$fromCode(_p35))));
+							_elm_lang$core$Char$fromCode(_p34))));
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							glyph: _elm_lang$core$Char$fromCode(_p35),
+							glyph: _elm_lang$core$Char$fromCode(_p34),
 							mesh: mesh
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
@@ -28135,7 +28123,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							maybeTexture: _elm_lang$core$Result$toMaybe(_p34._0)
+							maybeTexture: _elm_lang$core$Result$toMaybe(_p33._0)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -28144,7 +28132,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$update = F2(
 var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions = function (_p36) {
+var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$subscriptions = function (_p35) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
@@ -29690,7 +29678,7 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFont = {
 		_0: _w0rm$rendering_text_with_webgl$Formatting$spacing(20),
 		_1: {
 			ctor: '::',
-			_0: A2(_w0rm$rendering_text_with_webgl$Formatting$code, 'elm', '-- Prints the text\ntext :\n  (Letter -> List a -> List a) -- print a glyph\n  -> String                    -- text to print\n  -> List a                    -- printed result\n\n\n-- Base64 data: URI\nfontSrc : String\n'),
+			_0: A2(_w0rm$rendering_text_with_webgl$Formatting$code, 'elm', '-- Prints the text\ntext :\n  (Letter -> List a) -- print a glyph\n  -> String          -- text to print\n  -> List a          -- printed result\n\n\n-- Base64 data: URI\nspriteSrc : String\n'),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -29713,20 +29701,20 @@ var _w0rm$rendering_text_with_webgl$Slides$mogeeFont = {
 		}
 	}
 };
-var _w0rm$rendering_text_with_webgl$Slides$fontAsAProgram = {
+var _w0rm$rendering_text_with_webgl$Slides$fontAsCode = {
 	ctor: '::',
 	_0: A2(
 		_w0rm$rendering_text_with_webgl$Formatting$position,
-		{ctor: '_Tuple2', _0: 100, _1: 110},
+		{ctor: '_Tuple2', _0: 105, _1: 345},
 		{
 			ctor: '::',
 			_0: _w0rm$rendering_text_with_webgl$Custom$pixelfont(
 				{
-					text: 'Font as\na Program',
+					text: 'Font as Code',
 					color: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
 					pixelSize: 20,
-					width: 1180,
-					height: 610
+					width: 1100,
+					height: 200
 				}),
 			_1: {ctor: '[]'}
 		}),
@@ -29952,7 +29940,7 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 								ctor: '::',
 								_0: {
 									ctor: '::',
-									_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$fontAsAProgram),
+									_0: _w0rm$rendering_text_with_webgl$Formatting$dark(_w0rm$rendering_text_with_webgl$Slides$fontAsCode),
 									_1: {ctor: '[]'}
 								},
 								_1: {

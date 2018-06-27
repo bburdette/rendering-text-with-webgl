@@ -78,15 +78,15 @@ exploringTheProblem =
     ]
 
 
-fontAsAProgram : List Content
-fontAsAProgram =
-    [ position ( 100, 110 )
+fontAsCode : List Content
+fontAsCode =
+    [ position ( 105, 345 )
         [ Custom.pixelfont
-            { text = "Font as\na Program"
+            { text = "Font as Code"
             , color = vec3 1 1 1
             , pixelSize = 20
-            , width = 1180
-            , height = 610
+            , width = 1100
+            , height = 200
             }
         ]
     ]
@@ -98,13 +98,13 @@ mogeeFont =
     , spacing 20
     , code "elm" """-- Prints the text
 text :
-  (Letter -> List a -> List a) -- print a glyph
-  -> String                    -- text to print
-  -> List a                    -- printed result
+  (Letter -> List a) -- print a glyph
+  -> String          -- text to print
+  -> List a          -- printed result
 
 
 -- Base64 data: URI
-fontSrc : String
+spriteSrc : String
 """
     , position ( 920, 20 )
         [ Custom.pixelfont
@@ -230,7 +230,7 @@ slides =
     , solvedProblem
     , [ padded exploringTheProblem ]
     , [ shout "<Nadya Kuzmina>" ]
-    , [ dark fontAsAProgram ]
+    , [ dark fontAsCode ]
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
     , [ dark mogeeFontUsage3d ]
