@@ -25540,14 +25540,152 @@ var _w0rm$rendering_text_with_webgl$Font_Text$getKerningValue = F3(
 			}
 		}
 	});
+var _w0rm$rendering_text_with_webgl$Font_Text$textHelp = F2(
+	function (meshFn, ctx) {
+		textHelp:
+		while (true) {
+			var _p3 = ctx.nextIndices;
+			if (_p3.ctor === '[]') {
+				return ctx;
+			} else {
+				var _p8 = _p3._1;
+				var _p7 = _p3._0;
+				var cached = A2(_elm_lang$core$Dict$get, _p7.index, ctx.cache);
+				var glyph = A2(
+					_elm_lang$core$Maybe$withDefault,
+					_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+					A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p7.index, ctx.font.glyphs));
+				var mesh = function () {
+					var _p4 = cached;
+					if (_p4.ctor === 'Just') {
+						return _p4._0;
+					} else {
+						return meshFn(
+							A2(
+								_elm_lang$core$List$map,
+								_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
+								A2(
+									_elm_lang$core$Result$withDefault,
+									{ctor: '[]'},
+									A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+					}
+				}();
+				var cache = function () {
+					var _p5 = cached;
+					if (_p5.ctor === 'Nothing') {
+						return A3(_elm_lang$core$Dict$insert, _p7.index, mesh, ctx.cache);
+					} else {
+						return ctx.cache;
+					}
+				}();
+				var xAdvance = ctx.kerning ? A2(
+					_elm_lang$core$Maybe$withDefault,
+					0,
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						A2(_w0rm$rendering_text_with_webgl$Font_Text$getKerningValue, ctx.font.kerning, _p7.index),
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (_) {
+								return _.index;
+							},
+							_elm_lang$core$List$head(_p8)))) : 0;
+				var newX = (ctx.x + glyph.advanceWidth) + xAdvance;
+				var _p6 = _p7.$class;
+				switch (_p6.ctor) {
+					case 'Space':
+						var _v15 = meshFn,
+							_v16 = _elm_lang$core$Native_Utils.update(
+							ctx,
+							{
+								cache: cache,
+								x: newX,
+								nextIndices: _p8,
+								prevIndices: {ctor: '[]'},
+								xAtLastWordBreak: newX
+							});
+						meshFn = _v15;
+						ctx = _v16;
+						continue textHelp;
+					case 'Newline':
+						var _v17 = meshFn,
+							_v18 = _elm_lang$core$Native_Utils.update(
+							ctx,
+							{
+								cache: cache,
+								x: 0,
+								y: ctx.y - ctx.lineHeight,
+								nextIndices: _p8,
+								prevIndices: {ctor: '[]'},
+								xAtLastWordBreak: 0
+							});
+						meshFn = _v17;
+						ctx = _v18;
+						continue textHelp;
+					default:
+						if ((_elm_lang$core$Native_Utils.cmp(newX, ctx.width) > 0) && (!_elm_lang$core$Native_Utils.eq(ctx.xAtLastWordBreak, 0))) {
+							var _v19 = meshFn,
+								_v20 = _elm_lang$core$Native_Utils.update(
+								ctx,
+								{
+									cache: cache,
+									x: 0,
+									y: ctx.y - ctx.lineHeight,
+									glyphs: A2(
+										_elm_lang$core$List$drop,
+										_elm_lang$core$List$length(ctx.prevIndices),
+										ctx.glyphs),
+									nextIndices: A3(
+										_elm_lang$core$List$foldl,
+										F2(
+											function (x, y) {
+												return {ctor: '::', _0: x, _1: y};
+											}),
+										ctx.nextIndices,
+										ctx.prevIndices),
+									prevIndices: {ctor: '[]'},
+									xAtLastWordBreak: 0
+								});
+							meshFn = _v19;
+							ctx = _v20;
+							continue textHelp;
+						} else {
+							var _v21 = meshFn,
+								_v22 = _elm_lang$core$Native_Utils.update(
+								ctx,
+								{
+									cache: cache,
+									x: newX,
+									glyphs: {
+										ctor: '::',
+										_0: {
+											mesh: mesh,
+											transform: A2(
+												_elm_community$linear_algebra$Math_Matrix4$mul,
+												A3(_elm_community$linear_algebra$Math_Matrix4$makeScale3, ctx.size, ctx.size, ctx.size),
+												A3(_elm_community$linear_algebra$Math_Matrix4$makeTranslate3, ctx.x, ctx.y, 0))
+										},
+										_1: ctx.glyphs
+									},
+									nextIndices: _p8,
+									prevIndices: {ctor: '::', _0: _p7, _1: ctx.prevIndices}
+								});
+							meshFn = _v21;
+							ctx = _v22;
+							continue textHelp;
+						}
+				}
+			}
+		}
+	});
 var _w0rm$rendering_text_with_webgl$Font_Text$findLigature = F2(
 	function (ligatures, text) {
 		findLigature:
 		while (true) {
-			var _p3 = ligatures;
-			if (_p3.ctor === '::') {
-				var _p4 = _p3._0;
-				var ligatureSize = _elm_lang$core$List$length(_p4.sub);
+			var _p9 = ligatures;
+			if (_p9.ctor === '::') {
+				var _p10 = _p9._0;
+				var ligatureSize = _elm_lang$core$List$length(_p10.sub);
 				var takeFromText = A2(_elm_lang$core$List$take, ligatureSize, text);
 				if (_elm_lang$core$Native_Utils.eq(
 					A2(
@@ -25556,13 +25694,13 @@ var _w0rm$rendering_text_with_webgl$Font_Text$findLigature = F2(
 							return _.index;
 						},
 						takeFromText),
-					_p4.sub)) {
-					return _elm_lang$core$Maybe$Just(_p4);
+					_p10.sub)) {
+					return _elm_lang$core$Maybe$Just(_p10);
 				} else {
-					var _v12 = _p3._1,
-						_v13 = text;
-					ligatures = _v12;
-					text = _v13;
+					var _v24 = _p9._1,
+						_v25 = text;
+					ligatures = _v24;
+					text = _v25;
 					continue findLigature;
 				}
 			} else {
@@ -25572,7 +25710,7 @@ var _w0rm$rendering_text_with_webgl$Font_Text$findLigature = F2(
 	});
 var _w0rm$rendering_text_with_webgl$Font_Text$ClassifiedGlyph = F2(
 	function (a, b) {
-		return {index: a, $class: b};
+		return {$class: a, index: b};
 	});
 var _w0rm$rendering_text_with_webgl$Font_Text$Context = function (a) {
 	return function (b) {
@@ -25586,9 +25724,7 @@ var _w0rm$rendering_text_with_webgl$Font_Text$Context = function (a) {
 									return function (j) {
 										return function (k) {
 											return function (l) {
-												return function (m) {
-													return {font: a, size: b, lineHeight: c, width: d, kerning: e, x: f, y: g, cache: h, glyphs: i, xAtLastWordBreak: j, glyphsSinceLastWordBreak: k, nextIndices: l, prevIndices: m};
-												};
+												return {font: a, size: b, lineHeight: c, width: d, kerning: e, x: f, y: g, cache: h, glyphs: i, xAtLastWordBreak: j, nextIndices: k, prevIndices: l};
 											};
 										};
 									};
@@ -25623,7 +25759,6 @@ var _w0rm$rendering_text_with_webgl$Font_Text$contextFromStyle = F2(
 			cache: style.cache,
 			glyphs: {ctor: '[]'},
 			xAtLastWordBreak: 0,
-			glyphsSinceLastWordBreak: 0,
 			nextIndices: glyphIndices,
 			prevIndices: {ctor: '[]'}
 		};
@@ -25634,34 +25769,34 @@ var _w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp = F3(
 	function (font, text, result) {
 		replaceLigaturesHelp:
 		while (true) {
-			var _p5 = text;
-			if (_p5.ctor === '[]') {
+			var _p11 = text;
+			if (_p11.ctor === '[]') {
 				return _elm_lang$core$List$reverse(result);
 			} else {
-				var _p6 = A2(_w0rm$rendering_text_with_webgl$Font_Text$findLigature, font.ligatures, text);
-				if (_p6.ctor === 'Just') {
-					var _p7 = _p6._0;
-					var _v16 = font,
-						_v17 = A2(
+				var _p12 = A2(_w0rm$rendering_text_with_webgl$Font_Text$findLigature, font.ligatures, text);
+				if (_p12.ctor === 'Just') {
+					var _p13 = _p12._0;
+					var _v28 = font,
+						_v29 = A2(
 						_elm_lang$core$List$drop,
-						_elm_lang$core$List$length(_p7.sub),
+						_elm_lang$core$List$length(_p13.sub),
 						text),
-						_v18 = {
+						_v30 = {
 						ctor: '::',
-						_0: {index: _p7.by, $class: _w0rm$rendering_text_with_webgl$Font_Text$Other},
+						_0: {index: _p13.by, $class: _w0rm$rendering_text_with_webgl$Font_Text$Other},
 						_1: result
 					};
-					font = _v16;
-					text = _v17;
-					result = _v18;
+					font = _v28;
+					text = _v29;
+					result = _v30;
 					continue replaceLigaturesHelp;
 				} else {
-					var _v19 = font,
-						_v20 = _p5._1,
-						_v21 = {ctor: '::', _0: _p5._0, _1: result};
-					font = _v19;
-					text = _v20;
-					result = _v21;
+					var _v31 = font,
+						_v32 = _p11._1,
+						_v33 = {ctor: '::', _0: _p11._0, _1: result};
+					font = _v31;
+					text = _v32;
+					result = _v33;
 					continue replaceLigaturesHelp;
 				}
 			}
@@ -25670,14 +25805,14 @@ var _w0rm$rendering_text_with_webgl$Font_Text$replaceLigaturesHelp = F3(
 var _w0rm$rendering_text_with_webgl$Font_Text$Newline = {ctor: 'Newline'};
 var _w0rm$rendering_text_with_webgl$Font_Text$Space = {ctor: 'Space'};
 var _w0rm$rendering_text_with_webgl$Font_Text$classify = function ($char) {
-	var _p8 = $char;
-	switch (_p8.valueOf()) {
+	var _p14 = $char;
+	switch (_p14.valueOf()) {
 		case ' ':
 			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
 		case '\t':
 			return _w0rm$rendering_text_with_webgl$Font_Text$Space;
 		case '\n':
-			return _w0rm$rendering_text_with_webgl$Font_Text$Newline;
+			return A2(_elm_lang$core$Debug$log, '', _w0rm$rendering_text_with_webgl$Font_Text$Newline);
 		default:
 			return _w0rm$rendering_text_with_webgl$Font_Text$Other;
 	}
@@ -25685,128 +25820,20 @@ var _w0rm$rendering_text_with_webgl$Font_Text$classify = function ($char) {
 var _w0rm$rendering_text_with_webgl$Font_Text$stringToGlyphIndices = F2(
 	function (font, text) {
 		return A2(
-			_elm_lang$core$List$filterMap,
+			_elm_lang$core$List$map,
 			function ($char) {
 				return A2(
-					_elm_lang$core$Maybe$map,
-					function (index) {
-						return {
-							index: index,
-							$class: _w0rm$rendering_text_with_webgl$Font_Text$classify($char)
-						};
-					},
+					_w0rm$rendering_text_with_webgl$Font_Text$ClassifiedGlyph,
+					_w0rm$rendering_text_with_webgl$Font_Text$classify($char),
 					A2(
-						_elm_lang$core$Dict$get,
-						_elm_lang$core$Char$toCode($char),
-						font.cmap));
+						_elm_lang$core$Maybe$withDefault,
+						0,
+						A2(
+							_elm_lang$core$Dict$get,
+							_elm_lang$core$Char$toCode($char),
+							font.cmap)));
 			},
 			_elm_lang$core$String$toList(text));
-	});
-var _w0rm$rendering_text_with_webgl$Font_Text$textHelp = F2(
-	function (meshFn, ctx) {
-		textHelp:
-		while (true) {
-			var _p9 = ctx.nextIndices;
-			if (_p9.ctor === '[]') {
-				return ctx;
-			} else {
-				var _p16 = _p9._1;
-				var _p15 = _p9._0;
-				var cached = A2(_elm_lang$core$Dict$get, _p15.index, ctx.cache);
-				var glyph = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-					A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p15.index, ctx.font.glyphs));
-				var mesh = function () {
-					var _p10 = cached;
-					if (_p10.ctor === 'Just') {
-						return _p10._0;
-					} else {
-						return meshFn(
-							A2(
-								_elm_lang$core$List$map,
-								_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
-								A2(
-									_elm_lang$core$Result$withDefault,
-									{ctor: '[]'},
-									A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
-					}
-				}();
-				var cache = function () {
-					var _p11 = cached;
-					if (_p11.ctor === 'Nothing') {
-						return A3(_elm_lang$core$Dict$insert, _p15.index, mesh, ctx.cache);
-					} else {
-						return ctx.cache;
-					}
-				}();
-				var xAdvance = ctx.kerning ? A2(
-					_elm_lang$core$Maybe$withDefault,
-					0,
-					A2(
-						_elm_lang$core$Maybe$andThen,
-						A2(_w0rm$rendering_text_with_webgl$Font_Text$getKerningValue, ctx.font.kerning, _p15.index),
-						A2(
-							_elm_lang$core$Maybe$map,
-							function (_) {
-								return _.index;
-							},
-							_elm_lang$core$List$head(_p16)))) : 0;
-				var newX = (ctx.x + glyph.advanceWidth) + xAdvance;
-				var _p12 = ((_elm_lang$core$Native_Utils.cmp(newX, ctx.width) > 0) && ((!_elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space)) && (!_elm_lang$core$Native_Utils.eq(ctx.xAtLastWordBreak, 0)))) ? {ctor: '_Tuple3', _0: 0, _1: ctx.y - ctx.lineHeight, _2: true} : {ctor: '_Tuple3', _0: newX, _1: ctx.y, _2: false};
-				var x = _p12._0;
-				var y = _p12._1;
-				var dropWord = _p12._2;
-				var _p13 = _elm_lang$core$Native_Utils.eq(_p15.$class, _w0rm$rendering_text_with_webgl$Font_Text$Space) ? {ctor: '_Tuple2', _0: x, _1: 0} : (dropWord ? {ctor: '_Tuple2', _0: 0, _1: 0} : {ctor: '_Tuple2', _0: ctx.xAtLastWordBreak, _1: ctx.glyphsSinceLastWordBreak + 1});
-				var xAtLastWordBreak = _p13._0;
-				var glyphsSinceLastWordBreak = _p13._1;
-				var _p14 = function () {
-					if (dropWord) {
-						var undoGlyphs = A2(_elm_lang$core$List$take, ctx.glyphsSinceLastWordBreak, ctx.prevIndices);
-						return {
-							ctor: '_Tuple3',
-							_0: A3(
-								_elm_lang$core$List$foldl,
-								F2(
-									function (x, y) {
-										return {ctor: '::', _0: x, _1: y};
-									}),
-								ctx.nextIndices,
-								undoGlyphs),
-							_1: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.prevIndices),
-							_2: A2(_elm_lang$core$List$drop, ctx.glyphsSinceLastWordBreak, ctx.glyphs)
-						};
-					} else {
-						return {
-							ctor: '_Tuple3',
-							_0: _p16,
-							_1: {ctor: '::', _0: _p15, _1: ctx.prevIndices},
-							_2: {
-								ctor: '::',
-								_0: {
-									mesh: mesh,
-									transform: A2(
-										_elm_community$linear_algebra$Math_Matrix4$mul,
-										A3(_elm_community$linear_algebra$Math_Matrix4$makeScale3, ctx.size, ctx.size, ctx.size),
-										A3(_elm_community$linear_algebra$Math_Matrix4$makeTranslate3, ctx.x, ctx.y, 0))
-								},
-								_1: ctx.glyphs
-							}
-						};
-					}
-				}();
-				var nextIndices = _p14._0;
-				var prevIndices = _p14._1;
-				var glyphs = _p14._2;
-				var _v26 = meshFn,
-					_v27 = _elm_lang$core$Native_Utils.update(
-					ctx,
-					{cache: cache, x: x, y: y, glyphs: glyphs, nextIndices: nextIndices, prevIndices: prevIndices, xAtLastWordBreak: xAtLastWordBreak, glyphsSinceLastWordBreak: glyphsSinceLastWordBreak});
-				meshFn = _v26;
-				ctx = _v27;
-				continue textHelp;
-			}
-		}
 	});
 var _w0rm$rendering_text_with_webgl$Font_Text$text = F3(
 	function (meshFn, style, string) {
@@ -26491,6 +26518,53 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$Options = F6(
 	});
 
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$samples = 3;
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$polylineToSvgPath = function (points) {
+	var _p0 = _w0rm$rendering_text_with_webgl$Font_PathCommand$removeDuplicates(points);
+	if (_p0.ctor === '::') {
+		var _p1 = _p0._0;
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			'M ',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(
+					_w0rm$rendering_text_with_webgl$Point2d$xCoordinate(_p1)),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(
+							_w0rm$rendering_text_with_webgl$Point2d$yCoordinate(_p1)),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							A3(
+								_elm_lang$core$List$foldl,
+								F2(
+									function (p, r) {
+										return A2(
+											_elm_lang$core$Basics_ops['++'],
+											r,
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'L',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(
+														_w0rm$rendering_text_with_webgl$Point2d$xCoordinate(p)),
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														',',
+														_elm_lang$core$Basics$toString(
+															_w0rm$rendering_text_with_webgl$Point2d$yCoordinate(p))))));
+									}),
+								'',
+								points),
+							'Z')))));
+	} else {
+		return '';
+	}
+};
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$circle = F4(
 	function (x, y, r, color) {
 		return A2(
@@ -26519,12 +26593,12 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$circle = F4(
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine = F2(
 	function (p1, p2) {
-		var _p0 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
-		var x2 = _p0._0;
-		var y2 = _p0._1;
-		var _p1 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
-		var x1 = _p1._0;
-		var y1 = _p1._1;
+		var _p2 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p2);
+		var x2 = _p2._0;
+		var y2 = _p2._1;
+		var _p3 = _w0rm$rendering_text_with_webgl$Point2d$coordinates(p1);
+		var x1 = _p3._0;
+		var y1 = _p3._1;
 		return A2(
 			_elm_lang$svg$Svg$line,
 			{
@@ -26566,20 +26640,20 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewTriangulatedGlyph = F2(
 			A3(
 				_elm_lang$core$List$foldl,
 				F2(
-					function (_p2, result) {
-						var _p3 = _p2;
-						var _p6 = _p3._2;
-						var _p5 = _p3._1;
-						var _p4 = _p3._0;
+					function (_p4, result) {
+						var _p5 = _p4;
+						var _p8 = _p5._2;
+						var _p7 = _p5._1;
+						var _p6 = _p5._0;
 						return {
 							ctor: '::',
-							_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p4, _p5),
+							_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p6, _p7),
 							_1: {
 								ctor: '::',
-								_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p4, _p6),
+								_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p6, _p8),
 								_1: {
 									ctor: '::',
-									_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p5, _p6),
+									_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$svgLine, _p7, _p8),
 									_1: result
 								}
 							}
@@ -26597,7 +26671,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewTriangulatedGlyph = F2(
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewCountursGlyph = F2(
 	function (k, glyph) {
-		var _p7 = A2(
+		var _p9 = A2(
 			_elm_lang$core$List$partition,
 			_w0rm$rendering_text_with_webgl$Font_PathCommand$winding,
 			A2(
@@ -26607,49 +26681,111 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewCountursGlyph = F2(
 					_elm_lang$core$Result$withDefault,
 					{ctor: '[]'},
 					A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
-		var ccw = _p7._0;
-		var cw = _p7._1;
+		var ccw = _p9._0;
+		var cw = _p9._1;
 		return A2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
 			A2(
-				F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					}),
+				_elm_lang$core$Basics_ops['++'],
 				A2(
-					_elm_lang$svg$Svg$path,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d(glyph.path),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
-							_1: {
+					_elm_lang$core$List$map,
+					function (p) {
+						return A2(
+							_elm_lang$svg$Svg$path,
+							{
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+								_0: _elm_lang$svg$Svg_Attributes$d(
+									_w0rm$rendering_text_with_webgl$Custom_Outlines$polylineToSvgPath(p)),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-									_1: {ctor: '[]'}
+									_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow-red)'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
 								}
-							}
-						}
+							},
+							{ctor: '[]'});
 					},
-					{ctor: '[]'}),
+					cw),
 				A2(
-					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$List$map,
+					function (p) {
+						return A2(
+							_elm_lang$svg$Svg$path,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$d(
+									_w0rm$rendering_text_with_webgl$Custom_Outlines$polylineToSvgPath(p)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow)'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'});
+					},
+					ccw)));
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSegmentedGlyph = F2(
+	function (k, glyph) {
+		return function (path) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				A2(
+					F2(
+						function (x, y) {
+							return A2(_elm_lang$core$Basics_ops['++'], x, y);
+						}),
 					A2(
 						_elm_lang$core$List$map,
 						function (p) {
-							return A4(
-								_w0rm$rendering_text_with_webgl$Custom_Outlines$circle,
-								_w0rm$rendering_text_with_webgl$Point2d$xCoordinate(p),
-								_w0rm$rendering_text_with_webgl$Point2d$yCoordinate(p),
-								4,
-								'red');
+							return A2(
+								_elm_lang$svg$Svg$path,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$d(
+										_w0rm$rendering_text_with_webgl$Custom_Outlines$polylineToSvgPath(p)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{ctor: '[]'});
 						},
-						_elm_lang$core$List$concat(cw)),
+						path),
 					A2(
 						_elm_lang$core$List$map,
 						function (p) {
@@ -26660,99 +26796,59 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewCountursGlyph = F2(
 								4,
 								'black');
 						},
-						_elm_lang$core$List$concat(ccw)))));
-	});
-var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSegmentedGlyph = F2(
-	function (k, glyph) {
-		return A2(
-			_elm_lang$svg$Svg$g,
-			{ctor: '[]'},
+						_elm_lang$core$List$concat(path))));
+		}(
 			A2(
-				F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					}),
+				_elm_lang$core$List$map,
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(_w0rm$rendering_text_with_webgl$Custom_Outlines$samples),
 				A2(
-					_elm_lang$svg$Svg$path,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d(glyph.path),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				A2(
-					_elm_lang$core$List$map,
-					function (p) {
-						return A4(
-							_w0rm$rendering_text_with_webgl$Custom_Outlines$circle,
-							_w0rm$rendering_text_with_webgl$Point2d$xCoordinate(p),
-							_w0rm$rendering_text_with_webgl$Point2d$yCoordinate(p),
-							4,
-							'black');
-					},
-					A2(
-						_elm_lang$core$List$concatMap,
-						_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(_w0rm$rendering_text_with_webgl$Custom_Outlines$samples),
-						A2(
-							_elm_lang$core$Result$withDefault,
-							{ctor: '[]'},
-							A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))))));
+					_elm_lang$core$Result$withDefault,
+					{ctor: '[]'},
+					A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
-	function (k, _p8) {
-		var _p9 = _p8;
-		var _p12 = _p9.path;
+	function (k, _p10) {
+		var _p11 = _p10;
+		var _p14 = _p11.path;
 		var dots = function (path) {
 			return A3(
 				_elm_lang$core$List$foldl,
 				F2(
 					function (p, res) {
-						var _p10 = p;
-						switch (_p10.ctor) {
+						var _p12 = p;
+						switch (_p12.ctor) {
 							case 'MoveTo':
 								return {
 									ctor: '::',
-									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._0, _p10._1, 5, 'black'),
+									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._0, _p12._1, 5, 'black'),
 									_1: res
 								};
 							case 'LineTo':
 								return {
 									ctor: '::',
-									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._0, _p10._1, 5, 'black'),
+									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._0, _p12._1, 5, 'black'),
 									_1: res
 								};
 							case 'QuadraticCurveTo':
 								return {
 									ctor: '::',
-									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._0, _p10._1, 5, 'red'),
+									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._0, _p12._1, 5, 'red'),
 									_1: {
 										ctor: '::',
-										_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._2, _p10._3, 5, 'black'),
+										_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._2, _p12._3, 5, 'black'),
 										_1: res
 									}
 								};
 							default:
 								return {
 									ctor: '::',
-									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._0, _p10._1, 5, 'red'),
+									_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._0, _p12._1, 5, 'red'),
 									_1: {
 										ctor: '::',
-										_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._2, _p10._3, 5, 'red'),
+										_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._2, _p12._3, 5, 'red'),
 										_1: {
 											ctor: '::',
-											_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p10._4, _p10._5, 5, 'black'),
+											_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outlines$circle, _p12._4, _p12._5, 5, 'black'),
 											_1: res
 										}
 									}
@@ -26765,7 +26861,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
 		var paths = A2(
 			_elm_lang$core$Result$withDefault,
 			{ctor: '[]'},
-			A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, _p12));
+			A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, _p14));
 		return A2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
@@ -26778,7 +26874,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
 					_elm_lang$svg$Svg$path,
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d(_p12),
+						_0: _elm_lang$svg$Svg_Attributes$d(_p14),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
@@ -26796,12 +26892,12 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
 					{ctor: '[]'}),
 				A3(
 					_elm_lang$core$List$foldl,
-					function (_p11) {
+					function (_p13) {
 						return F2(
 							function (x, y) {
 								return A2(_elm_lang$core$Basics_ops['++'], x, y);
 							})(
-							dots(_p11));
+							dots(_p13));
 					},
 					{ctor: '[]'},
 					paths)));
@@ -26841,18 +26937,18 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesText = functi
 				A2(_elm_lang$core$String$split, 'Z', glyph.path))));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewText = function (step) {
-	var _p13 = step;
-	if (_p13 === 1) {
+	var _p15 = step;
+	if (_p15 === 1) {
 		return _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesText;
 	} else {
-		return function (_p14) {
+		return function (_p16) {
 			return _elm_lang$html$Html$text('');
 		};
 	}
 };
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewGlyph = function (step) {
-	var _p15 = step;
-	switch (_p15) {
+	var _p17 = step;
+	switch (_p17) {
 		case 1:
 			return _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph;
 		case 2:
@@ -26865,17 +26961,17 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewGlyph = function (step) 
 			return _w0rm$rendering_text_with_webgl$Custom_Outlines$viewTriangulatedGlyph;
 	}
 };
-var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
-	var _p17 = _p16;
-	var _p22 = _p17.width;
-	var _p21 = _p17.step;
-	var _p20 = _p17.height;
-	var _p19 = _p17.glyph;
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p18) {
+	var _p19 = _p18;
+	var _p24 = _p19.width;
+	var _p23 = _p19.step;
+	var _p22 = _p19.height;
+	var _p21 = _p19.glyph;
 	var p = 20;
-	var k = (_p20 - (p * 2)) / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
-	var _p18 = {ctor: '_Tuple2', _0: ((_p22 / 2) - (k * _p19.advanceWidth)) / 2, _1: (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k) + p};
-	var centerX = _p18._0;
-	var centerY = _p18._1;
+	var k = (_p22 - (p * 2)) / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
+	var _p20 = {ctor: '_Tuple2', _0: ((_p24 / 2) - (k * _p21.advanceWidth)) / 2, _1: (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k) + p};
+	var centerX = _p20._0;
+	var centerY = _p20._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -26905,7 +27001,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 									_0: 'width',
 									_1: A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p22 / 2),
+										_elm_lang$core$Basics$toString(_p24 / 2),
 										'px')
 								},
 								_1: {ctor: '[]'}
@@ -26914,11 +27010,11 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$svg$Svg_Attributes$width(
-							_elm_lang$core$Basics$toString(_p22 / 2)),
+							_elm_lang$core$Basics$toString(_p24 / 2)),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$height(
-								_elm_lang$core$Basics$toString(_p20)),
+								_elm_lang$core$Basics$toString(_p22)),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -26959,7 +27055,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 						},
 						{
 							ctor: '::',
-							_0: A3(_w0rm$rendering_text_with_webgl$Custom_Outlines$viewGlyph, _p21, k, _p19),
+							_0: A3(_w0rm$rendering_text_with_webgl$Custom_Outlines$viewGlyph, _p23, k, _p21),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -26978,7 +27074,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 									_0: 'width',
 									_1: A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p22 / 2),
+										_elm_lang$core$Basics$toString(_p24 / 2),
 										'px')
 								},
 								_1: {
@@ -26999,7 +27095,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 					},
 					{
 						ctor: '::',
-						_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$viewText, _p21, _p19),
+						_0: A2(_w0rm$rendering_text_with_webgl$Custom_Outlines$viewText, _p23, _p21),
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
@@ -27008,13 +27104,13 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p16) {
 };
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$update = F2(
 	function (action, model) {
-		var _p23 = action;
-		if (_p23.ctor === 'Animate') {
+		var _p25 = action;
+		if (_p25.ctor === 'Animate') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{elapsed: model.elapsed + _p23._0}),
+					{elapsed: model.elapsed + _p25._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -27024,7 +27120,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$update = F2(
 				A2(
 					_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
 					_w0rm$rendering_text_with_webgl$Iverni$font,
-					_elm_lang$core$Char$fromCode(_p23._0)));
+					_elm_lang$core$Char$fromCode(_p25._0)));
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
@@ -27058,7 +27154,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$KeyPress = function (a) {
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Outlines$subscriptions = function (_p24) {
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$subscriptions = function (_p26) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
@@ -29529,7 +29625,7 @@ var _w0rm$rendering_text_with_webgl$Slides$lineBreaking = {
 		{
 			ctor: '::',
 			_0: _w0rm$rendering_text_with_webgl$Custom$typewriter(
-				{width: 1280, height: 720, fontSize: 150, start: 13, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
+				{width: 1280, height: 720, fontSize: 150, start: 11, text: 'Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area.'}),
 			_1: {ctor: '[]'}
 		}),
 	_1: {ctor: '[]'}

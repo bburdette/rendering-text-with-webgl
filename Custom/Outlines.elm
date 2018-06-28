@@ -223,18 +223,26 @@ viewSegmentedGlyph k glyph =
     glyph.path
         |> Parser.run ParsePathCommand.path
         |> Result.withDefault []
-        |> List.concatMap (PathCommand.pathToPolygon samples)
-        |> List.map (\p -> circle (Point2d.xCoordinate p) (Point2d.yCoordinate p) 4 "black")
-        |> (::)
-            (Svg.path
-                [ SvgAttributes.d glyph.path
-                , SvgAttributes.fill "transparent"
-                , SvgAttributes.stroke "black"
-                , SvgAttributes.strokeWidth "1"
-                ]
-                []
-            )
-        |> Svg.g []
+        |> List.map (PathCommand.pathToPolygon samples)
+        |> (\path ->
+                path
+                    |> List.concat
+                    |> List.map (\p -> circle (Point2d.xCoordinate p) (Point2d.yCoordinate p) 4 "black")
+                    |> (++)
+                        (List.map
+                            (\p ->
+                                Svg.path
+                                    [ SvgAttributes.d (polylineToSvgPath p)
+                                    , SvgAttributes.fill "transparent"
+                                    , SvgAttributes.stroke "black"
+                                    , SvgAttributes.strokeWidth "2"
+                                    ]
+                                    []
+                            )
+                            path
+                        )
+                    |> Svg.g []
+           )
 
 
 viewCountursGlyph : Float -> Glyph -> Svg msg
@@ -248,21 +256,30 @@ viewCountursGlyph k glyph =
                 |> List.partition PathCommand.winding
     in
     (List.map
-        (\p -> circle (Point2d.xCoordinate p) (Point2d.yCoordinate p) 4 "red")
-        (List.concat cw)
-        ++ List.map
-            (\p -> circle (Point2d.xCoordinate p) (Point2d.yCoordinate p) 4 "black")
-            (List.concat ccw)
-    )
-        |> (::)
-            (Svg.path
-                [ SvgAttributes.d glyph.path
+        (\p ->
+            Svg.path
+                [ SvgAttributes.d (polylineToSvgPath p)
                 , SvgAttributes.fill "transparent"
-                , SvgAttributes.stroke "black"
-                , SvgAttributes.strokeWidth "1"
+                , SvgAttributes.stroke "red"
+                , SvgAttributes.strokeWidth "2"
+                , SvgAttributes.markerEnd "url(#arrow-red)"
                 ]
                 []
+        )
+        cw
+        ++ List.map
+            (\p ->
+                Svg.path
+                    [ SvgAttributes.d (polylineToSvgPath p)
+                    , SvgAttributes.fill "transparent"
+                    , SvgAttributes.stroke "black"
+                    , SvgAttributes.strokeWidth "2"
+                    , SvgAttributes.markerEnd "url(#arrow)"
+                    ]
+                    []
             )
+            ccw
+    )
         |> Svg.g []
 
 
@@ -313,6 +330,30 @@ circle x y r color =
         , SvgAttributes.r (toString r)
         ]
         []
+
+
+polylineToSvgPath : List Point2d -> String
+polylineToSvgPath points =
+    case PathCommand.removeDuplicates points of
+        first :: rest ->
+            "M "
+                ++ toString (Point2d.xCoordinate first)
+                ++ ","
+                ++ toString (Point2d.yCoordinate first)
+                ++ List.foldl
+                    (\p r ->
+                        r
+                            ++ "L"
+                            ++ toString (Point2d.xCoordinate p)
+                            ++ ","
+                            ++ toString (Point2d.yCoordinate p)
+                    )
+                    ""
+                    points
+                ++ "Z"
+
+        _ ->
+            ""
 
 
 samples : Int

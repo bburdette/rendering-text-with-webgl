@@ -202,7 +202,7 @@ lineBreaking =
             { width = 1280
             , height = 720
             , fontSize = 150
-            , start = 13
+            , start = 11
             , text = "Line breaking is the process of breaking a section of text into lines such that it will fit in the available display area."
             }
         ]

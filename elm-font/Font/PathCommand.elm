@@ -2,6 +2,7 @@ module Font.PathCommand
     exposing
         ( PathCommand(..)
         , pathToPolygon
+        , removeDuplicates
         , triangulate
         , winding
         )

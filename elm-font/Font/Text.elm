@@ -26,8 +26,8 @@ type Class
 
 
 type alias ClassifiedGlyph =
-    { index : Int
-    , class : Class
+    { class : Class
+    , index : Int
     }
 
 
@@ -41,7 +41,7 @@ classify char =
             Space
 
         '\n' ->
-            Newline
+            Newline |> Debug.log ""
 
         _ ->
             Other
@@ -58,7 +58,6 @@ type alias Context attributes =
     , cache : Dict Int (Mesh attributes)
     , glyphs : List (GlyphInfo attributes)
     , xAtLastWordBreak : Float
-    , glyphsSinceLastWordBreak : Int
     , nextIndices : List ClassifiedGlyph
     , prevIndices : List ClassifiedGlyph
     }
@@ -92,7 +91,6 @@ contextFromStyle style glyphIndices =
     , cache = style.cache
     , glyphs = []
     , xAtLastWordBreak = 0
-    , glyphsSinceLastWordBreak = 0
     , nextIndices = glyphIndices
     , prevIndices = []
     }
@@ -100,10 +98,12 @@ contextFromStyle style glyphIndices =
 
 stringToGlyphIndices : Font -> String -> List ClassifiedGlyph
 stringToGlyphIndices font text =
-    List.filterMap
+    List.map
         (\char ->
             Dict.get (Char.toCode char) font.cmap
-                |> Maybe.map (\index -> { index = index, class = classify char })
+                |> Maybe.withDefault 0
+                -- TODO: use "glyph not found" glyph but not for new line?
+                |> ClassifiedGlyph (classify char)
         )
         (String.toList text)
 
@@ -199,7 +199,23 @@ findInPairsPositions pairsPositions rightIndex =
             Nothing
 
 
-text : (List (List Point2d) -> Mesh attributes) -> Style attributes -> String -> ( List (GlyphInfo attributes), Dict Int (Mesh attributes) )
+type alias TextFunction attributes =
+    Style attributes
+    -> String
+    -> ( List (GlyphInfo attributes), Dict Int (Mesh attributes) )
+
+
+text2d : TextFunction Attributes2d
+text2d =
+    text mesh2d
+
+
+text3d : TextFunction Attributes3d
+text3d =
+    text mesh3d
+
+
+text : (List (List Point2d) -> Mesh attributes) -> TextFunction attributes
 text meshFn style string =
     let
         indicesList =
@@ -218,27 +234,17 @@ text meshFn style string =
     ( List.reverse result.glyphs, result.cache )
 
 
-text2d : Style Attributes2d -> String -> ( List (GlyphInfo Attributes2d), Dict Int (Mesh Attributes2d) )
-text2d =
-    text mesh2d
-
-
-text3d : Style Attributes3d -> String -> ( List (GlyphInfo Attributes3d), Dict Int (Mesh Attributes3d) )
-text3d =
-    text mesh3d
-
-
 textHelp : (List (List Point2d) -> Mesh attributes) -> Context attributes -> Context attributes
 textHelp meshFn ctx =
     case ctx.nextIndices of
         [] ->
             ctx
 
-        classifiedGlyph :: rest ->
+        classifiedGlyph :: nextIndices ->
             let
                 xAdvance =
                     if ctx.kerning then
-                        List.head rest
+                        List.head nextIndices
                             |> Maybe.map .index
                             |> Maybe.andThen (getKerningValue ctx.font.kerning classifiedGlyph.index)
                             |> Maybe.withDefault 0
@@ -275,58 +281,54 @@ textHelp meshFn ctx =
 
                 newX =
                     ctx.x + glyph.advanceWidth + xAdvance
-
-                ( x, y, dropWord ) =
-                    if
-                        (newX > ctx.width)
-                            && (classifiedGlyph.class /= Space)
-                            && (ctx.xAtLastWordBreak /= 0)
-                    then
-                        ( 0, ctx.y - ctx.lineHeight, True )
-
-                    else
-                        ( newX, ctx.y, False )
-
-                ( xAtLastWordBreak, glyphsSinceLastWordBreak ) =
-                    if classifiedGlyph.class == Space then
-                        ( x, 0 )
-
-                    else if dropWord then
-                        ( 0, 0 )
-
-                    else
-                        ( ctx.xAtLastWordBreak, ctx.glyphsSinceLastWordBreak + 1 )
-
-                ( nextIndices, prevIndices, glyphs ) =
-                    if dropWord then
-                        let
-                            undoGlyphs =
-                                List.take ctx.glyphsSinceLastWordBreak ctx.prevIndices
-                        in
-                        ( List.foldl (::) ctx.nextIndices undoGlyphs
-                        , List.drop ctx.glyphsSinceLastWordBreak ctx.prevIndices
-                        , List.drop ctx.glyphsSinceLastWordBreak ctx.glyphs
-                        )
-
-                    else
-                        ( rest
-                        , classifiedGlyph :: ctx.prevIndices
-                        , { mesh = mesh
-                          , transform =
-                                Mat4.makeTranslate3 ctx.x ctx.y 0
-                                    |> Mat4.mul (Mat4.makeScale3 ctx.size ctx.size ctx.size)
-                          }
-                            :: ctx.glyphs
-                        )
             in
-            textHelp meshFn
-                { ctx
-                    | cache = cache
-                    , x = x
-                    , y = y
-                    , glyphs = glyphs
-                    , nextIndices = nextIndices
-                    , prevIndices = prevIndices
-                    , xAtLastWordBreak = xAtLastWordBreak
-                    , glyphsSinceLastWordBreak = glyphsSinceLastWordBreak
-                }
+            case classifiedGlyph.class of
+                Space ->
+                    textHelp meshFn
+                        { ctx
+                            | cache = cache
+                            , x = newX
+                            , nextIndices = nextIndices
+                            , prevIndices = []
+                            , xAtLastWordBreak = newX
+                        }
+
+                Newline ->
+                    textHelp meshFn
+                        { ctx
+                            | cache = cache
+                            , x = 0
+                            , y = ctx.y - ctx.lineHeight
+                            , nextIndices = nextIndices
+                            , prevIndices = []
+                            , xAtLastWordBreak = 0
+                        }
+
+                Other ->
+                    if newX > ctx.width && ctx.xAtLastWordBreak /= 0 then
+                        textHelp meshFn
+                            { ctx
+                                | cache = cache
+                                , x = 0
+                                , y = ctx.y - ctx.lineHeight
+                                , glyphs = List.drop (List.length ctx.prevIndices) ctx.glyphs
+                                , nextIndices = List.foldl (::) ctx.nextIndices ctx.prevIndices
+                                , prevIndices = []
+                                , xAtLastWordBreak = 0
+                            }
+
+                    else
+                        textHelp meshFn
+                            { ctx
+                                | cache = cache
+                                , x = newX
+                                , glyphs =
+                                    { mesh = mesh
+                                    , transform =
+                                        Mat4.makeTranslate3 ctx.x ctx.y 0
+                                            |> Mat4.mul (Mat4.makeScale3 ctx.size ctx.size ctx.size)
+                                    }
+                                        :: ctx.glyphs
+                                , nextIndices = nextIndices
+                                , prevIndices = classifiedGlyph :: ctx.prevIndices
+                            }
