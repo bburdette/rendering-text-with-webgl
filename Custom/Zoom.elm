@@ -2,7 +2,7 @@ module Custom.Zoom exposing (Model, Msg, Options, initial, subscriptions, update
 
 import AnimationFrame
 import Dict
-import Font.Mesh as Mesh exposing (Attributes2d)
+import Font.Mesh as Mesh exposing (Attributes2d, glyph2d)
 import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
@@ -19,7 +19,7 @@ type Msg
 
 type alias Model =
     { elapsed : Time
-    , text : List (GlyphInfo Attributes2d)
+    , text : List (GlyphInfo (Mesh Attributes2d))
     , width : Float
     , height : Float
     }
@@ -36,7 +36,7 @@ type alias Options =
 initial : Options -> Model
 initial options =
     { elapsed = 0
-    , text = Tuple.first (Text.text2d (style options.fontSize) options.text)
+    , text = Tuple.first (Text.text glyph2d (style options.fontSize) options.text)
     , width = options.width
     , height = options.height
     }
@@ -89,16 +89,17 @@ view { elapsed, width, height, text } =
         wordCenterY =
             centerY + 80
 
-        glyphToEntity { transform, mesh } =
+        glyphToEntity { x, y, size, glyph } =
             WebGL.entity
                 vertex2d
                 fragment2d
-                mesh
+                glyph
                 { projection = projection
                 , color = vec3 1 0 0
                 , center = vec3 (width * (0.5 + 0.5 * sin (elapsed / 2000))) (centerY - 20) 0
                 , transform =
-                    transform
+                    Mat4.makeTranslate3 x y 0
+                        |> Mat4.mul (Mat4.makeScale3 size size size)
                         |> Mat4.mul (Mat4.makeTranslate3 wordCenterX wordCenterY 0)
                 }
     in

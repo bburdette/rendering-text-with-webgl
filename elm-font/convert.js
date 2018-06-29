@@ -48,7 +48,7 @@ font =
     """
 ${fontData}
 """
-    |> Decoder.decodeString Font.decodeFont
+    |> Decoder.decodeString Font.decode
     |> Result.withDefault Font.empty
 `;
 

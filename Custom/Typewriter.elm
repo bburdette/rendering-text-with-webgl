@@ -2,7 +2,7 @@ module Custom.Typewriter exposing (Model, Msg, Options, initial, subscriptions, 
 
 import AnimationFrame
 import Dict
-import Font.Mesh as Mesh exposing (Attributes3d)
+import Font.Mesh as Mesh exposing (Attributes3d, glyph3d)
 import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
@@ -20,7 +20,7 @@ type Msg
 type alias Model =
     { elapsed : Time
     , fontSize : Float
-    , text : List (GlyphInfo Attributes3d)
+    , text : List (GlyphInfo (Mesh Attributes3d))
     , width : Float
     , height : Float
     , start : Int
@@ -49,7 +49,7 @@ initial options =
             }
 
         text =
-            Tuple.first (Text.text3d style options.text)
+            Tuple.first (Text.text glyph3d style options.text)
     in
     { elapsed = 0
     , text = text
@@ -99,11 +99,11 @@ view { elapsed, width, height, text, start, fontSize } =
         angle =
             elapsed / 1000
 
-        glyphToEntity index { transform, mesh } =
+        glyphToEntity index { x, y, size, glyph } =
             WebGL.entity
                 vertex3d
                 fragment3d
-                mesh
+                glyph
                 { camera = camera
                 , index = index
                 , start = start
@@ -111,8 +111,8 @@ view { elapsed, width, height, text, start, fontSize } =
                 , color = vec3 1 0 0
                 , projection = projection
                 , transform =
-                    transform
-                        |> Mat4.mul (Mat4.makeScale3 1 1 100)
+                    Mat4.makeTranslate3 x y 0
+                        |> Mat4.mul (Mat4.makeScale3 size size (size * 100))
                 }
     in
     WebGL.toHtml

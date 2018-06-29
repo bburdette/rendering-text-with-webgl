@@ -5,7 +5,6 @@ import Char
 import Font.Font as Font
 import Font.Glyph as Glyph exposing (Glyph)
 import Font.Mesh as Mesh exposing (Attributes3d)
-import Font.ParsePathCommand as ParsePathCommand
 import Font.PathCommand as PathCommand exposing (PathCommand(..))
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
@@ -13,7 +12,6 @@ import Iverni exposing (font)
 import Keyboard exposing (KeyCode)
 import Math.Matrix4 as Mat4 exposing (Mat4)
 import Math.Vector3 as Vec3 exposing (Vec3, vec3)
-import Parser
 import Time exposing (Time)
 import WebGL exposing (Mesh, Shader)
 
@@ -82,15 +80,8 @@ getGlyphAndMesh keyCode =
         glyph =
             Font.getGlyph font (Char.fromCode keyCode)
                 |> Maybe.withDefault Glyph.empty
-
-        mesh =
-            glyph.path
-                |> Parser.run ParsePathCommand.path
-                |> Result.withDefault []
-                |> List.map (PathCommand.pathToPolygon 10)
-                |> Mesh.mesh3d
     in
-    ( glyph, mesh )
+    ( glyph, Mesh.glyph3d glyph )
 
 
 {-| A model of the sort's base, hardcoded for Iverni font

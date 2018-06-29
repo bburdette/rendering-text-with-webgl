@@ -1,6 +1,6 @@
-module Font.Glyph exposing (Glyph, empty)
+module Font.Glyph exposing (Glyph, decode, empty)
 
--- More about metrics: https://www.freetype.org/freetype2/docs/glyphs/glyphs-3.html
+import Json.Decode as Decode
 
 
 type alias Glyph =
@@ -16,3 +16,11 @@ empty =
     , advanceWidth = 0
     , leftSideBearing = 0
     }
+
+
+decode : Decode.Decoder Glyph
+decode =
+    Decode.map3 Glyph
+        (Decode.field "path" Decode.string)
+        (Decode.field "advanceWidth" Decode.float)
+        (Decode.field "leftSideBearing" Decode.float)

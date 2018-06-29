@@ -1,7 +1,7 @@
 module Custom.Ivernifont exposing (Options, view)
 
 import Dict
-import Font.Mesh as Mesh exposing (Attributes2d)
+import Font.Mesh as Mesh exposing (Attributes2d, glyph2d)
 import Font.Text as Text exposing (Feature, GlyphInfo)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
@@ -35,7 +35,7 @@ view { width, features, color, height, text, lineHeight, fontSize } =
             }
 
         renderedText =
-            Tuple.first (Text.text2d style text)
+            Tuple.first (Text.text glyph2d style text)
 
         devicePixelRatio =
             2
@@ -43,14 +43,16 @@ view { width, features, color, height, text, lineHeight, fontSize } =
         projection =
             Mat4.makeOrtho2D 0 width -height 0
 
-        glyphToEntity { transform, mesh } =
+        glyphToEntity { glyph, x, y, size } =
             WebGL.entity
                 vertex2d
                 fragment2d
-                mesh
+                glyph
                 { projection = projection
                 , color = color
-                , transform = transform
+                , transform =
+                    Mat4.makeTranslate3 x y 0
+                        |> Mat4.mul (Mat4.makeScale3 size size size)
                 }
     in
     WebGL.toHtml

@@ -1,7 +1,18 @@
-module Font.Mesh exposing (Attributes2d, Attributes3d, mesh2d, mesh3d)
+module Font.Mesh
+    exposing
+        ( Attributes2d
+        , Attributes3d
+        , glyph2d
+        , glyph3d
+          -- temporary export for the sort demo
+        , mesh3d
+        )
 
+import Font.Glyph as Glyph exposing (Glyph)
+import Font.ParsePathCommand as ParsePathCommand
 import Font.PathCommand as PathCommand exposing (PathCommand)
 import Math.Vector3 as Vec3 exposing (Vec3, vec3)
+import Parser
 import Point2d exposing (Point2d)
 import WebGL exposing (Mesh)
 
@@ -15,6 +26,24 @@ type alias Attributes3d =
 type alias Attributes2d =
     { position : Vec3
     }
+
+
+glyph2d : Glyph -> Mesh Attributes2d
+glyph2d glyph =
+    glyph.path
+        |> Parser.run ParsePathCommand.path
+        |> Result.withDefault []
+        |> List.map (PathCommand.pathToPolygon 10)
+        |> mesh2d
+
+
+glyph3d : Glyph -> Mesh Attributes3d
+glyph3d glyph =
+    glyph.path
+        |> Parser.run ParsePathCommand.path
+        |> Result.withDefault []
+        |> List.map (PathCommand.pathToPolygon 10)
+        |> mesh3d
 
 
 {-| Generate a mesh for 2d text rendering. Y is pointing down.
