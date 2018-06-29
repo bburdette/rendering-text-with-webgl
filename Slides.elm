@@ -45,7 +45,7 @@ cssProperties =
                 , ( "display", "block" )
                 ]
             ]
-            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space word-break word-spacing word-wrap writing-mode" ]
+            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space width word-break word-spacing word-wrap writing-mode" ]
         )
     ]
 
@@ -75,7 +75,7 @@ exploringTheProblem =
     , bullets
         [ bullet "Elm is a great tool to explore the problem space"
         , bullet "WebGL in Elm is a fun way to dive into graphics programming"
-        , bullet "Opens possibilities for creative coding"
+        , bullet "Opens possibilities for typographic experiments"
         ]
     ]
 
@@ -125,10 +125,10 @@ iverniFont =
     [ title "Iverni Typeface"
     , spacing 20
     , bullets
-        [ bullet "Saved in OpenType® format"
-        , bullet "Converted to JSON using opentype.js"
-        , bullet "Decoded into Elm"
-        , bullet "Rendered with WebGL"
+        [ bullet "Save in OpenType® format"
+        , bullet "Convert to JSON using opentype.js"
+        , bullet "Decode into Elm"
+        , bullet "Render with WebGL"
         ]
     , position ( 850, 15 )
         [ Custom.ivernifont
@@ -210,6 +210,36 @@ lineBreaking =
     ]
 
 
+wordWrapping : List Content
+wordWrapping =
+    [ title "Word Wrapping"
+    , code "elm" """style :
+    { font : Font
+    , fontSize : Float
+    , lineHeight : Float
+    , width : Float
+    , features : List Feature
+    } -> Style glyph
+
+text :
+    (Glyph -> glyph)  -- evaluates a glyph
+    -> Style glyph    -- styles the text
+    -> String         -- text to print
+    -> ( List (GlyphInfo glyph), Style glyph )"""
+    ]
+
+
+recap : List Content
+recap =
+    [ title "Recap"
+    , bullets
+        [ bullet "Elm is a great tool to explore the problem space"
+        , bullet "WebGL in Elm is a fun way to dive into graphics programming"
+        , bullet "Opens possibilities for creative coding"
+        ]
+    ]
+
+
 thankYou : List Content
 thankYou =
     [ position ( 0, 0 )
@@ -226,11 +256,18 @@ thankYou =
 slides : List Slide
 slides =
     [ [ padded intro ]
-    , [ shout "<Text is User Interface>" ] -- https://ia.net/topics/the-web-is-all-about-typography-period
     , cssProperties
     , solvedProblem
+    , [ background "assets/nadya-kuzmina.jpg"
+            [ position ( 160, 50 )
+                [ Content.item (Html.h1 [ style [ ( "width", "100px" ) ] ] [ text "Nadya Kuzmina" ])
+                , richtext """type design
+
+[@nadyakzmn](https://twitter.com/nadyakzmn)"""
+                ]
+            ]
+      ]
     , [ padded exploringTheProblem ]
-    , [ shout "<Nadya Kuzmina>" ]
     , [ dark fontAsCode ]
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
@@ -255,7 +292,7 @@ slides =
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 5 ]
     , [ shout "<Smart Font Features>" ]
     , lineBreaking
-    , [ shout "<Word Wrapping Algorithm>" ]
+    , [ padded wordWrapping ]
     , [ Custom.wordwapping { step = 3, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 4, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 5, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
@@ -264,7 +301,7 @@ slides =
     , [ Custom.wordwapping { step = 8, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 9, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 16, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ shout "<Recap>" ]
+    , [ padded recap ]
     , thankYou
     ]
         -- make 16:9 slides
