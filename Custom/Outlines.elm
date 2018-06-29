@@ -1,6 +1,5 @@
 module Custom.Outlines exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
-import AnimationFrame
 import Char
 import Font.Font as Font
 import Font.Glyph as Glyph exposing (Glyph)
@@ -9,21 +8,17 @@ import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
 import Iverni exposing (font)
 import Keyboard exposing (KeyCode)
-import Parser
 import Point2d exposing (Point2d)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttributes
-import Time exposing (Time)
 
 
 type Msg
-    = Animate Time
-    | KeyPress KeyCode
+    = KeyPress KeyCode
 
 
 type alias Model =
-    { elapsed : Time
-    , glyph : Glyph
+    { glyph : Glyph
     , step : Int
     , width : Float
     , height : Float
@@ -44,8 +39,7 @@ initial options =
             Font.getGlyph font '8'
                 |> Maybe.withDefault Glyph.empty
     in
-    { elapsed = 0
-    , glyph = glyph
+    { glyph = glyph
     , step = options.step
     , width = options.width
     , height = options.height
@@ -54,20 +48,12 @@ initial options =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.batch
-        [ AnimationFrame.diffs Animate
-        , Keyboard.presses KeyPress
-        ]
+    Keyboard.presses KeyPress
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
-        Animate elapsed ->
-            ( { model | elapsed = model.elapsed + elapsed }
-            , Cmd.none
-            )
-
         KeyPress keyCode ->
             let
                 glyph =
@@ -335,7 +321,7 @@ polylineToSvgPath : List Point2d -> String
 polylineToSvgPath points =
     case PathCommand.removeDuplicates points of
         first :: rest ->
-            "M "
+            "M"
                 ++ toString (Point2d.xCoordinate first)
                 ++ ","
                 ++ toString (Point2d.yCoordinate first)

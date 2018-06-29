@@ -23,11 +23,13 @@ intro =
         )
     , position ( 120, 500 ) [ image ( 110, 110 ) "assets/mogee.png" ]
     , position ( 250, 490 )
-        [ richtext """Andrey Kuzmin
+        [ scale 0.75
+            [ richtext """Andrey Kuzmin
 
 Twitter: [@unsoundscapes](https://twitter.com/unsoundscapes)
 
 GitHub: [@w0rm](https://github.com/w0rm)"""
+            ]
         ]
     , position ( 840, 500 ) [ image ( round (460 / 290 * 110), 110 ) "assets/soundcloud.png" ]
     ]
@@ -171,7 +173,7 @@ bulletPoints =
     [ "Parse SVG path with elm-tools/parser"
     , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
     , "Find outlines and holes based on winding"
-    , "Triangulate outlines with holes using monotone polygon triangulation algorithm from ianmackenzie/elm-geometry"
+    , "Triangulate outlines with holes using ianmackenzie/elm-geometry"
     , "Generate a WebGL mesh"
     ]
 
@@ -184,8 +186,7 @@ steps n =
         |> Content.container
             (Html.ol
                 [ style
-                    [ ( "font", "20px/1.2 FiraCode, monospace" )
-                    , ( "position", "absolute" )
+                    [ ( "position", "absolute" )
                     , ( "left", "50%" )
                     , ( "top", "100px" )
                     , ( "margin", "0" )
@@ -255,6 +256,14 @@ slides =
     , [ shout "<Smart Font Features>" ]
     , lineBreaking
     , [ shout "<Word Wrapping Algorithm>" ]
+    , [ Custom.wordwapping { step = 3, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 4, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 5, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 6, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 7, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 8, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 9, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ Custom.wordwapping { step = 16, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ shout "<Recap>" ]
     , thankYou
     ]

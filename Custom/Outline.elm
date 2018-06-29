@@ -1,10 +1,8 @@
 module Custom.Outline exposing (Options, view)
 
-import Font.Font as Font
-import Font.Glyph as Glyph exposing (Glyph)
-import Html exposing (Html)
+import Font.Text as Text
 import Html.Attributes as HtmlAttributes
-import Iverni exposing (font)
+import Iverni
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttributes
 
@@ -19,26 +17,22 @@ type alias Options =
     }
 
 
-view : Options -> Html msg
+view : Options -> Svg msg
 view { width, height, left, top, fontSize, text } =
-    text
-        |> String.toList
-        |> List.foldl
-            (\char { advance, paths } ->
-                let
-                    k =
-                        fontSize / font.unitsPerEm
-
-                    glyph =
-                        Font.getGlyph font char
-                            |> Maybe.withDefault Glyph.empty
-                in
-                { advance = advance + glyph.advanceWidth * k
-                , paths = renderGlyph advance (top + font.ascender * k) k glyph :: paths
+    let
+        style =
+            Text.style
+                { font = Iverni.font
+                , width = width - left
+                , fontSize = fontSize
+                , lineHeight = 1
+                , features = []
                 }
-            )
-            { advance = left, paths = [] }
-        |> .paths
+    in
+    Text.text .path style text
+        -- drop the cached style
+        |> Tuple.first
+        |> List.map (renderGlyph left top)
         |> Svg.svg
             [ HtmlAttributes.style [ ( "display", "block" ) ]
             , SvgAttributes.width (toString width)
@@ -46,26 +40,26 @@ view { width, height, left, top, fontSize, text } =
             ]
 
 
-renderGlyph : Float -> Float -> Float -> Glyph -> Svg msg
-renderGlyph x y k { path } =
+renderGlyph : Float -> Float -> { x : Float, y : Float, size : Float, glyph : String } -> Svg msg
+renderGlyph left top { x, y, size, glyph } =
     Svg.g
         [ SvgAttributes.transform
             ("translate("
-                ++ toString x
+                ++ toString (x * size + left)
                 ++ ","
-                ++ toString y
+                ++ toString (-y * size + top)
                 ++ ") scale("
-                ++ toString k
+                ++ toString size
                 ++ ","
-                ++ toString -k
+                ++ toString -size
                 ++ ")"
             )
         ]
         [ Svg.path
-            [ SvgAttributes.d path
+            [ SvgAttributes.d glyph
             , SvgAttributes.fill "transparent"
             , SvgAttributes.stroke "black"
-            , SvgAttributes.strokeWidth (toString (2 / k))
+            , SvgAttributes.strokeWidth (toString (2 / size))
             ]
             []
         ]

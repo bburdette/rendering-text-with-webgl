@@ -16,6 +16,7 @@ module Custom
         , typewriter
         , update
         , view
+        , wordwapping
         , zoom
         )
 
@@ -28,6 +29,7 @@ import Custom.Pixelfont as Pixelfont
 import Custom.Pixelglyph as Pixelglyph
 import Custom.Sort as Sort
 import Custom.Typewriter as Typewriter
+import Custom.Wordwrapping as Wordwrapping
 import Custom.Zoom as Zoom
 import Html exposing (Html)
 import SliceShow.Content as Content
@@ -112,6 +114,11 @@ pixelglyph options =
 cubicglyph : Cubicglyph.Options -> Content
 cubicglyph options =
     Content.custom (CubicglyphModel (Cubicglyph.initial options))
+
+
+wordwapping : Wordwrapping.Options -> Content
+wordwapping options =
+    Content.item (Wordwrapping.view options)
 
 
 subscriptions : Model -> Sub Msg

@@ -26444,9 +26444,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Metrics$subscriptions = function (_p1
 	return _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Metrics$KeyPress);
 };
 
-var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
-	function (x, y, k, _p0) {
+var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F3(
+	function (left, top, _p0) {
 		var _p1 = _p0;
+		var _p2 = _p1.size;
 		return A2(
 			_elm_lang$svg$Svg$g,
 			{
@@ -26457,25 +26458,25 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
 						'translate(',
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(x),
+							_elm_lang$core$Basics$toString((_p1.x * _p2) + left),
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								',',
 								A2(
 									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(y),
+									_elm_lang$core$Basics$toString(((0 - _p1.y) * _p2) + top),
 									A2(
 										_elm_lang$core$Basics_ops['++'],
 										') scale(',
 										A2(
 											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(k),
+											_elm_lang$core$Basics$toString(_p2),
 											A2(
 												_elm_lang$core$Basics_ops['++'],
 												',',
 												A2(
 													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(0 - k),
+													_elm_lang$core$Basics$toString(0 - _p2),
 													')'))))))))),
 				_1: {ctor: '[]'}
 			},
@@ -26485,7 +26486,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
 					_elm_lang$svg$Svg$path,
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$d(_p1.path),
+						_0: _elm_lang$svg$Svg_Attributes$d(_p1.glyph),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$fill('transparent'),
@@ -26495,7 +26496,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
-										_elm_lang$core$Basics$toString(2 / k)),
+										_elm_lang$core$Basics$toString(2 / _p2)),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -26505,8 +26506,18 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph = F4(
 				_1: {ctor: '[]'}
 			});
 	});
-var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p2) {
-	var _p3 = _p2;
+var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p3) {
+	var _p4 = _p3;
+	var _p6 = _p4.width;
+	var _p5 = _p4.left;
+	var style = _w0rm$rendering_text_with_webgl$Font_Text$style(
+		{
+			font: _w0rm$rendering_text_with_webgl$Iverni$font,
+			width: _p6 - _p5,
+			fontSize: _p4.fontSize,
+			lineHeight: 1,
+			features: {ctor: '[]'}
+		});
 	return A2(
 		_elm_lang$svg$Svg$svg,
 		{
@@ -26520,43 +26531,26 @@ var _w0rm$rendering_text_with_webgl$Custom_Outline$view = function (_p2) {
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$svg$Svg_Attributes$width(
-					_elm_lang$core$Basics$toString(_p3.width)),
+					_elm_lang$core$Basics$toString(_p6)),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$svg$Svg_Attributes$height(
-						_elm_lang$core$Basics$toString(_p3.height)),
+						_elm_lang$core$Basics$toString(_p4.height)),
 					_1: {ctor: '[]'}
 				}
 			}
 		},
-		function (_) {
-			return _.paths;
-		}(
-			A3(
-				_elm_lang$core$List$foldl,
-				F2(
-					function ($char, _p4) {
-						var _p5 = _p4;
-						var _p6 = _p5.advance;
-						var glyph = A2(
-							_elm_lang$core$Maybe$withDefault,
-							_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-							A2(_w0rm$rendering_text_with_webgl$Font_Font$getGlyph, _w0rm$rendering_text_with_webgl$Iverni$font, $char));
-						var k = _p3.fontSize / _w0rm$rendering_text_with_webgl$Iverni$font.unitsPerEm;
-						return {
-							advance: _p6 + (glyph.advanceWidth * k),
-							paths: {
-								ctor: '::',
-								_0: A4(_w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph, _p6, _p3.top + (_w0rm$rendering_text_with_webgl$Iverni$font.ascender * k), k, glyph),
-								_1: _p5.paths
-							}
-						};
-					}),
-				{
-					advance: _p3.left,
-					paths: {ctor: '[]'}
-				},
-				_elm_lang$core$String$toList(_p3.text))));
+		A2(
+			_elm_lang$core$List$map,
+			A2(_w0rm$rendering_text_with_webgl$Custom_Outline$renderGlyph, _p5, _p4.top),
+			_elm_lang$core$Tuple$first(
+				A3(
+					_w0rm$rendering_text_with_webgl$Font_Text$text,
+					function (_) {
+						return _.path;
+					},
+					style,
+					_p4.text))));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Outline$Options = F6(
 	function (a, b, c, d, e, f) {
@@ -26570,7 +26564,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$polylineToSvgPath = function
 		var _p1 = _p0._0;
 		return A2(
 			_elm_lang$core$Basics_ops['++'],
-			'M ',
+			'M',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				_elm_lang$core$Basics$toString(
@@ -27151,30 +27145,20 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p18) {
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$update = F2(
 	function (action, model) {
 		var _p25 = action;
-		if (_p25.ctor === 'Animate') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{elapsed: model.elapsed + _p25._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			var glyph = A2(
-				_elm_lang$core$Maybe$withDefault,
-				_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
-				A2(
-					_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
-					_w0rm$rendering_text_with_webgl$Iverni$font,
-					_elm_lang$core$Char$fromCode(_p25._0)));
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{glyph: glyph}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		}
+		var glyph = A2(
+			_elm_lang$core$Maybe$withDefault,
+			_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+			A2(
+				_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
+				_w0rm$rendering_text_with_webgl$Iverni$font,
+				_elm_lang$core$Char$fromCode(_p25._0)));
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{glyph: glyph}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$initial = function (options) {
 	var glyph = A2(
@@ -27184,11 +27168,11 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$initial = function (options)
 			_w0rm$rendering_text_with_webgl$Font_Font$getGlyph,
 			_w0rm$rendering_text_with_webgl$Iverni$font,
 			_elm_lang$core$Native_Utils.chr('8')));
-	return {elapsed: 0, glyph: glyph, step: options.step, width: options.width, height: options.height};
+	return {glyph: glyph, step: options.step, width: options.width, height: options.height};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Outlines$Model = F5(
-	function (a, b, c, d, e) {
-		return {elapsed: a, glyph: b, step: c, width: d, height: e};
+var _w0rm$rendering_text_with_webgl$Custom_Outlines$Model = F4(
+	function (a, b, c, d) {
+		return {glyph: a, step: b, width: c, height: d};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$Options = F3(
 	function (a, b, c) {
@@ -27197,20 +27181,8 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$Options = F3(
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$KeyPress = function (a) {
 	return {ctor: 'KeyPress', _0: a};
 };
-var _w0rm$rendering_text_with_webgl$Custom_Outlines$Animate = function (a) {
-	return {ctor: 'Animate', _0: a};
-};
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$subscriptions = function (_p26) {
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Outlines$Animate),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Outlines$KeyPress),
-				_1: {ctor: '[]'}
-			}
-		});
+	return _elm_lang$keyboard$Keyboard$presses(_w0rm$rendering_text_with_webgl$Custom_Outlines$KeyPress);
 };
 
 var _w0rm$rendering_text_with_webgl$Custom_Pixelfont$loadTexture = function (msg) {
@@ -28665,6 +28637,734 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$subscriptions = function (
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Typewriter$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$process = F2(
+	function (glyphFn, ctx) {
+		process:
+		while (true) {
+			var _p0 = {ctor: '_Tuple2', _0: ctx.step, _1: ctx.nextIndices};
+			if (_p0._1.ctor === '[]') {
+				return _elm_lang$core$Native_Utils.update(
+					ctx,
+					{
+						currentWordIndices: {ctor: '[]'}
+					});
+			} else {
+				if (_p0._0 === 0) {
+					return ctx;
+				} else {
+					var _p5 = _p0._1._1;
+					var _p4 = _p0._1._0;
+					var xAdvance = ctx.kerning ? A2(
+						_elm_lang$core$Maybe$withDefault,
+						0,
+						A2(
+							_elm_lang$core$Maybe$andThen,
+							A2(_w0rm$rendering_text_with_webgl$Font_Kerning$get, ctx.font.kerning, _p4.index),
+							A2(
+								_elm_lang$core$Maybe$map,
+								function (_) {
+									return _.index;
+								},
+								_elm_lang$core$List$head(_p5)))) : 0;
+					var fontGlyph = A2(
+						_elm_lang$core$Maybe$withDefault,
+						_w0rm$rendering_text_with_webgl$Font_Glyph$empty,
+						A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p4.index, ctx.font.glyphs));
+					var _p1 = function () {
+						var _p2 = A2(_elm_lang$core$Dict$get, _p4.index, ctx.cache);
+						if (_p2.ctor === 'Just') {
+							return {ctor: '_Tuple2', _0: _p2._0, _1: ctx.cache};
+						} else {
+							var glyph = glyphFn(fontGlyph);
+							return {
+								ctor: '_Tuple2',
+								_0: glyph,
+								_1: A3(_elm_lang$core$Dict$insert, _p4.index, glyph, ctx.cache)
+							};
+						}
+					}();
+					var glyph = _p1._0;
+					var cache = _p1._1;
+					var newX = (ctx.penX + fontGlyph.advanceWidth) + xAdvance;
+					var _p3 = _p4.$class;
+					switch (_p3.ctor) {
+						case 'Space':
+							var _v3 = glyphFn,
+								_v4 = _elm_lang$core$Native_Utils.update(
+								ctx,
+								{
+									cache: cache,
+									penX: newX,
+									nextIndices: _p5,
+									currentWordIndices: {ctor: '[]'},
+									xAtLastWordBreak: newX,
+									step: ctx.step - 1
+								});
+							glyphFn = _v3;
+							ctx = _v4;
+							continue process;
+						case 'Newline':
+							var _v5 = glyphFn,
+								_v6 = _elm_lang$core$Native_Utils.update(
+								ctx,
+								{
+									cache: cache,
+									penX: 0,
+									penY: ctx.penY - ctx.lineHeight,
+									nextIndices: _p5,
+									currentWordIndices: {ctor: '[]'},
+									xAtLastWordBreak: 0,
+									step: ctx.step - 1
+								});
+							glyphFn = _v5;
+							ctx = _v6;
+							continue process;
+						default:
+							if ((_elm_lang$core$Native_Utils.cmp(newX, ctx.width) > 0) && (!_elm_lang$core$Native_Utils.eq(ctx.xAtLastWordBreak, 0))) {
+								var _v7 = glyphFn,
+									_v8 = _elm_lang$core$Native_Utils.update(
+									ctx,
+									{
+										cache: cache,
+										penX: 0,
+										penY: ctx.penY - ctx.lineHeight,
+										glyphs: A2(
+											_elm_lang$core$List$drop,
+											_elm_lang$core$List$length(ctx.currentWordIndices),
+											ctx.glyphs),
+										nextIndices: A3(
+											_elm_lang$core$List$foldl,
+											F2(
+												function (x, y) {
+													return {ctor: '::', _0: x, _1: y};
+												}),
+											ctx.nextIndices,
+											ctx.currentWordIndices),
+										currentWordIndices: {ctor: '[]'},
+										xAtLastWordBreak: 0,
+										step: ctx.step - 1
+									});
+								glyphFn = _v7;
+								ctx = _v8;
+								continue process;
+							} else {
+								var _v9 = glyphFn,
+									_v10 = _elm_lang$core$Native_Utils.update(
+									ctx,
+									{
+										cache: cache,
+										penX: newX,
+										glyphs: {
+											ctor: '::',
+											_0: {glyph: glyph, x: ctx.penX, y: ctx.penY, size: ctx.size},
+											_1: ctx.glyphs
+										},
+										nextIndices: _p5,
+										currentWordIndices: {ctor: '::', _0: _p4, _1: ctx.currentWordIndices},
+										step: ctx.step - 1
+									});
+								glyphFn = _v9;
+								ctx = _v10;
+								continue process;
+							}
+					}
+				}
+			}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$InternalStyle = F7(
+	function (a, b, c, d, e, f, g) {
+		return {font: a, fontSize: b, lineHeight: c, width: d, step: e, features: f, cache: g};
+	});
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$GlyphInfo = F4(
+	function (a, b, c, d) {
+		return {glyph: a, x: b, y: c, size: d};
+	});
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$Context = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return {font: a, size: b, lineHeight: c, width: d, kerning: e, step: f, penX: g, penY: h, cache: i, glyphs: j, xAtLastWordBreak: k, nextIndices: l, currentWordIndices: m};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$Style = function (a) {
+	return {ctor: 'Style', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$style = function (_p6) {
+	var _p7 = _p6;
+	return _w0rm$rendering_text_with_webgl$Font_TextStepper$Style(
+		{font: _p7.font, step: _p7.step, fontSize: _p7.fontSize, lineHeight: _p7.lineHeight, width: _p7.width, features: _p7.features, cache: _elm_lang$core$Dict$empty});
+};
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$Kern = {ctor: 'Kern'};
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$init = F2(
+	function (_p8, glyphIndices) {
+		var _p9 = _p8;
+		var _p11 = _p9.fontSize;
+		var _p10 = _p9.font;
+		return {
+			font: _p10,
+			cache: _p9.cache,
+			step: _p9.step,
+			size: _p11 / _p10.unitsPerEm,
+			kerning: A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_TextStepper$Kern, _p9.features),
+			lineHeight: _p9.lineHeight * _p10.unitsPerEm,
+			width: (_p9.width / _p11) * _p10.unitsPerEm,
+			penX: 0,
+			penY: 0 - _p10.ascender,
+			xAtLastWordBreak: 0,
+			nextIndices: glyphIndices,
+			currentWordIndices: {ctor: '[]'},
+			glyphs: {ctor: '[]'}
+		};
+	});
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$Liga = {ctor: 'Liga'};
+var _w0rm$rendering_text_with_webgl$Font_TextStepper$text = F3(
+	function (glyphFn, _p12, string) {
+		var _p13 = _p12;
+		var _p14 = _p13._0;
+		return A2(
+			_w0rm$rendering_text_with_webgl$Font_TextStepper$process,
+			glyphFn,
+			A2(
+				_w0rm$rendering_text_with_webgl$Font_TextStepper$init,
+				_p14,
+				(A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_TextStepper$Liga, _p14.features) ? _w0rm$rendering_text_with_webgl$Font_Ligatures$substitute(_p14.font.ligatures) : _elm_lang$core$Basics$identity)(
+					A2(_w0rm$rendering_text_with_webgl$Font_ClassifiedGlyph$fromString, _p14.font.cmap, string))));
+	});
+
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$label = F4(
+	function (_p0, anchor, color, str) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$svg$Svg$text_,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(_p1._0)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$y(
+						_elm_lang$core$Basics$toString(_p1._1)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$textAnchor(anchor),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill(color),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg$text(str),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderPen = function (context) {
+	return A2(
+		_elm_lang$svg$Svg$g,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$circle,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$r('5'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$fill('red'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$cx(
+								_elm_lang$core$Basics$toString(context.penX * context.size)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$cy(
+									_elm_lang$core$Basics$toString((0 - context.penY) * context.size)),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$line,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x1(
+							_elm_lang$core$Basics$toString(context.penX * context.size)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y1(
+								_elm_lang$core$Basics$toString((0 - context.penY) * context.size)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x2(
+									_elm_lang$core$Basics$toString((context.penX * context.size) - 40)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y2(
+										_elm_lang$core$Basics$toString(((0 - context.penY) * context.size) + 40)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A4(
+						_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$label,
+						{ctor: '_Tuple2', _0: (context.penX * context.size) - 50, _1: ((0 - context.penY) * context.size) + 70},
+						'end',
+						'red',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'pen = (',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(context.penX),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									', ',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(context.penY),
+										')'))))),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderBaselines = function (context) {
+	return A2(
+		_elm_lang$svg$Svg$g,
+		{ctor: '[]'},
+		A2(
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$Basics_ops['++'], x, y);
+				}),
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$line,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x1(
+							_elm_lang$core$Basics$toString(0)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x2(
+								_elm_lang$core$Basics$toString(0 + (context.width * context.size))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y1('-20'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y2('-20'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$markerEnd('url(#arrow-red)'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$line,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x1(
+								_elm_lang$core$Basics$toString(0 + (context.width * context.size))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x2(
+									_elm_lang$core$Basics$toString(0 + (context.width * context.size))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y1('-40'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y2(
+											_elm_lang$core$Basics$toString((40 + (context.lineHeight * context.size)) + (context.font.ascender * context.size))),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('red'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$strokeDasharray('10,5'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A4(
+							_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$label,
+							{ctor: '_Tuple2', _0: (context.width * context.size) / 2, _1: -40},
+							'middle',
+							'red',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'line width = ',
+								_elm_lang$core$Basics$toString(context.width))),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (n) {
+					return A2(
+						_elm_lang$svg$Svg$line,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x1(
+								_elm_lang$core$Basics$toString(0)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x2(
+									_elm_lang$core$Basics$toString(0 + (context.width * context.size))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y1(
+										_elm_lang$core$Basics$toString(
+											((_elm_lang$core$Basics$toFloat(n) * context.lineHeight) * context.size) + (context.font.ascender * context.size))),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y2(
+											_elm_lang$core$Basics$toString(
+												((_elm_lang$core$Basics$toFloat(n) * context.lineHeight) * context.size) + (context.font.ascender * context.size))),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth('1'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'});
+				},
+				A2(_elm_lang$core$List$range, 0, 1))));
+};
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderGlyph = F2(
+	function (attrs, _p2) {
+		var _p3 = _p2;
+		var _p4 = _p3.size;
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$transform(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'translate(',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p3.x * _p4),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								',',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString((0 - _p3.y) * _p4),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										') scale(',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(_p4),
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												',',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(0 - _p4),
+													')'))))))))),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$path,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$d(_p3.glyph.path),
+						_1: attrs
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderNextGlyph = function (context) {
+	var _p5 = A2(
+		_elm_lang$core$Maybe$andThen,
+		function (i) {
+			return A2(_Skinney$elm_array_exploration$Array_Hamt$get, i, context.font.glyphs);
+		},
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.index;
+			},
+			_elm_lang$core$List$head(context.nextIndices)));
+	if (_p5.ctor === 'Nothing') {
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	} else {
+		var _p6 = _p5._0;
+		var color = (_elm_lang$core$Native_Utils.cmp(context.penX + _p6.advanceWidth, context.width) > 0) ? 'red' : 'black';
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$rect,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(context.penX * context.size)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString((0 - (context.penY + context.font.ascender)) * context.size)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(_p6.advanceWidth * context.size)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(context.font.unitsPerEm * context.size)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill(color),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderGlyph,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('white'),
+							_1: {ctor: '[]'}
+						},
+						{x: context.penX, y: context.penY, size: context.size, glyph: _p6}),
+					_1: {ctor: '[]'}
+				}
+			});
+	}
+};
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$view = function (_p7) {
+	var _p8 = _p7;
+	var _p12 = _p8.width;
+	var _p11 = _p8.step;
+	var _p10 = _p8.lineWidth;
+	var _p9 = _p8.height;
+	var style = _w0rm$rendering_text_with_webgl$Font_TextStepper$style(
+		{
+			fontSize: _p8.fontSize,
+			width: _p10,
+			lineHeight: 1.2,
+			font: _w0rm$rendering_text_with_webgl$Iverni$font,
+			step: _p11,
+			features: {ctor: '[]'}
+		});
+	var context = A3(_w0rm$rendering_text_with_webgl$Font_TextStepper$text, _elm_lang$core$Basics$identity, style, _p8.text);
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(_p12)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$height(
+						_elm_lang$core$Basics$toString(_p9)),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$g,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$transform(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'translate(',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString((_p12 - _p10) / 2),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									',',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(((_p9 - ((2 * context.lineHeight) * context.size)) / 2) + 50),
+										')'))))),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderBaselines(context),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$g,
+							{ctor: '[]'},
+							A2(
+								_elm_lang$core$List$map,
+								_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderGlyph(
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('#bbb'),
+										_1: {ctor: '[]'}
+									}),
+								A2(
+									_elm_lang$core$List$drop,
+									_elm_lang$core$List$length(context.currentWordIndices),
+									context.glyphs))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$g,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$List$map,
+									_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderGlyph(
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('black'),
+											_1: {ctor: '[]'}
+										}),
+									A2(
+										_elm_lang$core$List$take,
+										_elm_lang$core$List$length(context.currentWordIndices),
+										context.glyphs))),
+							_1: {
+								ctor: '::',
+								_0: _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderNextGlyph(context),
+								_1: {
+									ctor: '::',
+									_0: _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$renderPen(context),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A4(
+					_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$label,
+					{ctor: '_Tuple2', _0: _p12 - 70, _1: 60},
+					'end',
+					'black',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'current step = ',
+						_elm_lang$core$Basics$toString((_p11 - context.step) + 1))),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$Options = F6(
+	function (a, b, c, d, e, f) {
+		return {fontSize: a, text: b, width: c, height: d, lineWidth: e, step: f};
+	});
+
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$fragment2d = {'src': '\n        precision mediump float;\n        uniform vec3 color;\n        void main () {\n            gl_FragColor = vec4(color, 1.0);\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$vertex2d = {'src': '\n        precision highp float;\n        attribute vec3 position;\n        uniform vec3 center;\n        uniform mat4 projection;\n        uniform mat4 transform;\n        void main () {\n            float maxdist = 100.0;\n            vec4 p = transform * vec4(position, 1.0);\n            vec4 c = vec4(center, 1.0);\n            float dist = distance(p, c);\n\n            if (dist > maxdist) {\n                dist = maxdist;\n            }\n\n            float k = (1.0 - dist * dist / maxdist / maxdist);\n            gl_Position = projection * (p + (p - c) * k);\n        }\n    '};
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$view = function (_p0) {
@@ -28809,6 +29509,10 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$subscriptions = function (_p8) {
 	return _elm_lang$animation_frame$AnimationFrame$diffs(_w0rm$rendering_text_with_webgl$Custom_Zoom$Animate);
 };
 
+var _w0rm$rendering_text_with_webgl$Custom$wordwapping = function (options) {
+	return _w0rm$elm_slice_show$SliceShow_Content$item(
+		_w0rm$rendering_text_with_webgl$Custom_Wordwrapping$view(options));
+};
 var _w0rm$rendering_text_with_webgl$Custom$ivernifont = function (options) {
 	return _w0rm$elm_slice_show$SliceShow_Content$item(
 		_w0rm$rendering_text_with_webgl$Custom_Ivernifont$view(options));
@@ -29689,7 +30393,7 @@ var _w0rm$rendering_text_with_webgl$Slides$bulletPoints = {
 			_0: 'Find outlines and holes based on winding',
 			_1: {
 				ctor: '::',
-				_0: 'Triangulate outlines with holes using monotone polygon triangulation algorithm from ianmackenzie/elm-geometry',
+				_0: 'Triangulate outlines with holes using ianmackenzie/elm-geometry',
 				_1: {
 					ctor: '::',
 					_0: 'Generate a WebGL mesh',
@@ -29708,24 +30412,20 @@ var _w0rm$rendering_text_with_webgl$Slides$steps = function (n) {
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'font', _1: '20px/1.2 FiraCode, monospace'},
+						_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+							_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
+								_0: {ctor: '_Tuple2', _0: 'top', _1: '100px'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'top', _1: '100px'},
+									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
 									_1: {
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'right', _1: '100px'},
-											_1: {ctor: '[]'}
-										}
+										_0: {ctor: '_Tuple2', _0: 'right', _1: '100px'},
+										_1: {ctor: '[]'}
 									}
 								}
 							}
@@ -30013,7 +30713,14 @@ var _w0rm$rendering_text_with_webgl$Slides$intro = {
 				{ctor: '_Tuple2', _0: 250, _1: 490},
 				{
 					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Formatting$richtext('Andrey Kuzmin\n\nTwitter: [@unsoundscapes](https://twitter.com/unsoundscapes)\n\nGitHub: [@w0rm](https://github.com/w0rm)'),
+					_0: A2(
+						_w0rm$rendering_text_with_webgl$Formatting$scale,
+						0.75,
+						{
+							ctor: '::',
+							_0: _w0rm$rendering_text_with_webgl$Formatting$richtext('Andrey Kuzmin\n\nTwitter: [@unsoundscapes](https://twitter.com/unsoundscapes)\n\nGitHub: [@w0rm](https://github.com/w0rm)'),
+							_1: {ctor: '[]'}
+						}),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -30253,13 +30960,85 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																										ctor: '::',
 																										_0: {
 																											ctor: '::',
-																											_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Recap>'),
+																											_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																												{step: 3, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
 																											_1: {ctor: '[]'}
 																										},
 																										_1: {
 																											ctor: '::',
-																											_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
-																											_1: {ctor: '[]'}
+																											_0: {
+																												ctor: '::',
+																												_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																													{step: 4, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																												_1: {ctor: '[]'}
+																											},
+																											_1: {
+																												ctor: '::',
+																												_0: {
+																													ctor: '::',
+																													_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																														{step: 5, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																													_1: {ctor: '[]'}
+																												},
+																												_1: {
+																													ctor: '::',
+																													_0: {
+																														ctor: '::',
+																														_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																															{step: 6, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																														_1: {ctor: '[]'}
+																													},
+																													_1: {
+																														ctor: '::',
+																														_0: {
+																															ctor: '::',
+																															_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																																{step: 7, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																															_1: {ctor: '[]'}
+																														},
+																														_1: {
+																															ctor: '::',
+																															_0: {
+																																ctor: '::',
+																																_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																																	{step: 8, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																																_1: {ctor: '[]'}
+																															},
+																															_1: {
+																																ctor: '::',
+																																_0: {
+																																	ctor: '::',
+																																	_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																																		{step: 9, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																																	_1: {ctor: '[]'}
+																																},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {
+																																		ctor: '::',
+																																		_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+																																			{step: 16, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																																		_1: {ctor: '[]'}
+																																	},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {
+																																			ctor: '::',
+																																			_0: _w0rm$rendering_text_with_webgl$Formatting$shout('<Recap>'),
+																																			_1: {ctor: '[]'}
+																																		},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: _w0rm$rendering_text_with_webgl$Slides$thankYou,
+																																			_1: {ctor: '[]'}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
 																										}
 																									}
 																								}
