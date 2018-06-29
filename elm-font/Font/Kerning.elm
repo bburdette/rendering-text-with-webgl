@@ -1,4 +1,9 @@
-module Font.Kerning exposing (Kerning, decode, get)
+module Font.Kerning
+    exposing
+        ( Kerning
+        , decode
+        , get
+        )
 
 import Array.Hamt as Array exposing (Array)
 import Json.Decode as Decode

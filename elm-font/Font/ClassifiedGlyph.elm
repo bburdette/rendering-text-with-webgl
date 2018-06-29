@@ -1,4 +1,9 @@
-module Font.ClassifiedGlyph exposing (Class(..), ClassifiedGlyph, fromString)
+module Font.ClassifiedGlyph
+    exposing
+        ( Class(..)
+        , ClassifiedGlyph
+        , fromString
+        )
 
 import Char
 import Dict exposing (Dict)

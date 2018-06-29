@@ -1,4 +1,9 @@
-module Font.Ligatures exposing (Ligature, decode, substitute)
+module Font.Ligatures
+    exposing
+        ( Ligature
+        , decode
+        , substitute
+        )
 
 import Font.ClassifiedGlyph exposing (Class(..), ClassifiedGlyph)
 import Json.Decode as Decode

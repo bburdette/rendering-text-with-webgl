@@ -1,4 +1,11 @@
-module Font.Text exposing (Feature(..), GlyphInfo, Style, text)
+module Font.Text
+    exposing
+        ( Feature(..)
+        , GlyphInfo
+        , Style
+        , style
+        , text
+        )
 
 import Array.Hamt as Array exposing (Array)
 import Dict exposing (Dict)
@@ -9,7 +16,7 @@ import Font.Kerning as Kerning
 import Font.Ligatures as Ligatures
 
 
-type alias Style glyph =
+type alias InternalStyle glyph =
     { font : Font
     , fontSize : Float
     , lineHeight : Float
@@ -17,6 +24,10 @@ type alias Style glyph =
     , features : List Feature
     , cache : Dict Int glyph
     }
+
+
+type Style glyph
+    = Style (InternalStyle glyph)
 
 
 type Feature
@@ -48,14 +59,31 @@ type alias Context glyph =
     }
 
 
-type alias TextFunction glyph =
-    Style glyph
+style :
+    { font : Font
+    , fontSize : Float
+    , lineHeight : Float
+    , width : Float
+    , features : List Feature
+    }
+    -> Style a
+style { font, fontSize, lineHeight, width, features } =
+    Style
+        { font = font
+        , fontSize = fontSize
+        , lineHeight = lineHeight
+        , width = width
+        , features = features
+        , cache = Dict.empty
+        }
+
+
+text :
+    (Glyph -> glyph)
+    -> Style glyph
     -> String
-    -> ( List (GlyphInfo glyph), Dict Int glyph )
-
-
-text : (Glyph -> glyph) -> TextFunction glyph
-text glyphFn style string =
+    -> ( List (GlyphInfo glyph), Style glyph )
+text glyphFn (Style style) string =
     string
         -- unicode string to classified glyph indices
         |> ClassifiedGlyph.fromString style.font.cmap
@@ -71,10 +99,10 @@ text glyphFn style string =
         -- process the layout
         |> process glyphFn
         -- extract the result
-        |> end
+        |> end style
 
 
-init : Style glyph -> List ClassifiedGlyph -> Context glyph
+init : InternalStyle glyph -> List ClassifiedGlyph -> Context glyph
 init { font, fontSize, features, lineHeight, width, cache } glyphIndices =
     { font = font
     , cache = cache
@@ -182,8 +210,11 @@ process glyphFn ctx =
                             }
 
 
-end : Context glyph -> ( List (GlyphInfo glyph), Dict Int glyph )
-end context =
+end :
+    InternalStyle glyph
+    -> Context glyph
+    -> ( List (GlyphInfo glyph), Style glyph )
+end style context =
     ( List.reverse context.glyphs
-    , context.cache
+    , Style { style | cache = context.cache }
     )

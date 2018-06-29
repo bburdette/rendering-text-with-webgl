@@ -1,7 +1,6 @@
 module Custom.Typewriter exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
-import Dict
 import Font.Mesh as Mesh exposing (Attributes3d, glyph3d)
 import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
@@ -40,13 +39,13 @@ initial : Options -> Model
 initial options =
     let
         style =
-            { font = Iverni.font
-            , fontSize = options.fontSize
-            , lineHeight = 1.1
-            , width = options.width
-            , features = [ Text.Liga, Text.Kern ]
-            , cache = Dict.empty
-            }
+            Text.style
+                { font = Iverni.font
+                , fontSize = options.fontSize
+                , lineHeight = 1.1
+                , width = options.width
+                , features = [ Text.Liga, Text.Kern ]
+                }
 
         text =
             Tuple.first (Text.text glyph3d style options.text)

@@ -24370,6 +24370,38 @@ var _w0rm$rendering_text_with_webgl$Polygon2d$area = function (polygon) {
 			_w0rm$rendering_text_with_webgl$Polygon2d$innerLoops(polygon)));
 };
 
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$spaces = A2(
+	_elm_tools$parser$Parser$ignore,
+	_elm_tools$parser$Parser$zeroOrMore,
+	function ($char) {
+		return _elm_lang$core$Native_Utils.eq(
+			$char,
+			_elm_lang$core$Native_Utils.chr(' '));
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$number = _elm_tools$parser$Parser$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_tools$parser$Parser_ops['|='],
+			A2(
+				_elm_tools$parser$Parser_ops['|.'],
+				_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$negate),
+				_elm_tools$parser$Parser$symbol('-')),
+			_elm_tools$parser$Parser$float),
+		_1: {
+			ctor: '::',
+			_0: _elm_tools$parser$Parser$float,
+			_1: {ctor: '[]'}
+		}
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$close = A2(
+	_elm_tools$parser$Parser_ops['|.'],
+	A2(
+		_elm_tools$parser$Parser_ops['|.'],
+		_elm_tools$parser$Parser$succeed(
+			{ctor: '_Tuple0'}),
+		_elm_tools$parser$Parser$symbol('Z')),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces);
 var _w0rm$rendering_text_with_webgl$Font_PathCommand$accumulateDistinctPoints = F3(
 	function (previousPoint, points, accumulatedPoints) {
 		accumulateDistinctPoints:
@@ -24684,52 +24716,7 @@ var _w0rm$rendering_text_with_webgl$Font_PathCommand$BezierCurveTo = F6(
 	function (a, b, c, d, e, f) {
 		return {ctor: 'BezierCurveTo', _0: a, _1: b, _2: c, _3: d, _4: e, _5: f};
 	});
-var _w0rm$rendering_text_with_webgl$Font_PathCommand$QuadraticCurveTo = F4(
-	function (a, b, c, d) {
-		return {ctor: 'QuadraticCurveTo', _0: a, _1: b, _2: c, _3: d};
-	});
-var _w0rm$rendering_text_with_webgl$Font_PathCommand$LineTo = F2(
-	function (a, b) {
-		return {ctor: 'LineTo', _0: a, _1: b};
-	});
-var _w0rm$rendering_text_with_webgl$Font_PathCommand$MoveTo = F2(
-	function (a, b) {
-		return {ctor: 'MoveTo', _0: a, _1: b};
-	});
-
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces = A2(
-	_elm_tools$parser$Parser$ignore,
-	_elm_tools$parser$Parser$zeroOrMore,
-	function ($char) {
-		return _elm_lang$core$Native_Utils.eq(
-			$char,
-			_elm_lang$core$Native_Utils.chr(' '));
-	});
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number = _elm_tools$parser$Parser$oneOf(
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_tools$parser$Parser_ops['|='],
-			A2(
-				_elm_tools$parser$Parser_ops['|.'],
-				_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$negate),
-				_elm_tools$parser$Parser$symbol('-')),
-			_elm_tools$parser$Parser$float),
-		_1: {
-			ctor: '::',
-			_0: _elm_tools$parser$Parser$float,
-			_1: {ctor: '[]'}
-		}
-	});
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$close = A2(
-	_elm_tools$parser$Parser_ops['|.'],
-	A2(
-		_elm_tools$parser$Parser_ops['|.'],
-		_elm_tools$parser$Parser$succeed(
-			{ctor: '_Tuple0'}),
-		_elm_tools$parser$Parser$symbol('Z')),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$bezierCurveTo = A2(
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$bezierCurveTo = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
@@ -24757,19 +24744,23 @@ var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$bezierCurveTo = A2(
 													_elm_tools$parser$Parser_ops['|.'],
 													_elm_tools$parser$Parser$succeed(_w0rm$rendering_text_with_webgl$Font_PathCommand$BezierCurveTo),
 													_elm_tools$parser$Parser$symbol('C')),
-												_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-											_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-										_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-									_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-								_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-							_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-						_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-					_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-				_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-			_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-		_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$quadraticCurveTo = A2(
+												_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+											_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+										_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+									_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+								_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+							_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+						_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+					_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+		_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$QuadraticCurveTo = F4(
+	function (a, b, c, d) {
+		return {ctor: 'QuadraticCurveTo', _0: a, _1: b, _2: c, _3: d};
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$quadraticCurveTo = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
@@ -24789,15 +24780,19 @@ var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$quadraticCurveTo = A2(
 									_elm_tools$parser$Parser_ops['|.'],
 									_elm_tools$parser$Parser$succeed(_w0rm$rendering_text_with_webgl$Font_PathCommand$QuadraticCurveTo),
 									_elm_tools$parser$Parser$symbol('Q')),
-								_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-							_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-						_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-					_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-				_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-			_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-		_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$lineTo = A2(
+								_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+							_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+						_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+					_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+		_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$LineTo = F2(
+	function (a, b) {
+		return {ctor: 'LineTo', _0: a, _1: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$lineTo = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
@@ -24809,11 +24804,15 @@ var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$lineTo = A2(
 					_elm_tools$parser$Parser_ops['|.'],
 					_elm_tools$parser$Parser$succeed(_w0rm$rendering_text_with_webgl$Font_PathCommand$LineTo),
 					_elm_tools$parser$Parser$symbol('L')),
-				_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-			_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-		_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$moveTo = A2(
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+		_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$MoveTo = F2(
+	function (a, b) {
+		return {ctor: 'MoveTo', _0: a, _1: b};
+	});
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$moveTo = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
@@ -24825,42 +24824,46 @@ var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$moveTo = A2(
 					_elm_tools$parser$Parser_ops['|.'],
 					_elm_tools$parser$Parser$succeed(_w0rm$rendering_text_with_webgl$Font_PathCommand$MoveTo),
 					_elm_tools$parser$Parser$symbol('M')),
-				_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-			_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces),
-		_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$number),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$spaces);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$command = _elm_tools$parser$Parser$oneOf(
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces),
+		_w0rm$rendering_text_with_webgl$Font_PathCommand$number),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$spaces);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$command = _elm_tools$parser$Parser$oneOf(
 	{
 		ctor: '::',
-		_0: _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$moveTo,
+		_0: _w0rm$rendering_text_with_webgl$Font_PathCommand$moveTo,
 		_1: {
 			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$lineTo,
+			_0: _w0rm$rendering_text_with_webgl$Font_PathCommand$lineTo,
 			_1: {
 				ctor: '::',
-				_0: _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$quadraticCurveTo,
+				_0: _w0rm$rendering_text_with_webgl$Font_PathCommand$quadraticCurveTo,
 				_1: {
 					ctor: '::',
-					_0: _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$bezierCurveTo,
+					_0: _w0rm$rendering_text_with_webgl$Font_PathCommand$bezierCurveTo,
 					_1: {ctor: '[]'}
 				}
 			}
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$commands = A2(
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$commands = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
 		_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
-		A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$zeroOrMore, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$command)),
-	_w0rm$rendering_text_with_webgl$Font_ParsePathCommand$close);
-var _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path = A2(
+		A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$zeroOrMore, _w0rm$rendering_text_with_webgl$Font_PathCommand$command)),
+	_w0rm$rendering_text_with_webgl$Font_PathCommand$close);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$path = A2(
 	_elm_tools$parser$Parser_ops['|.'],
 	A2(
 		_elm_tools$parser$Parser_ops['|='],
 		_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
-		A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$zeroOrMore, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$commands)),
+		A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$zeroOrMore, _w0rm$rendering_text_with_webgl$Font_PathCommand$commands)),
 	_elm_tools$parser$Parser$end);
+var _w0rm$rendering_text_with_webgl$Font_PathCommand$parse = function (string) {
+	return _elm_lang$core$Result$toMaybe(
+		A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_PathCommand$path, string));
+};
 
 var _w0rm$rendering_text_with_webgl$Font_Mesh$edgeNormal = F3(
 	function (p0, p1, p2) {
@@ -25130,9 +25133,9 @@ var _w0rm$rendering_text_with_webgl$Font_Mesh$glyph3d = function (glyph) {
 			_elm_lang$core$List$map,
 			_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
 			A2(
-				_elm_lang$core$Result$withDefault,
+				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
-				A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(glyph.path))));
 };
 var _w0rm$rendering_text_with_webgl$Font_Mesh$glyph2d = function (glyph) {
 	return _w0rm$rendering_text_with_webgl$Font_Mesh$mesh2d(
@@ -25140,9 +25143,9 @@ var _w0rm$rendering_text_with_webgl$Font_Mesh$glyph2d = function (glyph) {
 			_elm_lang$core$List$map,
 			_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(10),
 			A2(
-				_elm_lang$core$Result$withDefault,
+				_elm_lang$core$Maybe$withDefault,
 				{ctor: '[]'},
-				A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+				_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(glyph.path))));
 };
 var _w0rm$rendering_text_with_webgl$Font_Mesh$Attributes3d = F2(
 	function (a, b) {
@@ -25676,13 +25679,6 @@ var _w0rm$rendering_text_with_webgl$Font_Font$decode = A8(
 	A2(_elm_lang$core$Json_Decode$field, 'descender', _elm_lang$core$Json_Decode$float),
 	A2(_elm_lang$core$Json_Decode$field, 'unitsPerEm', _elm_lang$core$Json_Decode$float));
 
-var _w0rm$rendering_text_with_webgl$Font_Text$end = function (context) {
-	return {
-		ctor: '_Tuple2',
-		_0: _elm_lang$core$List$reverse(context.glyphs),
-		_1: context.cache
-	};
-};
 var _w0rm$rendering_text_with_webgl$Font_Text$process = F2(
 	function (glyphFn, ctx) {
 		process:
@@ -25806,7 +25802,7 @@ var _w0rm$rendering_text_with_webgl$Font_Text$process = F2(
 			}
 		}
 	});
-var _w0rm$rendering_text_with_webgl$Font_Text$Style = F6(
+var _w0rm$rendering_text_with_webgl$Font_Text$InternalStyle = F6(
 	function (a, b, c, d, e, f) {
 		return {font: a, fontSize: b, lineHeight: c, width: d, features: e, cache: f};
 	});
@@ -25839,21 +25835,40 @@ var _w0rm$rendering_text_with_webgl$Font_Text$Context = function (a) {
 		};
 	};
 };
+var _w0rm$rendering_text_with_webgl$Font_Text$Style = function (a) {
+	return {ctor: 'Style', _0: a};
+};
+var _w0rm$rendering_text_with_webgl$Font_Text$style = function (_p6) {
+	var _p7 = _p6;
+	return _w0rm$rendering_text_with_webgl$Font_Text$Style(
+		{font: _p7.font, fontSize: _p7.fontSize, lineHeight: _p7.lineHeight, width: _p7.width, features: _p7.features, cache: _elm_lang$core$Dict$empty});
+};
+var _w0rm$rendering_text_with_webgl$Font_Text$end = F2(
+	function (style, context) {
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$List$reverse(context.glyphs),
+			_1: _w0rm$rendering_text_with_webgl$Font_Text$Style(
+				_elm_lang$core$Native_Utils.update(
+					style,
+					{cache: context.cache}))
+		};
+	});
 var _w0rm$rendering_text_with_webgl$Font_Text$Kern = {ctor: 'Kern'};
 var _w0rm$rendering_text_with_webgl$Font_Text$init = F2(
-	function (_p6, glyphIndices) {
-		var _p7 = _p6;
-		var _p9 = _p7.fontSize;
-		var _p8 = _p7.font;
+	function (_p8, glyphIndices) {
+		var _p9 = _p8;
+		var _p11 = _p9.fontSize;
+		var _p10 = _p9.font;
 		return {
-			font: _p8,
-			cache: _p7.cache,
-			size: _p9 / _p8.unitsPerEm,
-			kerning: A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Kern, _p7.features),
-			lineHeight: _p7.lineHeight * _p8.unitsPerEm,
-			width: (_p7.width / _p9) * _p8.unitsPerEm,
+			font: _p10,
+			cache: _p9.cache,
+			size: _p11 / _p10.unitsPerEm,
+			kerning: A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Kern, _p9.features),
+			lineHeight: _p9.lineHeight * _p10.unitsPerEm,
+			width: (_p9.width / _p11) * _p10.unitsPerEm,
 			penX: 0,
-			penY: 0 - _p8.ascender,
+			penY: 0 - _p10.ascender,
 			xAtLastWordBreak: 0,
 			nextIndices: glyphIndices,
 			currentWordIndices: {ctor: '[]'},
@@ -25862,16 +25877,20 @@ var _w0rm$rendering_text_with_webgl$Font_Text$init = F2(
 	});
 var _w0rm$rendering_text_with_webgl$Font_Text$Liga = {ctor: 'Liga'};
 var _w0rm$rendering_text_with_webgl$Font_Text$text = F3(
-	function (glyphFn, style, string) {
-		return _w0rm$rendering_text_with_webgl$Font_Text$end(
+	function (glyphFn, _p12, string) {
+		var _p13 = _p12;
+		var _p14 = _p13._0;
+		return A2(
+			_w0rm$rendering_text_with_webgl$Font_Text$end,
+			_p14,
 			A2(
 				_w0rm$rendering_text_with_webgl$Font_Text$process,
 				glyphFn,
 				A2(
 					_w0rm$rendering_text_with_webgl$Font_Text$init,
-					style,
-					(A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Liga, style.features) ? _w0rm$rendering_text_with_webgl$Font_Ligatures$substitute(style.font.ligatures) : _elm_lang$core$Basics$identity)(
-						A2(_w0rm$rendering_text_with_webgl$Font_ClassifiedGlyph$fromString, style.font.cmap, string)))));
+					_p14,
+					(A2(_elm_lang$core$List$member, _w0rm$rendering_text_with_webgl$Font_Text$Liga, _p14.features) ? _w0rm$rendering_text_with_webgl$Font_Ligatures$substitute(_p14.font.ligatures) : _elm_lang$core$Basics$identity)(
+						A2(_w0rm$rendering_text_with_webgl$Font_ClassifiedGlyph$fromString, _p14.font.cmap, string)))));
 	});
 
 var _w0rm$rendering_text_with_webgl$Iverni$font = A2(
@@ -25904,7 +25923,8 @@ var _w0rm$rendering_text_with_webgl$Custom_Ivernifont$view = function (_p0) {
 			});
 	};
 	var devicePixelRatio = 2;
-	var style = {font: _w0rm$rendering_text_with_webgl$Iverni$font, fontSize: _p1.fontSize, lineHeight: _p1.lineHeight, width: _p6, features: _p1.features, cache: _elm_lang$core$Dict$empty};
+	var style = _w0rm$rendering_text_with_webgl$Font_Text$style(
+		{font: _w0rm$rendering_text_with_webgl$Iverni$font, fontSize: _p1.fontSize, lineHeight: _p1.lineHeight, width: _p6, features: _p1.features});
 	var renderedText = _elm_lang$core$Tuple$first(
 		A3(_w0rm$rendering_text_with_webgl$Font_Text$text, _w0rm$rendering_text_with_webgl$Font_Mesh$glyph2d, style, _p1.text));
 	return A2(
@@ -26691,9 +26711,9 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewTriangulatedGlyph = F2(
 						_elm_lang$core$List$map,
 						_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(_w0rm$rendering_text_with_webgl$Custom_Outlines$samples),
 						A2(
-							_elm_lang$core$Result$withDefault,
+							_elm_lang$core$Maybe$withDefault,
 							{ctor: '[]'},
-							A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))))));
+							_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(glyph.path))))));
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewCountursGlyph = F2(
 	function (k, glyph) {
@@ -26704,9 +26724,9 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewCountursGlyph = F2(
 				_elm_lang$core$List$map,
 				_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(_w0rm$rendering_text_with_webgl$Custom_Outlines$samples),
 				A2(
-					_elm_lang$core$Result$withDefault,
+					_elm_lang$core$Maybe$withDefault,
 					{ctor: '[]'},
-					A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+					_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(glyph.path))));
 		var ccw = _p9._0;
 		var cw = _p9._1;
 		return A2(
@@ -26828,9 +26848,9 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSegmentedGlyph = F2(
 				_elm_lang$core$List$map,
 				_w0rm$rendering_text_with_webgl$Font_PathCommand$pathToPolygon(_w0rm$rendering_text_with_webgl$Custom_Outlines$samples),
 				A2(
-					_elm_lang$core$Result$withDefault,
+					_elm_lang$core$Maybe$withDefault,
 					{ctor: '[]'},
-					A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, glyph.path))));
+					_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(glyph.path))));
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
 	function (k, _p10) {
@@ -26885,9 +26905,9 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$viewSvgOutlinesGlyph = F2(
 				path);
 		};
 		var paths = A2(
-			_elm_lang$core$Result$withDefault,
+			_elm_lang$core$Maybe$withDefault,
 			{ctor: '[]'},
-			A2(_elm_tools$parser$Parser$run, _w0rm$rendering_text_with_webgl$Font_ParsePathCommand$path, _p14));
+			_w0rm$rendering_text_with_webgl$Font_PathCommand$parse(_p14));
 		return A2(
 			_elm_lang$svg$Svg$g,
 			{ctor: '[]'},
@@ -28606,22 +28626,22 @@ var _w0rm$rendering_text_with_webgl$Custom_Typewriter$update = F2(
 		};
 	});
 var _w0rm$rendering_text_with_webgl$Custom_Typewriter$initial = function (options) {
-	var style = {
-		font: _w0rm$rendering_text_with_webgl$Iverni$font,
-		fontSize: options.fontSize,
-		lineHeight: 1.1,
-		width: options.width,
-		features: {
-			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Font_Text$Liga,
-			_1: {
+	var style = _w0rm$rendering_text_with_webgl$Font_Text$style(
+		{
+			font: _w0rm$rendering_text_with_webgl$Iverni$font,
+			fontSize: options.fontSize,
+			lineHeight: 1.1,
+			width: options.width,
+			features: {
 				ctor: '::',
-				_0: _w0rm$rendering_text_with_webgl$Font_Text$Kern,
-				_1: {ctor: '[]'}
+				_0: _w0rm$rendering_text_with_webgl$Font_Text$Liga,
+				_1: {
+					ctor: '::',
+					_0: _w0rm$rendering_text_with_webgl$Font_Text$Kern,
+					_1: {ctor: '[]'}
+				}
 			}
-		},
-		cache: _elm_lang$core$Dict$empty
-	};
+		});
 	var text = _elm_lang$core$Tuple$first(
 		A3(_w0rm$rendering_text_with_webgl$Font_Text$text, _w0rm$rendering_text_with_webgl$Font_Mesh$glyph3d, style, options.text));
 	return {elapsed: 0, text: text, fontSize: options.fontSize, width: options.width, height: options.height, start: options.start};
@@ -28729,22 +28749,22 @@ var _w0rm$rendering_text_with_webgl$Custom_Zoom$view = function (_p0) {
 		A2(_elm_lang$core$List$map, glyphToEntity, _p1.text));
 };
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$style = function (fontSize) {
-	return {
-		font: _w0rm$rendering_text_with_webgl$Iverni$font,
-		fontSize: fontSize,
-		lineHeight: 1.3,
-		width: 10000,
-		features: {
-			ctor: '::',
-			_0: _w0rm$rendering_text_with_webgl$Font_Text$Liga,
-			_1: {
+	return _w0rm$rendering_text_with_webgl$Font_Text$style(
+		{
+			font: _w0rm$rendering_text_with_webgl$Iverni$font,
+			fontSize: fontSize,
+			lineHeight: 1.3,
+			width: 10000,
+			features: {
 				ctor: '::',
-				_0: _w0rm$rendering_text_with_webgl$Font_Text$Kern,
-				_1: {ctor: '[]'}
+				_0: _w0rm$rendering_text_with_webgl$Font_Text$Liga,
+				_1: {
+					ctor: '::',
+					_0: _w0rm$rendering_text_with_webgl$Font_Text$Kern,
+					_1: {ctor: '[]'}
+				}
 			}
-		},
-		cache: _elm_lang$core$Dict$empty
-	};
+		});
 };
 var _w0rm$rendering_text_with_webgl$Custom_Zoom$update = F2(
 	function (action, model) {

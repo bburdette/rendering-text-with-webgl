@@ -1,7 +1,6 @@
 module Custom.Zoom exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
-import Dict
 import Font.Mesh as Mesh exposing (Attributes2d, glyph2d)
 import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
@@ -58,13 +57,13 @@ update action model =
 
 style : Float -> Text.Style a
 style fontSize =
-    { font = Iverni.font
-    , fontSize = fontSize
-    , lineHeight = 1.3
-    , width = 10000 -- don't need line wrapping
-    , features = [ Text.Liga, Text.Kern ]
-    , cache = Dict.empty
-    }
+    Text.style
+        { font = Iverni.font
+        , fontSize = fontSize
+        , lineHeight = 1.3
+        , width = 10000 -- don't need line wrapping
+        , features = [ Text.Liga, Text.Kern ]
+        }
 
 
 view : Model -> Html msg

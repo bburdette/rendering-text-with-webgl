@@ -1,4 +1,9 @@
-module Font.Glyph exposing (Glyph, decode, empty)
+module Font.Glyph
+    exposing
+        ( Glyph
+        , decode
+        , empty
+        )
 
 import Json.Decode as Decode
 

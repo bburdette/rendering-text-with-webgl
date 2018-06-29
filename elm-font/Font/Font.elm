@@ -1,4 +1,10 @@
-module Font.Font exposing (Font, decode, empty, getGlyph)
+module Font.Font
+    exposing
+        ( Font
+        , decode
+        , empty
+        , getGlyph
+        )
 
 import Array.Hamt as Array exposing (Array)
 import Char

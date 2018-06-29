@@ -1,6 +1,5 @@
 module Custom.Ivernifont exposing (Options, view)
 
-import Dict
 import Font.Mesh as Mesh exposing (Attributes2d, glyph2d)
 import Font.Text as Text exposing (Feature, GlyphInfo)
 import Html exposing (Html)
@@ -26,13 +25,13 @@ view : Options -> Html msg
 view { width, features, color, height, text, lineHeight, fontSize } =
     let
         style =
-            { font = Iverni.font
-            , fontSize = fontSize
-            , lineHeight = lineHeight
-            , width = width
-            , features = features
-            , cache = Dict.empty
-            }
+            Text.style
+                { font = Iverni.font
+                , fontSize = fontSize
+                , lineHeight = lineHeight
+                , width = width
+                , features = features
+                }
 
         renderedText =
             Tuple.first (Text.text glyph2d style text)

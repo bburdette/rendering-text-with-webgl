@@ -4,7 +4,6 @@ import AnimationFrame
 import Char
 import Font.Font as Font
 import Font.Glyph as Glyph exposing (Glyph)
-import Font.ParsePathCommand as ParsePathCommand
 import Font.PathCommand as PathCommand exposing (PathCommand(..))
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
@@ -182,8 +181,8 @@ viewSvgOutlinesGlyph k { path } =
     let
         paths =
             path
-                |> Parser.run ParsePathCommand.path
-                |> Result.withDefault []
+                |> PathCommand.parse
+                |> Maybe.withDefault []
 
         dots path =
             List.foldl
@@ -221,8 +220,8 @@ viewSvgOutlinesGlyph k { path } =
 viewSegmentedGlyph : Float -> Glyph -> Svg msg
 viewSegmentedGlyph k glyph =
     glyph.path
-        |> Parser.run ParsePathCommand.path
-        |> Result.withDefault []
+        |> PathCommand.parse
+        |> Maybe.withDefault []
         |> List.map (PathCommand.pathToPolygon samples)
         |> (\path ->
                 path
@@ -250,8 +249,8 @@ viewCountursGlyph k glyph =
     let
         ( ccw, cw ) =
             glyph.path
-                |> Parser.run ParsePathCommand.path
-                |> Result.withDefault []
+                |> PathCommand.parse
+                |> Maybe.withDefault []
                 |> List.map (PathCommand.pathToPolygon samples)
                 |> List.partition PathCommand.winding
     in
@@ -286,8 +285,8 @@ viewCountursGlyph k glyph =
 viewTriangulatedGlyph : Float -> Glyph -> Svg msg
 viewTriangulatedGlyph k glyph =
     glyph.path
-        |> Parser.run ParsePathCommand.path
-        |> Result.withDefault []
+        |> PathCommand.parse
+        |> Maybe.withDefault []
         |> List.map (PathCommand.pathToPolygon samples)
         |> PathCommand.triangulate
         |> List.foldl
