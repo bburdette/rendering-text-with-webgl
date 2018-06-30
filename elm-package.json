@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "summary": "Rendering Text with WebGL",
   "repository": "https://github.com/w0rm/rendering-text-with-webgl.git",
-  "license": "MIT",
+  "license": "",
   "source-directories": [".", "elm-geometry/src", "elm-font"],
   "exposed-modules": [],
   "dependencies": {
