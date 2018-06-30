@@ -8,14 +8,13 @@ module Font.PathCommand
         , winding
         )
 
-import Array.Hamt as Array
 import CubicSpline2d exposing (CubicSpline2d)
 import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
 import Parser exposing ((|.), (|=), Parser)
 import Point2d exposing (Point2d)
 import Polygon2d as Polygon2d exposing (Polygon2d)
-import Polygon2d.Monotone as Monotone
 import QuadraticSpline2d exposing (QuadraticSpline2d)
+import TriangularMesh
 
 
 type PathCommand
@@ -118,25 +117,10 @@ triangulate path =
                                     >> Maybe.withDefault False
                                 )
                     }
-                    |> Monotone.monotonePolygons
+                    |> Polygon2d.triangulate
             )
-        |> List.concatMap
-            (\( points, loops ) ->
-                List.concatMap
-                    (\vertices ->
-                        vertices
-                            |> Monotone.faces
-                            |> List.filterMap
-                                (\( i, j, k ) ->
-                                    Maybe.map3
-                                        (,,)
-                                        (Array.get i points)
-                                        (Array.get j points)
-                                        (Array.get k points)
-                                )
-                    )
-                    loops
-            )
+        -- TODO: maybe use indices to make it work with indexTriangles
+        |> List.concatMap TriangularMesh.faceVertices
 
 
 pathToPolygon : Int -> List PathCommand -> List Point2d
