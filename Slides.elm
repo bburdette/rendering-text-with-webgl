@@ -1,6 +1,7 @@
 module Slides exposing (slides)
 
 import Custom exposing (Content, Slide)
+import Font.Feature as Feature
 import Formatting exposing (..)
 import Html exposing (h1, text)
 import Html.Attributes exposing (style)
@@ -61,22 +62,11 @@ solvedProblem =
                 , ( "color", "#9e9c9d" )
                 ]
             ]
-            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space word-break word-spacing word-wrap writing-mode" ]
+            [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space width word-break word-spacing word-wrap writing-mode" ]
         )
     , position
         ( 250, 145 )
         [ imageLink ( 802, 430 ) "assets/solved-problems.png" "https://twitter.com/AbletonDev/status/902486487664615428" ]
-    ]
-
-
-exploringTheProblem : List Content
-exploringTheProblem =
-    [ title "Rendering Text in Elm WebGL"
-    , bullets
-        [ bullet "Elm is a great tool to explore the problem space"
-        , bullet "WebGL in Elm is a fun way to dive into graphics programming"
-        , bullet "Opens possibilities for typographic experiments"
-        ]
     ]
 
 
@@ -125,7 +115,7 @@ iverniFont =
     [ title "Iverni Typeface"
     , spacing 20
     , bullets
-        [ bullet "Save in OpenType® format"
+        [ bullet "Save in OpenType format"
         , bullet "Convert to JSON using opentype.js"
         , bullet "Decode into Elm"
         , bullet "Render with WebGL"
@@ -196,6 +186,117 @@ steps n =
             )
 
 
+gsub : List Content
+gsub =
+    [ title "OpenType Features: GSUB"
+    , spacing 20
+    , scale 0.9
+        [ bullets
+            [ bullet "Single"
+            , bullet "Multiple"
+            , bullet "Alternate"
+            , bulletRed "Ligature"
+            , bullet "Context"
+            , bullet "Chaining Context"
+            , bullet "Extension Substitution"
+            , bullet "Reverse chaining context single"
+            ]
+        , richtext "[See OpenType specification](https://docs.microsoft.com/en-us/typography/opentype/spec/gsub#gsub-header)"
+        ]
+    , position ( 850, 450 ) [ richtext "Ligatures" ]
+    , position ( 750, 250 )
+        [ Custom.ivernifont
+            { features = []
+            , fontSize = 200
+            , text = "tt ="
+            , lineHeight = 1
+            , width = 430
+            , height = 200
+            , color = vec3 0.7 0.7 0.7
+            }
+        ]
+    , position ( 995, 250 )
+        [ Custom.ivernifont
+            { features = [ Feature.Liga ]
+            , fontSize = 200
+            , text = "tt"
+            , lineHeight = 1
+            , width = 100
+            , height = 200
+            , color = vec3 1 0 0
+            }
+        ]
+    ]
+
+
+gpos : List Content
+gpos =
+    [ title "OpenType Features: GPOS"
+    , spacing 20
+    , scale 0.9
+        [ bullets
+            [ bullet "Single adjustment"
+            , bulletRed "Pair adjustment"
+            , bullet "Cursive attachment"
+            , bullet "MarkToBase attachment"
+            , bullet "MarkToLigature attachment"
+            , bullet "MarkToMark attachment"
+            , bullet "Context positioning"
+            , bullet "Chained Context positioning"
+            , bullet "Extension positioning"
+            ]
+        , richtext "[See OpenType specification](https://docs.microsoft.com/en-us/typography/opentype/spec/gpos#gpos-header)"
+        ]
+    , position ( 870, 500 ) [ richtext "Kerning" ]
+    , position ( 750, 250 )
+        [ Custom.ivernifont
+            { features = []
+            , fontSize = 200
+            , text = "Ty ="
+            , lineHeight = 1
+            , width = 430
+            , height = 200
+            , color = vec3 0.7 0.7 0.7
+            }
+        ]
+    , Content.item
+        (Html.div
+            [ style
+                [ ( "height", "260px" )
+                , ( "border-right", "2px black dashed" )
+                , ( "position", "absolute" )
+                , ( "left", "810px" )
+                , ( "top", "220px" )
+                ]
+            ]
+            []
+        )
+    , position ( 992, 250 )
+        [ Custom.ivernifont
+            { features = [ Feature.Kern ]
+            , fontSize = 200
+            , text = "Ty"
+            , lineHeight = 1
+            , width = 150
+            , height = 200
+            , color = vec3 1 0 0
+            }
+        ]
+    , Content.item
+        (Html.div
+            [ style
+                [ ( "height", "260px" )
+                , ( "border-right", "2px black dashed" )
+                , ( "position", "absolute" )
+                , ( "left", "1052px" )
+                , ( "top", "220px" )
+                ]
+            ]
+            []
+        )
+    ]
+
+
 lineBreaking : List Content
 lineBreaking =
     [ position ( 0, 0 )
@@ -229,13 +330,13 @@ text :
     ]
 
 
-recap : List Content
-recap =
-    [ title "Recap"
+conclusions : List Content
+conclusions =
+    [ title "Conclusions"
     , bullets
-        [ bullet "Elm is a great tool to explore the problem space"
-        , bullet "WebGL in Elm is a fun way to dive into graphics programming"
-        , bullet "Opens possibilities for creative coding"
+        [ bullet "Elm is a great research tool" |> Content.hide
+        , bullet "Text rendering is super complex" |> Content.hide
+        , bullet "Typografic experiments are fun" |> Content.hide
         ]
     ]
 
@@ -256,8 +357,6 @@ thankYou =
 slides : List Slide
 slides =
     [ [ padded intro ]
-    , cssProperties
-    , solvedProblem
     , [ background "assets/nadya-kuzmina.jpg"
             [ position ( 160, 50 )
                 [ Content.item (Html.h1 [ style [ ( "width", "100px" ) ] ] [ text "Nadya Kuzmina" ])
@@ -267,7 +366,8 @@ slides =
                 ]
             ]
       ]
-    , [ padded exploringTheProblem ]
+    , cssProperties
+    , solvedProblem
     , [ dark fontAsCode ]
     , [ dark mogeeFont ]
     , [ dark mogeeFontUsage ]
@@ -290,7 +390,8 @@ slides =
     , [ Custom.outlines { width = 1280, height = 720, step = 4 }, steps 3 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 4 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 5 ]
-    , [ shout "<Smart Font Features>" ]
+    , [ padded gsub ]
+    , [ padded gpos ]
     , lineBreaking
     , [ padded wordWrapping ]
     , [ Custom.wordwapping { step = 3, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
@@ -301,7 +402,7 @@ slides =
     , [ Custom.wordwapping { step = 8, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 9, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
     , [ Custom.wordwapping { step = 16, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ padded recap ]
+    , [ padded conclusions ]
     , thankYou
     ]
         -- make 16:9 slides

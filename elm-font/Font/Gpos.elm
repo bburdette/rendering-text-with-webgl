@@ -1,20 +1,46 @@
-module Font.Kerning
+module Font.Gpos
     exposing
-        ( Kerning
+        ( Gpos
         , decode
+        , empty
         , get
         )
 
 import Array.Hamt as Array exposing (Array)
+import Font.ClassifiedGlyph exposing (ClassifiedGlyph)
+import Font.Feature as Feature exposing (Feature, FeatureTable)
 import Json.Decode as Decode
 
 
-type Kerning
-    = KerningPairPosFormat1
+empty : Gpos
+empty =
+    Feature.empty
+
+
+type alias Gpos =
+    FeatureTable GposLookup
+
+
+type GposLookup
+    = PairAdjustment (List PairAdjustmentSubtable) -- 2 Adjust position of a pair of glyphs. Kerning is an example of pair adjustment.
+      -- 1   SingleAdjustment  -- Adjust position of a single glyph
+      -- 3   CursiveAttachment  -- Attach cursive glyphs
+      -- 4   MarkToBaseAttachment  -- Attach a combining mark to a base glyph
+      -- 5   MarkToLigatureAttachment  -- Attach a combining mark to a ligature
+      -- 6   MarkToMarkAttachment  -- Attach a combining mark to another mark
+      -- 7   ContextPositioning  -- Position one or more glyphs in context
+      -- 8   ChainedContextPositioning  -- Position one or more glyphs in chained context
+      -- 9   ExtensionPositioning  -- Extension mechanism for other positionings
+      -- 10+ Reserved  -- For future use (set to zero)
+    | Unsupported
+
+
+type PairAdjustmentSubtable
+    = PairPosFormat1
         { coverage : Coverage
-        , pairSets : Array (List KerningPairPosFormat1Pair)
+        , pairSets : Array (List PairPosFormat1Pair)
         }
-    | KerningPairPosFormat2
+    | PairPosFormat2
         { coverage : Coverage
         , classDef1 : ClassDef
         , classDef2 : ClassDef
@@ -22,7 +48,7 @@ type Kerning
         }
 
 
-type alias KerningPairPosFormat1Pair =
+type alias PairPosFormat1Pair =
     { secondGlyph : Int
     , xAdvance : Float
     }
@@ -40,24 +66,48 @@ type alias ClassDefRange =
     }
 
 
-get : List Kerning -> Int -> Int -> Maybe Float
-get kerning leftIndex rightIndex =
-    case kerning of
-        (KerningPairPosFormat1 { coverage, pairSets }) :: rest ->
+{-| get x offset for two indices,
+currently only supports horizontal kerning
+-}
+get : List Feature -> Gpos -> ClassifiedGlyph -> ClassifiedGlyph -> Maybe Float
+get features gpos left right =
+    Feature.get
+        features
+        (getGpos left.index right.index)
+        gpos
+
+
+getGpos : Int -> Int -> GposLookup -> Maybe Float
+getGpos leftIndex rightIndex gposLookup =
+    case gposLookup of
+        PairAdjustment pairAdjustmentSubtables ->
+            getPairAdjustment
+                pairAdjustmentSubtables
+                leftIndex
+                rightIndex
+
+        Unsupported ->
+            Nothing
+
+
+getPairAdjustment : List PairAdjustmentSubtable -> Int -> Int -> Maybe Float
+getPairAdjustment pairAdjustmentSubtables leftIndex rightIndex =
+    case pairAdjustmentSubtables of
+        (PairPosFormat1 { coverage, pairSets }) :: rest ->
             case
                 getCoverageIndex coverage leftIndex
                     |> Maybe.andThen (\covIndex -> Array.get covIndex pairSets)
                     |> Maybe.andThen (\pairsPositions -> findInPairsPositions pairsPositions rightIndex)
             of
-                Just width ->
-                    Just width
+                Just xAdvance ->
+                    Just xAdvance
 
                 Nothing ->
-                    get rest leftIndex rightIndex
+                    getPairAdjustment rest leftIndex rightIndex
 
-        (KerningPairPosFormat2 { coverage, classDef1, classDef2, classRecords }) :: rest ->
+        (PairPosFormat2 { coverage, classDef1, classDef2, classRecords }) :: rest ->
             if getCoverageIndex coverage leftIndex == Nothing then
-                get rest leftIndex rightIndex
+                getPairAdjustment rest leftIndex rightIndex
 
             else
                 let
@@ -66,6 +116,10 @@ get kerning leftIndex rightIndex =
 
                     rightClass =
                         getGlyphClass classDef2 rightIndex
+
+                    classRecords_ =
+                        Maybe.map Array.toList (Array.get leftClass classRecords)
+                            |> Maybe.withDefault []
                 in
                 classRecords
                     |> Array.get leftClass
@@ -120,7 +174,7 @@ searchClassDefRangeHelp list glyphIndex =
             Nothing
 
         range :: rest ->
-            if range.start >= glyphIndex && range.end <= glyphIndex then
+            if range.start <= glyphIndex && range.end >= glyphIndex then
                 Just range.classId
 
             else
@@ -169,17 +223,43 @@ searchRangeHelp list glyphIndex currentIndex =
 -- DECODING
 
 
-decode : Decode.Decoder Kerning
+decode : Decode.Decoder Gpos
 decode =
+    Feature.decode decodeGposLookup
+
+
+decodeGposLookup : Decode.Decoder GposLookup
+decodeGposLookup =
+    Decode.andThen
+        (\lookupType ->
+            case lookupType of
+                2 ->
+                    Decode.map
+                        PairAdjustment
+                        (Decode.field
+                            "subtables"
+                            (Decode.list
+                                decodePairAdjustmentSubtable
+                            )
+                        )
+
+                _ ->
+                    Decode.succeed Unsupported
+        )
+        (Decode.field "lookupType" Decode.int)
+
+
+decodePairAdjustmentSubtable : Decode.Decoder PairAdjustmentSubtable
+decodePairAdjustmentSubtable =
     Decode.oneOf
-        [ decodeKerningPairPosFormat2
-        , decodeKerningPairPosFormat1
+        [ decodePairPosFormat2
+        , decodePairPosFormat1
         ]
 
 
-decodeKerningPairPosFormat1 : Decode.Decoder Kerning
-decodeKerningPairPosFormat1 =
-    Decode.map KerningPairPosFormat1
+decodePairPosFormat1 : Decode.Decoder PairAdjustmentSubtable
+decodePairPosFormat1 =
+    Decode.map PairPosFormat1
         (Decode.map2
             (\coverage pairSets ->
                 { coverage = coverage
@@ -187,15 +267,15 @@ decodeKerningPairPosFormat1 =
                 }
             )
             (Decode.field "coverage" decodeCoverage)
-            (Decode.field "pairSets" (Decode.list (Decode.list decodeKerningPairPosFormat1Pair)))
+            (Decode.field "pairSets" (Decode.list (Decode.list decodePairPosFormat1Pair)))
         )
 
 
-decodeKerningPairPosFormat2 : Decode.Decoder Kerning
-decodeKerningPairPosFormat2 =
+decodePairPosFormat2 : Decode.Decoder PairAdjustmentSubtable
+decodePairPosFormat2 =
     Decode.map4
         (\coverage classDef1 classDef2 classRecords ->
-            KerningPairPosFormat2
+            PairPosFormat2
                 { coverage = coverage
                 , classDef1 = classDef1
                 , classDef2 = classDef2
@@ -256,8 +336,8 @@ decodeCoverageRangeRecord =
         (Decode.field "index" Decode.int)
 
 
-decodeKerningPairPosFormat1Pair : Decode.Decoder KerningPairPosFormat1Pair
-decodeKerningPairPosFormat1Pair =
-    Decode.map2 KerningPairPosFormat1Pair
+decodePairPosFormat1Pair : Decode.Decoder PairPosFormat1Pair
+decodePairPosFormat1Pair =
+    Decode.map2 PairPosFormat1Pair
         (Decode.field "secondGlyph" Decode.int)
         decodeXAdvance

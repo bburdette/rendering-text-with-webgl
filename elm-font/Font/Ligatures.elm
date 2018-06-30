@@ -1,3 +1,6 @@
+{- TODO: use GSUB table directly instead -}
+
+
 module Font.Ligatures
     exposing
         ( Ligature

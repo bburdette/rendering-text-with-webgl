@@ -1,6 +1,7 @@
 module Custom.Typewriter exposing (Model, Msg, Options, initial, subscriptions, update, view)
 
 import AnimationFrame
+import Font.Feature as Feature
 import Font.Mesh as Mesh exposing (Attributes3d, glyph3d)
 import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
@@ -44,7 +45,7 @@ initial options =
                 , fontSize = options.fontSize
                 , lineHeight = 1.1
                 , width = options.width
-                , features = [ Text.Liga, Text.Kern ]
+                , features = [ Feature.Liga, Feature.Kern ]
                 }
 
         text =

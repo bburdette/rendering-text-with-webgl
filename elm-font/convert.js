@@ -17,12 +17,23 @@ for (let i = 0; i < font.glyphs.length; i++) {
   });
 }
 
-const kerningTables = Array.prototype.concat.apply(
-  [],
-  font.position
-    .getKerningTables()
-    .map(({ subtables }) => subtables)
-);
+function getLookupTables(table) {
+  const fontTable = font.tables[table.tableName];
+  return {
+    features: table
+      .getLangSysTable() // only support the default script and language
+      .featureIndexes
+      .map((i) => fontTable.features[i])
+      .map(({ tag, feature }) => ({
+        tag,
+        lookupIndices: feature.lookupListIndexes
+      })),
+    lookups: fontTable.lookups.map(({ lookupType, subtables }) => ({
+      lookupType,
+      subtables
+    })) // not supporting lookupFlag
+  };
+}
 
 const fontData = JSON.stringify({
   cmap: font.tables.cmap.glyphIndexMap,
@@ -32,8 +43,9 @@ const fontData = JSON.stringify({
   xHeight: font.tables.os2.sxHeight,
   capHeight: font.tables.os2.sCapHeight,
   unitsPerEm: font.unitsPerEm,
-  ligatures: font.substitution.getLigatures('liga'),
-  kerning: kerningTables
+  gsub: getLookupTables(font.substitution),
+  gpos: getLookupTables(font.position),
+  ligatures: font.substitution.getLigatures('liga')
 });
 
 const result =

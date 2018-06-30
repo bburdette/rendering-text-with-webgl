@@ -5,6 +5,7 @@ module Formatting
         , background
         , bullet
         , bulletLink
+        , bulletRed
         , bullets
         , char
         , code
@@ -201,6 +202,13 @@ bullets =
 bullet : String -> Content a b
 bullet str =
     item (li [] [ text str ])
+
+
+{-| List item
+-}
+bulletRed : String -> Content a b
+bulletRed str =
+    item (li [ style [ ( "color", "red" ) ] ] [ text str ])
 
 
 {-| List link item

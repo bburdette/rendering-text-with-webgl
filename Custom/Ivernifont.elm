@@ -1,7 +1,8 @@
 module Custom.Ivernifont exposing (Options, view)
 
+import Font.Feature exposing (Feature)
 import Font.Mesh as Mesh exposing (Attributes2d, glyph2d)
-import Font.Text as Text exposing (Feature, GlyphInfo)
+import Font.Text as Text exposing (GlyphInfo)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttributes
 import Iverni exposing (font)

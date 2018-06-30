@@ -1,5 +1,6 @@
 module Custom.Outline exposing (Options, view)
 
+import Font.Feature as Feature
 import Font.Text as Text
 import Html.Attributes as HtmlAttributes
 import Iverni
@@ -26,7 +27,7 @@ view { width, height, left, top, fontSize, text } =
                 , width = width - left
                 , fontSize = fontSize
                 , lineHeight = 1
-                , features = []
+                , features = [ Feature.Kern ]
                 }
     in
     Text.text .path style text

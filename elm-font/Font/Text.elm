@@ -1,7 +1,6 @@
 module Font.Text
     exposing
-        ( Feature(..)
-        , GlyphInfo
+        ( GlyphInfo
         , Style
         , style
         , text
@@ -10,9 +9,10 @@ module Font.Text
 import Array.Hamt as Array exposing (Array)
 import Dict exposing (Dict)
 import Font.ClassifiedGlyph as ClassifiedGlyph exposing (Class(..), ClassifiedGlyph)
+import Font.Feature exposing (Feature(..))
 import Font.Font as Font exposing (Font)
 import Font.Glyph as Glyph exposing (Glyph)
-import Font.Kerning as Kerning
+import Font.Gpos as Gpos
 import Font.Ligatures as Ligatures
 
 
@@ -30,11 +30,6 @@ type Style glyph
     = Style (InternalStyle glyph)
 
 
-type Feature
-    = Liga
-    | Kern
-
-
 type alias GlyphInfo glyph =
     { glyph : glyph
     , x : Float
@@ -48,7 +43,7 @@ type alias Context glyph =
     , size : Float
     , lineHeight : Float
     , width : Float
-    , kerning : Bool
+    , features : List Feature
     , penX : Float
     , penY : Float
     , cache : Dict Int glyph
@@ -107,7 +102,7 @@ init { font, fontSize, features, lineHeight, width, cache } glyphIndices =
     { font = font
     , cache = cache
     , size = fontSize / font.unitsPerEm
-    , kerning = List.member Kern features
+    , features = features
     , lineHeight = lineHeight * font.unitsPerEm
     , width = width / fontSize * font.unitsPerEm
     , penX = 0
@@ -146,14 +141,9 @@ process glyphFn ctx =
                             )
 
                 xAdvance =
-                    if ctx.kerning then
-                        List.head nextIndices
-                            |> Maybe.map .index
-                            |> Maybe.andThen (Kerning.get ctx.font.kerning classifiedGlyph.index)
-                            |> Maybe.withDefault 0
-
-                    else
-                        0
+                    List.head nextIndices
+                        |> Maybe.andThen (Gpos.get ctx.features ctx.font.gpos classifiedGlyph)
+                        |> Maybe.withDefault 0
 
                 newX =
                     ctx.penX + fontGlyph.advanceWidth + xAdvance
