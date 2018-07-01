@@ -336,7 +336,7 @@ conclusions =
     , bullets
         [ bullet "Elm is a great research tool" |> Content.hide
         , bullet "Text rendering is super complex" |> Content.hide
-        , bullet "Typografic experiments are fun" |> Content.hide
+        , bullet "Typographic experiments are fun" |> Content.hide
         ]
     ]
 
