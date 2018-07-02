@@ -96,9 +96,6 @@ view { elapsed, width, height, text, start, fontSize } =
         projection =
             Mat4.makePerspective 24 (width / height) 5 3500
 
-        angle =
-            elapsed / 1000
-
         glyphToEntity index { x, y, size, glyph } =
             WebGL.entity
                 vertex3d

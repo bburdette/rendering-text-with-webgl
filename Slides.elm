@@ -164,7 +164,6 @@ bulletPoints =
     , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
     , "Find outlines and holes based on winding"
     , "Triangulate outlines with holes using ianmackenzie/elm-geometry"
-    , "Generate a WebGL mesh"
     ]
 
 
@@ -389,7 +388,6 @@ slides =
     , [ Custom.outlines { width = 1280, height = 720, step = 3 }, steps 2 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 4 }, steps 3 ]
     , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 4 ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 5 ]
     , [ padded gsub ]
     , [ padded gpos ]
     , lineBreaking
