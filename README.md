@@ -1,6 +1,6 @@
 # Rendering Text with WebGL
 
-Slides from the [Elm Europe 2018](https://2018.elmeurope.org).
+[Slides](https://unsoundscapes.com/slides/2018-07-05-rendering-text-with-webgl) from the [Elm Europe 2018](https://2018.elmeurope.org).
 
 ## Abstract
 
