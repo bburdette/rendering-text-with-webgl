@@ -19219,14 +19219,13 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$setHelperOf = F3(
 			});
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$error = function (defaultValue) {
-	var _p9 = A2(_elm_lang$core$Debug$log, 'ERROR: please file a bug report at https://github.com/ianmackenzie/elm-geometry/issues', 'Internal error in Polygon2d.Monotone module');
 	return defaultValue;
 };
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$defaultTo = F2(
 	function (defaultValue, maybeValue) {
-		var _p10 = maybeValue;
-		if (_p10.ctor === 'Just') {
-			return _p10._0;
+		var _p9 = maybeValue;
+		if (_p9.ctor === 'Just') {
+			return _p9._0;
 		} else {
 			return _ianmackenzie$elm_geometry$Polygon2d_Monotone$error(defaultValue);
 		}
@@ -19283,20 +19282,20 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$getEdge = F2(
 		return A2(_Skinney$elm_array_exploration$Array_Hamt$get, index, state.edges);
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$buildLoop = F5(
-	function (state, points, startIndex, currentIndex, _p11) {
+	function (state, points, startIndex, currentIndex, _p10) {
 		buildLoop:
 		while (true) {
-			var _p12 = _p11;
-			var _p16 = _p12._0;
-			var _p13 = A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$getEdge, currentIndex, state);
-			if (_p13.ctor === 'Just') {
-				var _p15 = _p13._0;
-				var _p14 = A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p15.startVertexIndex, points);
-				if (_p14.ctor === 'Just') {
-					var nextIndex = _p15.nextEdgeIndex;
-					var newVertex = {index: _p15.startVertexIndex, position: _p14._0, nextVertexIndex: _p15.endVertexIndex};
-					var newAccumulated = {ctor: '::', _0: newVertex, _1: _p12._1};
-					var updatedEdgeIndices = A2(_elm_lang$core$Set$insert, currentIndex, _p16);
+			var _p11 = _p10;
+			var _p15 = _p11._0;
+			var _p12 = A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$getEdge, currentIndex, state);
+			if (_p12.ctor === 'Just') {
+				var _p14 = _p12._0;
+				var _p13 = A2(_Skinney$elm_array_exploration$Array_Hamt$get, _p14.startVertexIndex, points);
+				if (_p13.ctor === 'Just') {
+					var nextIndex = _p14.nextEdgeIndex;
+					var newVertex = {index: _p14.startVertexIndex, position: _p13._0, nextVertexIndex: _p14.endVertexIndex};
+					var newAccumulated = {ctor: '::', _0: newVertex, _1: _p11._1};
+					var updatedEdgeIndices = A2(_elm_lang$core$Set$insert, currentIndex, _p15);
 					if (_elm_lang$core$Native_Utils.eq(nextIndex, startIndex)) {
 						return {
 							ctor: '_Tuple2',
@@ -19313,14 +19312,14 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$buildLoop = F5(
 						points = _v20;
 						startIndex = _v21;
 						currentIndex = _v22;
-						_p11 = _v23;
+						_p10 = _v23;
 						continue buildLoop;
 					}
 				} else {
 					return _ianmackenzie$elm_geometry$Polygon2d_Monotone$error(
 						{
 							ctor: '_Tuple2',
-							_0: _p16,
+							_0: _p15,
 							_1: {ctor: '[]'}
 						});
 				}
@@ -19328,7 +19327,7 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$buildLoop = F5(
 				return _ianmackenzie$elm_geometry$Polygon2d_Monotone$error(
 					{
 						ctor: '_Tuple2',
-						_0: _p16,
+						_0: _p15,
 						_1: {ctor: '[]'}
 					});
 			}
@@ -19347,13 +19346,13 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$collectMonotoneLoops = functio
 		state.vertices);
 	var processStartEdge = F2(
 		function (index, accumulated) {
-			var _p17 = accumulated;
-			var processedEdgeIndices = _p17._0;
-			var accumulatedLoops = _p17._1;
+			var _p16 = accumulated;
+			var processedEdgeIndices = _p16._0;
+			var accumulatedLoops = _p16._1;
 			if (A2(_elm_lang$core$Set$member, index, processedEdgeIndices)) {
 				return accumulated;
 			} else {
-				var _p18 = A5(
+				var _p17 = A5(
 					_ianmackenzie$elm_geometry$Polygon2d_Monotone$buildLoop,
 					state,
 					points,
@@ -19364,8 +19363,8 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$collectMonotoneLoops = functio
 						_0: processedEdgeIndices,
 						_1: {ctor: '[]'}
 					});
-				var updatedEdgeIndices = _p18._0;
-				var loop = _p18._1;
+				var updatedEdgeIndices = _p17._0;
+				var loop = _p17._1;
 				return {
 					ctor: '_Tuple2',
 					_0: updatedEdgeIndices,
@@ -19373,7 +19372,7 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$collectMonotoneLoops = functio
 				};
 			}
 		});
-	var _p19 = A3(
+	var _p18 = A3(
 		_elm_lang$core$List$foldl,
 		processStartEdge,
 		{
@@ -19382,7 +19381,7 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$collectMonotoneLoops = functio
 			_1: {ctor: '[]'}
 		},
 		allEdgeIndices);
-	var loops = _p19._1;
+	var loops = _p18._1;
 	return {ctor: '_Tuple2', _0: points, _1: loops};
 };
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$getVertex = F2(
@@ -19442,14 +19441,14 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$accumulateDistinctPoints = F3(
 	function (previousPoint, points, accumulatedPoints) {
 		accumulateDistinctPoints:
 		while (true) {
-			var _p20 = points;
-			if (_p20.ctor === '[]') {
+			var _p19 = points;
+			if (_p19.ctor === '[]') {
 				return accumulatedPoints;
 			} else {
-				var _p21 = _p20._0;
-				var updatedPoints = _elm_lang$core$Native_Utils.eq(_p21, previousPoint) ? accumulatedPoints : {ctor: '::', _0: _p21, _1: accumulatedPoints};
-				var _v25 = _p21,
-					_v26 = _p20._1,
+				var _p20 = _p19._0;
+				var updatedPoints = _elm_lang$core$Native_Utils.eq(_p20, previousPoint) ? accumulatedPoints : {ctor: '::', _0: _p20, _1: accumulatedPoints};
+				var _v25 = _p20,
+					_v26 = _p19._1,
 					_v27 = updatedPoints;
 				previousPoint = _v25;
 				points = _v26;
@@ -19459,31 +19458,31 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$accumulateDistinctPoints = F3(
 		}
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$removeDuplicates = function (points) {
-	var _p22 = points;
-	if (_p22.ctor === '[]') {
+	var _p21 = points;
+	if (_p21.ctor === '[]') {
 		return {ctor: '[]'};
 	} else {
-		var _p24 = _p22._0;
+		var _p23 = _p21._0;
 		var accumulatedPoints = A3(
 			_ianmackenzie$elm_geometry$Polygon2d_Monotone$accumulateDistinctPoints,
-			_p24,
-			_p22._1,
+			_p23,
+			_p21._1,
 			{ctor: '[]'});
-		var _p23 = accumulatedPoints;
-		if (_p23.ctor === '::') {
-			return _elm_lang$core$Native_Utils.eq(_p23._0, _p24) ? {
+		var _p22 = accumulatedPoints;
+		if (_p22.ctor === '::') {
+			return _elm_lang$core$Native_Utils.eq(_p22._0, _p23) ? {
 				ctor: '::',
-				_0: _p24,
-				_1: _elm_lang$core$List$reverse(_p23._1)
+				_0: _p23,
+				_1: _elm_lang$core$List$reverse(_p22._1)
 			} : {
 				ctor: '::',
-				_0: _p24,
+				_0: _p23,
 				_1: _elm_lang$core$List$reverse(accumulatedPoints)
 			};
 		} else {
 			return {
 				ctor: '::',
-				_0: _p24,
+				_0: _p23,
 				_1: {ctor: '[]'}
 			};
 		}
@@ -19491,25 +19490,25 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$removeDuplicates = function (p
 };
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$leftTurn = F3(
 	function (p1, p2, p3) {
-		var _p25 = _ianmackenzie$elm_geometry$Point2d$coordinates(p3);
-		var x3 = _p25._0;
-		var y3 = _p25._1;
-		var _p26 = _ianmackenzie$elm_geometry$Point2d$coordinates(p2);
-		var x2 = _p26._0;
-		var y2 = _p26._1;
-		var _p27 = _ianmackenzie$elm_geometry$Point2d$coordinates(p1);
-		var x1 = _p27._0;
-		var y1 = _p27._1;
+		var _p24 = _ianmackenzie$elm_geometry$Point2d$coordinates(p3);
+		var x3 = _p24._0;
+		var y3 = _p24._1;
+		var _p25 = _ianmackenzie$elm_geometry$Point2d$coordinates(p2);
+		var x2 = _p25._0;
+		var y2 = _p25._1;
+		var _p26 = _ianmackenzie$elm_geometry$Point2d$coordinates(p1);
+		var x1 = _p26._0;
+		var y1 = _p26._1;
 		return _elm_lang$core$Native_Utils.cmp(((x2 - x1) * (y3 - y2)) - ((y2 - y1) * (x3 - x2)), 0) > 0;
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints = F2(
 	function (p1, p2) {
-		var _p28 = _ianmackenzie$elm_geometry$Point2d$coordinates(p2);
-		var x2 = _p28._0;
-		var y2 = _p28._1;
-		var _p29 = _ianmackenzie$elm_geometry$Point2d$coordinates(p1);
-		var x1 = _p29._0;
-		var y1 = _p29._1;
+		var _p27 = _ianmackenzie$elm_geometry$Point2d$coordinates(p2);
+		var x2 = _p27._0;
+		var y2 = _p27._1;
+		var _p28 = _ianmackenzie$elm_geometry$Point2d$coordinates(p1);
+		var x1 = _p28._0;
+		var y1 = _p28._1;
 		return (_elm_lang$core$Native_Utils.cmp(y1, y2) < 0) ? _elm_lang$core$Basics$LT : ((_elm_lang$core$Native_Utils.cmp(y1, y2) > 0) ? _elm_lang$core$Basics$GT : A2(_elm_lang$core$Basics$compare, x2, x1));
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$faces = function (vertices) {
@@ -19520,11 +19519,11 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$faces = function (vertices) {
 				return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints, second.position, first.position);
 			}),
 		vertices);
-	var _p30 = sortedVertices;
-	if (_p30.ctor === '[]') {
+	var _p29 = sortedVertices;
+	if (_p29.ctor === '[]') {
 		return {ctor: '[]'};
 	} else {
-		if (_p30._1.ctor === '[]') {
+		if (_p29._1.ctor === '[]') {
 			return {ctor: '[]'};
 		} else {
 			var processVertex = F2(
@@ -19532,15 +19531,15 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$faces = function (vertices) {
 					return _elm_lang$core$Native_Utils.eq(vertex.nextVertexIndex, state.chainStart.index) ? A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$startNewRightChain, vertex, state) : (_elm_lang$core$Native_Utils.eq(state.chainStart.nextVertexIndex, vertex.index) ? A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$startNewLeftChain, vertex, state) : (_elm_lang$core$Native_Utils.eq(vertex.nextVertexIndex, state.chainEnd.index) ? A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addRightChainVertex, vertex, state) : (_elm_lang$core$Native_Utils.eq(state.chainEnd.nextVertexIndex, vertex.index) ? A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addLeftChainVertex, vertex, state) : _ianmackenzie$elm_geometry$Polygon2d_Monotone$error(state))));
 				});
 			var initialState = {
-				chainStart: _p30._0,
+				chainStart: _p29._0,
 				chainInterior: {ctor: '[]'},
-				chainEnd: _p30._1._0,
+				chainEnd: _p29._1._0,
 				faces: {ctor: '[]'}
 			};
 			return function (_) {
 				return _.faces;
 			}(
-				A3(_elm_lang$core$List$foldl, processVertex, initialState, _p30._1._1));
+				A3(_elm_lang$core$List$foldl, processVertex, initialState, _p29._1._1));
 		}
 	}
 };
@@ -19579,9 +19578,9 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$handleSplitVertex = F3(
 					return A2(
 						_elm_lang$core$Maybe$map,
 						function (helperVertex) {
-							var _p31 = A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, helperVertex, state);
-							var updatedState = _p31._0;
-							var outgoingEdgeIndex = _p31._1;
+							var _p30 = A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, helperVertex, state);
+							var updatedState = _p30._0;
+							var outgoingEdgeIndex = _p30._1;
 							return A3(
 								_ianmackenzie$elm_geometry$Polygon2d_Monotone$setHelperOf,
 								index,
@@ -19619,9 +19618,9 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$handleMergeVertex = F3(
 									return A2(
 										_elm_lang$core$Maybe$map,
 										function (leftHelper) {
-											var _p32 = leftHelper.isMerge ? A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, leftHelper, rightUpdated) : {ctor: '_Tuple2', _0: rightUpdated, _1: index};
-											var leftDiagonalAdded = _p32._0;
-											var leftOutgoing = _p32._1;
+											var _p31 = leftHelper.isMerge ? A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, leftHelper, rightUpdated) : {ctor: '_Tuple2', _0: rightUpdated, _1: index};
+											var leftDiagonalAdded = _p31._0;
+											var leftOutgoing = _p31._1;
 											return A3(
 												_ianmackenzie$elm_geometry$Polygon2d_Monotone$setHelperOf,
 												leftEdgeIndex,
@@ -19647,9 +19646,9 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$handleRightVertex = F3(
 					return A2(
 						_elm_lang$core$Maybe$map,
 						function (helperVertex) {
-							var _p33 = helperVertex.isMerge ? A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, helperVertex, state) : {ctor: '_Tuple2', _0: state, _1: index};
-							var diagonalAdded = _p33._0;
-							var outgoingEdgeIndex = _p33._1;
+							var _p32 = helperVertex.isMerge ? A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$addDiagonal, index, helperVertex, state) : {ctor: '_Tuple2', _0: state, _1: index};
+							var diagonalAdded = _p32._0;
+							var outgoingEdgeIndex = _p32._1;
 							return A3(
 								_ianmackenzie$elm_geometry$Polygon2d_Monotone$setHelperOf,
 								leftEdgeIndex,
@@ -19711,60 +19710,60 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$kind = F3(
 		return (_elm_lang$core$Native_Utils.eq(compareToPrevious, _elm_lang$core$Basics$GT) && _elm_lang$core$Native_Utils.eq(compareToNext, _elm_lang$core$Basics$GT)) ? (A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$leftTurn, previous, current, next) ? _ianmackenzie$elm_geometry$Polygon2d_Monotone$Start : _ianmackenzie$elm_geometry$Polygon2d_Monotone$Split) : ((_elm_lang$core$Native_Utils.eq(compareToPrevious, _elm_lang$core$Basics$LT) && _elm_lang$core$Native_Utils.eq(compareToNext, _elm_lang$core$Basics$LT)) ? (A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$leftTurn, previous, current, next) ? _ianmackenzie$elm_geometry$Polygon2d_Monotone$End : _ianmackenzie$elm_geometry$Polygon2d_Monotone$Merge) : (_elm_lang$core$Native_Utils.eq(compareToPrevious, _elm_lang$core$Basics$GT) ? _ianmackenzie$elm_geometry$Polygon2d_Monotone$Right : _ianmackenzie$elm_geometry$Polygon2d_Monotone$Left));
 	});
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$toVertices = function (points) {
-	var _p34 = points;
-	if (_p34.ctor === '[]') {
+	var _p33 = points;
+	if (_p33.ctor === '[]') {
 		return {ctor: '[]'};
 	} else {
-		if (_p34._1.ctor === '[]') {
+		if (_p33._1.ctor === '[]') {
 			return {ctor: '[]'};
 		} else {
-			if (_p34._1._1.ctor === '[]') {
-				var _p36 = _p34._1._0;
-				var _p35 = _p34._0;
+			if (_p33._1._1.ctor === '[]') {
+				var _p35 = _p33._1._0;
+				var _p34 = _p33._0;
 				return _elm_lang$core$Native_Utils.eq(
-					A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints, _p35, _p36),
+					A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints, _p34, _p35),
 					_elm_lang$core$Basics$GT) ? {
 					ctor: '::',
-					_0: {position: _p35, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Split},
+					_0: {position: _p34, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Split},
 					_1: {
 						ctor: '::',
-						_0: {position: _p36, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Merge},
+						_0: {position: _p35, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Merge},
 						_1: {ctor: '[]'}
 					}
 				} : {
 					ctor: '::',
-					_0: {position: _p35, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Merge},
+					_0: {position: _p34, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Merge},
 					_1: {
 						ctor: '::',
-						_0: {position: _p36, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Split},
+						_0: {position: _p35, kind: _ianmackenzie$elm_geometry$Polygon2d_Monotone$Split},
 						_1: {ctor: '[]'}
 					}
 				};
 			} else {
-				var _p41 = _p34._1._1._0;
-				var _p40 = _p34._1._1._1;
-				var _p39 = _p34._0;
+				var _p40 = _p33._1._1._0;
+				var _p39 = _p33._1._1._1;
+				var _p38 = _p33._0;
 				var collect = F4(
 					function (previousPoint, currentPoint, remainingPoints, accumulated) {
 						collect:
 						while (true) {
-							var _p37 = remainingPoints;
-							if (_p37.ctor === '[]') {
+							var _p36 = remainingPoints;
+							if (_p36.ctor === '[]') {
 								var lastVertex = {
 									position: currentPoint,
-									kind: A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p39)
+									kind: A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p38)
 								};
 								return _elm_lang$core$List$reverse(
 									{ctor: '::', _0: lastVertex, _1: accumulated});
 							} else {
-								var _p38 = _p37._0;
+								var _p37 = _p36._0;
 								var newVertex = {
 									position: currentPoint,
-									kind: A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p38)
+									kind: A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$kind, previousPoint, currentPoint, _p37)
 								};
 								var _v33 = currentPoint,
-									_v34 = _p38,
-									_v35 = _p37._1,
+									_v34 = _p37,
+									_v35 = _p36._1,
 									_v36 = {ctor: '::', _0: newVertex, _1: accumulated};
 								previousPoint = _v33;
 								currentPoint = _v34;
@@ -19774,49 +19773,49 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$toVertices = function (points)
 							}
 						}
 					});
-				var lastPoint = A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$always, _p41, _p40);
+				var lastPoint = A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$always, _p40, _p39);
 				return A4(
 					collect,
 					lastPoint,
-					_p39,
+					_p38,
 					{
 						ctor: '::',
-						_0: _p34._1._0,
-						_1: {ctor: '::', _0: _p41, _1: _p40}
+						_0: _p33._1._0,
+						_1: {ctor: '::', _0: _p40, _1: _p39}
 					},
 					{ctor: '[]'});
 			}
 		}
 	}
 };
-var _ianmackenzie$elm_geometry$Polygon2d_Monotone$init = function (_p42) {
-	var _p43 = _p42;
+var _ianmackenzie$elm_geometry$Polygon2d_Monotone$init = function (_p41) {
+	var _p42 = _p41;
 	var allLoops = A2(
 		_elm_lang$core$List$map,
 		function (loop) {
 			return _ianmackenzie$elm_geometry$Polygon2d_Monotone$removeDuplicates(loop);
 		},
-		{ctor: '::', _0: _p43._0.outerLoop, _1: _p43._0.innerLoops});
+		{ctor: '::', _0: _p42._0.outerLoop, _1: _p42._0.innerLoops});
 	var vertices = _elm_lang$core$List$concat(
 		A2(_elm_lang$core$List$map, _ianmackenzie$elm_geometry$Polygon2d_Monotone$toVertices, allLoops));
 	var edges = _elm_lang$core$Tuple$second(
 		A3(
 			_elm_lang$core$List$foldl,
 			F2(
-				function (loop, _p44) {
-					var _p45 = _p44;
-					var _p46 = _p45._0;
+				function (loop, _p43) {
+					var _p44 = _p43;
+					var _p45 = _p44._0;
 					var length = _elm_lang$core$List$length(loop);
 					var newEdges = A2(
 						_Skinney$elm_array_exploration$Array_Hamt$initialize,
 						length,
 						function (index) {
-							return _elm_lang$core$Native_Utils.eq(index, 0) ? {startVertexIndex: _p46, endVertexIndex: _p46 + 1, nextEdgeIndex: _p46 + 1, previousEdgeIndex: (_p46 + length) - 1} : (_elm_lang$core$Native_Utils.eq(index, length - 1) ? {startVertexIndex: _p46 + index, endVertexIndex: _p46, nextEdgeIndex: _p46, previousEdgeIndex: (_p46 + index) - 1} : {startVertexIndex: _p46 + index, endVertexIndex: (_p46 + index) + 1, nextEdgeIndex: (_p46 + index) + 1, previousEdgeIndex: (_p46 + index) - 1});
+							return _elm_lang$core$Native_Utils.eq(index, 0) ? {startVertexIndex: _p45, endVertexIndex: _p45 + 1, nextEdgeIndex: _p45 + 1, previousEdgeIndex: (_p45 + length) - 1} : (_elm_lang$core$Native_Utils.eq(index, length - 1) ? {startVertexIndex: _p45 + index, endVertexIndex: _p45, nextEdgeIndex: _p45, previousEdgeIndex: (_p45 + index) - 1} : {startVertexIndex: _p45 + index, endVertexIndex: (_p45 + index) + 1, nextEdgeIndex: (_p45 + index) + 1, previousEdgeIndex: (_p45 + index) - 1});
 						});
 					return {
 						ctor: '_Tuple2',
-						_0: _p46 + length,
-						_1: A2(_Skinney$elm_array_exploration$Array_Hamt$append, _p45._1, newEdges)
+						_0: _p45 + length,
+						_1: A2(_Skinney$elm_array_exploration$Array_Hamt$append, _p44._1, newEdges)
 					};
 				}),
 			{ctor: '_Tuple2', _0: 0, _1: _Skinney$elm_array_exploration$Array_Hamt$empty},
@@ -19825,36 +19824,36 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$init = function (_p42) {
 };
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$monotonePolygons = function (polygon) {
 	var handleVertex = F2(
-		function (_p47, current) {
-			var _p48 = _p47;
-			var _p51 = _p48._1;
-			var _p50 = _p48._0;
-			var _p49 = _p51.kind;
-			switch (_p49.ctor) {
+		function (_p46, current) {
+			var _p47 = _p46;
+			var _p50 = _p47._1;
+			var _p49 = _p47._0;
+			var _p48 = _p50.kind;
+			switch (_p48.ctor) {
 				case 'Start':
-					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleStartVertex, _p50, current);
+					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleStartVertex, _p49, current);
 				case 'End':
-					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleEndVertex, _p50, current);
+					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleEndVertex, _p49, current);
 				case 'Right':
-					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleRightVertex, _p50, _p51.position, current);
+					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleRightVertex, _p49, _p50.position, current);
 				case 'Left':
-					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleLeftVertex, _p50, current);
+					return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleLeftVertex, _p49, current);
 				case 'Split':
-					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleSplitVertex, _p50, _p51.position, current);
+					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleSplitVertex, _p49, _p50.position, current);
 				default:
-					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleMergeVertex, _p50, _p51.position, current);
+					return A3(_ianmackenzie$elm_geometry$Polygon2d_Monotone$handleMergeVertex, _p49, _p50.position, current);
 			}
 		});
-	var _p52 = _ianmackenzie$elm_geometry$Polygon2d_Monotone$init(polygon);
-	var vertices = _p52.vertices;
-	var edges = _p52.edges;
+	var _p51 = _ianmackenzie$elm_geometry$Polygon2d_Monotone$init(polygon);
+	var vertices = _p51.vertices;
+	var edges = _p51.edges;
 	var priorityQueue = A2(
 		_elm_lang$core$List$sortWith,
 		F2(
-			function (_p54, _p53) {
-				var _p55 = _p54;
-				var _p56 = _p53;
-				return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints, _p56._1.position, _p55._1.position);
+			function (_p53, _p52) {
+				var _p54 = _p53;
+				var _p55 = _p52;
+				return A2(_ianmackenzie$elm_geometry$Polygon2d_Monotone$comparePoints, _p55._1.position, _p54._1.position);
 			}),
 		A2(_elm_lang$core$List$indexedMap, _ianmackenzie$elm_geometry$Future_Tuple$pair, vertices));
 	var initialState = {
@@ -19868,9 +19867,9 @@ var _ianmackenzie$elm_geometry$Polygon2d_Monotone$monotonePolygons = function (p
 	return _ianmackenzie$elm_geometry$Polygon2d_Monotone$collectMonotoneLoops(finalState);
 };
 var _ianmackenzie$elm_geometry$Polygon2d_Monotone$triangulation = function (polygon) {
-	var _p57 = _ianmackenzie$elm_geometry$Polygon2d_Monotone$monotonePolygons(polygon);
-	var points = _p57._0;
-	var loops = _p57._1;
+	var _p56 = _ianmackenzie$elm_geometry$Polygon2d_Monotone$monotonePolygons(polygon);
+	var points = _p56._0;
+	var loops = _p56._1;
 	return A2(
 		_ianmackenzie$elm_triangular_mesh$TriangularMesh$indexed,
 		points,
