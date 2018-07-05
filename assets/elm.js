@@ -26184,7 +26184,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Metrics$label = F3(
 							_0: _elm_lang$html$Html_Attributes$style(
 								{
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraMono, monospace'},
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -27277,7 +27277,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Outlines$view = function (_p18) {
 										_0: {ctor: '_Tuple2', _0: 'padding', _1: '100px 100px 100px 0'},
 										_1: {
 											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'font', _1: '20px/1.2 FiraCode, monospace'},
+											_0: {ctor: '_Tuple2', _0: 'font', _1: '20px/1.2 FiraMono, monospace'},
 											_1: {ctor: '[]'}
 										}
 									}
@@ -27609,7 +27609,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Pixelglyph$label = F2(
 							_0: _elm_lang$html$Html_Attributes$style(
 								{
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+									_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraMono, monospace'},
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -29019,7 +29019,7 @@ var _w0rm$rendering_text_with_webgl$Custom_Wordwrapping$label = F4(
 								_0: _elm_lang$html$Html_Attributes$style(
 									{
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraCode, monospace'},
+										_0: {ctor: '_Tuple2', _0: 'font', _1: '24px/1.3 FiraMono, monospace'},
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -30875,10 +30875,10 @@ var _w0rm$rendering_text_with_webgl$Slides$gsub = {
 };
 var _w0rm$rendering_text_with_webgl$Slides$bulletPoints = {
 	ctor: '::',
-	_0: 'Parse SVG path with elm-tools/parser',
+	_0: 'Parse SVG path with elm/parser',
 	_1: {
 		ctor: '::',
-		_0: 'Convert Bézier curves to line segments using ianmackenzie/elm-geometry',
+		_0: 'Convert Bézier curves to line segments using ianmackenzie/elm-geometry',
 		_1: {
 			ctor: '::',
 			_0: 'Find outlines and holes based on winding',
@@ -31061,7 +31061,7 @@ var _w0rm$rendering_text_with_webgl$Slides$solvedProblem = {
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'font', _1: '37px/1.3 FiraCode, monospace'},
+						_0: {ctor: '_Tuple2', _0: 'font', _1: '37px/1.3 FiraMono, monospace'},
 						_1: {
 							ctor: '::',
 							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 5px'},
@@ -31070,7 +31070,7 @@ var _w0rm$rendering_text_with_webgl$Slides$solvedProblem = {
 								_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'color', _1: '#9e9c9d'},
+									_0: {ctor: '_Tuple2', _0: 'color', _1: '#ccc'},
 									_1: {ctor: '[]'}
 								}
 							}
@@ -31110,7 +31110,7 @@ var _w0rm$rendering_text_with_webgl$Slides$cssProperties = {
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'font', _1: '37px/1.3 FiraCode, monospace'},
+						_0: {ctor: '_Tuple2', _0: 'font', _1: '37px/1.3 FiraMono, monospace'},
 						_1: {
 							ctor: '::',
 							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 5px'},

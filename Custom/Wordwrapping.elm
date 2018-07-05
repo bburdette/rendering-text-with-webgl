@@ -196,6 +196,6 @@ label ( x, y ) anchor color str =
         , SvgAttributes.textAnchor anchor
         , SvgAttributes.fill color
         , HtmlAttributes.style
-            [ ( "font", "24px/1.3 FiraCode, monospace" ) ]
+            [ ( "font", "24px/1.3 FiraMono, monospace" ) ]
         ]
         [ Svg.text str ]

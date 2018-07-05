@@ -403,7 +403,7 @@ label ( x, y ) str =
         [ SvgAttributes.x (toString x)
         , SvgAttributes.y (toString y)
         , SvgAttributes.fill "white"
-        , HtmlAttributes.style [ ( "font", "24px/1.3 FiraCode, monospace" ) ]
+        , HtmlAttributes.style [ ( "font", "24px/1.3 FiraMono, monospace" ) ]
         ]
         (List.map
             (\text ->

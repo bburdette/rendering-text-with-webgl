@@ -17,8 +17,8 @@
   font-style: normal;
 }
 @font-face {
-  font-family: "FiraCode";
-  src: url("fonts/FiraCode-Regular.otf") format("opentype");
+  font-family: "FiraMono";
+  src: url("fonts/FiraMono-Regular.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -31,7 +31,7 @@ body {
   background: black;
   color: #111;
   font-size: 30px;
-  font-family: FiraCode, monospace;
+  font-family: FiraMono, monospace;
 }
 h1,
 h2,
@@ -50,7 +50,7 @@ a:hover {
 }
 code {
   font-size: 30px;
-  font-family: FiraCode, monospace;
+  font-family: FiraMono, monospace;
 }
 li {
   margin-bottom: 10px;

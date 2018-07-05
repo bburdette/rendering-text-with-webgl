@@ -165,7 +165,7 @@ label ( x, y ) anchor str =
         [ SvgAttributes.x (toString x)
         , SvgAttributes.y (toString y)
         , SvgAttributes.textAnchor anchor
-        , HtmlAttributes.style [ ( "font", "24px/1.3 FiraCode, monospace" ) ]
+        , HtmlAttributes.style [ ( "font", "24px/1.3 FiraMono, monospace" ) ]
         ]
         [ Svg.text str ]
 

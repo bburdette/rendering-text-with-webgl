@@ -110,7 +110,7 @@ view { width, height, glyph, step } =
                 [ ( "width", toString (width / 2) ++ "px" )
                 , ( "box-sizing", "border-box" )
                 , ( "padding", "100px 100px 100px 0" )
-                , ( "font", "20px/1.2 FiraCode, monospace" )
+                , ( "font", "20px/1.2 FiraMono, monospace" )
                 ]
             ]
             [ viewText step glyph ]

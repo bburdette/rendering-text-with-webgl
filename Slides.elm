@@ -41,7 +41,7 @@ cssProperties =
     [ Content.item
         (Html.code
             [ style
-                [ ( "font", "37px/1.3 FiraCode, monospace" )
+                [ ( "font", "37px/1.3 FiraMono, monospace" )
                 , ( "margin", "0 5px" )
                 , ( "display", "block" )
                 ]
@@ -56,10 +56,10 @@ solvedProblem =
     [ Content.item
         (Html.div
             [ style
-                [ ( "font", "37px/1.3 FiraCode, monospace" )
+                [ ( "font", "37px/1.3 FiraMono, monospace" )
                 , ( "margin", "0 5px" )
                 , ( "display", "block" )
-                , ( "color", "#9e9c9d" )
+                , ( "color", "#ccc" )
                 ]
             ]
             [ text "color direction font font-display font-family font-feature-settings font-kerning font-language-override font-size font-size-adjust font-smoothing font-stretch font-style font-synthesis font-variant font-variant-alternates font-variant-caps font-variant-east-asian font-variant-ligatures font-variant-numeric font-variant-position font-variation-settings font-weight hanging-punctuation hyphens letter-spacing line-break line-height line-height-step overflow-wrap tab-size text-align text-align-last text-combine-upright text-decoration text-decoration-color text-decoration-line text-decoration-style text-indent text-justify text-orientation text-rendering text-shadow text-size-adjust text-transform text-underline-position unicode-bidi white-space width word-break word-spacing word-wrap writing-mode" ]
@@ -160,8 +160,8 @@ mogeeFontUsage3d =
 
 bulletPoints : List String
 bulletPoints =
-    [ "Parse SVG path with elm-tools/parser"
-    , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
+    [ "Parse SVG path with elm/parser"
+    , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
     , "Find outlines and holes based on winding"
     , "Triangulate outlines with holes using ianmackenzie/elm-geometry"
     ]
