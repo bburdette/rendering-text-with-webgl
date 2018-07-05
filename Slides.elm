@@ -158,19 +158,15 @@ mogeeFontUsage3d =
     ]
 
 
-bulletPoints : List String
-bulletPoints =
-    [ "Parse SVG path with elm/parser"
-    , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
-    , "Find outlines and holes based on winding"
-    , "Triangulate outlines with holes using ianmackenzie/elm-geometry"
-    ]
-
-
-steps : Int -> Content
-steps n =
-    bulletPoints
-        |> List.take n
+outlineStep : Int -> List Content
+outlineStep n =
+    [ Custom.outlines { width = 1280, height = 720, step = n }
+    , [ "Parse SVG path with elm/parser"
+      , "Convert Bézier curves to line segments using ianmackenzie/elm-geometry"
+      , "Find outlines and holes based on winding"
+      , "Triangulate outlines with holes using ianmackenzie/elm-geometry"
+      ]
+        |> List.take (n - 1)
         |> List.map bullet
         |> Content.container
             (Html.ol
@@ -183,6 +179,7 @@ steps n =
                     ]
                 ]
             )
+    ]
 
 
 gsub : List Content
@@ -329,6 +326,18 @@ text :
     ]
 
 
+wordwappingStep : Int -> Content
+wordwappingStep step =
+    Custom.wordwapping
+        { step = step
+        , width = 1280
+        , height = 720
+        , lineWidth = 500
+        , fontSize = 200
+        , text = "Word wrapping"
+        }
+
+
 conclusions : List Content
 conclusions =
     [ title "Conclusions"
@@ -383,23 +392,23 @@ slides =
             ]
       ]
     , [ Custom.sort { width = 1280, height = 720 } ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 1 } ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 2 }, steps 1 ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 3 }, steps 2 ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 4 }, steps 3 ]
-    , [ Custom.outlines { width = 1280, height = 720, step = 5 }, steps 4 ]
+    , outlineStep 1
+    , outlineStep 2
+    , outlineStep 3
+    , outlineStep 4
+    , outlineStep 5
     , [ padded gsub ]
     , [ padded gpos ]
     , lineBreaking
     , [ padded wordWrapping ]
-    , [ Custom.wordwapping { step = 3, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 4, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 5, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 6, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 7, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 8, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 9, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
-    , [ Custom.wordwapping { step = 16, width = 1280, height = 720, lineWidth = 500, fontSize = 200, text = "Word wrapping" } ]
+    , [ wordwappingStep 3 ]
+    , [ wordwappingStep 4 ]
+    , [ wordwappingStep 5 ]
+    , [ wordwappingStep 6 ]
+    , [ wordwappingStep 7 ]
+    , [ wordwappingStep 8 ]
+    , [ wordwappingStep 9 ]
+    , [ wordwappingStep 16 ]
     , [ padded conclusions ]
     , thankYou
     ]

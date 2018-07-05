@@ -30557,6 +30557,10 @@ var _w0rm$rendering_text_with_webgl$Slides$conclusions = {
 		_1: {ctor: '[]'}
 	}
 };
+var _w0rm$rendering_text_with_webgl$Slides$wordwappingStep = function (step) {
+	return _w0rm$rendering_text_with_webgl$Custom$wordwapping(
+		{step: step, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'});
+};
 var _w0rm$rendering_text_with_webgl$Slides$wordWrapping = {
 	ctor: '::',
 	_0: _w0rm$rendering_text_with_webgl$Formatting$title('Word Wrapping'),
@@ -30873,57 +30877,68 @@ var _w0rm$rendering_text_with_webgl$Slides$gsub = {
 		}
 	}
 };
-var _w0rm$rendering_text_with_webgl$Slides$bulletPoints = {
-	ctor: '::',
-	_0: 'Parse SVG path with elm/parser',
-	_1: {
+var _w0rm$rendering_text_with_webgl$Slides$outlineStep = function (n) {
+	return {
 		ctor: '::',
-		_0: 'Convert Bézier curves to line segments using ianmackenzie/elm-geometry',
+		_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
+			{width: 1280, height: 720, step: n}),
 		_1: {
 			ctor: '::',
-			_0: 'Find outlines and holes based on winding',
-			_1: {
-				ctor: '::',
-				_0: 'Triangulate outlines with holes using ianmackenzie/elm-geometry',
-				_1: {ctor: '[]'}
-			}
-		}
-	}
-};
-var _w0rm$rendering_text_with_webgl$Slides$steps = function (n) {
-	return A2(
-		_w0rm$elm_slice_show$SliceShow_Content$container,
-		_elm_lang$html$Html$ol(
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
+			_0: A2(
+				_w0rm$elm_slice_show$SliceShow_Content$container,
+				_elm_lang$html$Html$ol(
 					{
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
-							_1: {
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'top', _1: '100px'},
+								_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
+									_0: {ctor: '_Tuple2', _0: 'left', _1: '50%'},
 									_1: {
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'right', _1: '100px'},
+										_0: {ctor: '_Tuple2', _0: 'top', _1: '100px'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'right', _1: '100px'},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				A2(
+					_elm_lang$core$List$map,
+					_w0rm$rendering_text_with_webgl$Formatting$bullet,
+					A2(
+						_elm_lang$core$List$take,
+						n - 1,
+						{
+							ctor: '::',
+							_0: 'Parse SVG path with elm/parser',
+							_1: {
+								ctor: '::',
+								_0: 'Convert Bézier curves to line segments using ianmackenzie/elm-geometry',
+								_1: {
+									ctor: '::',
+									_0: 'Find outlines and holes based on winding',
+									_1: {
+										ctor: '::',
+										_0: 'Triangulate outlines with holes using ianmackenzie/elm-geometry',
 										_1: {ctor: '[]'}
 									}
 								}
 							}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}),
-		A2(
-			_elm_lang$core$List$map,
-			_w0rm$rendering_text_with_webgl$Formatting$bullet,
-			A2(_elm_lang$core$List$take, n, _w0rm$rendering_text_with_webgl$Slides$bulletPoints)));
+						}))),
+			_1: {ctor: '[]'}
+		}
+	};
 };
 var _w0rm$rendering_text_with_webgl$Slides$mogeeFontUsage3d = {
 	ctor: '::',
@@ -31359,60 +31374,19 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 														},
 														_1: {
 															ctor: '::',
-															_0: {
-																ctor: '::',
-																_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																	{width: 1280, height: 720, step: 1}),
-																_1: {ctor: '[]'}
-															},
+															_0: _w0rm$rendering_text_with_webgl$Slides$outlineStep(1),
 															_1: {
 																ctor: '::',
-																_0: {
-																	ctor: '::',
-																	_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																		{width: 1280, height: 720, step: 2}),
-																	_1: {
-																		ctor: '::',
-																		_0: _w0rm$rendering_text_with_webgl$Slides$steps(1),
-																		_1: {ctor: '[]'}
-																	}
-																},
+																_0: _w0rm$rendering_text_with_webgl$Slides$outlineStep(2),
 																_1: {
 																	ctor: '::',
-																	_0: {
-																		ctor: '::',
-																		_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																			{width: 1280, height: 720, step: 3}),
-																		_1: {
-																			ctor: '::',
-																			_0: _w0rm$rendering_text_with_webgl$Slides$steps(2),
-																			_1: {ctor: '[]'}
-																		}
-																	},
+																	_0: _w0rm$rendering_text_with_webgl$Slides$outlineStep(3),
 																	_1: {
 																		ctor: '::',
-																		_0: {
-																			ctor: '::',
-																			_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																				{width: 1280, height: 720, step: 4}),
-																			_1: {
-																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Slides$steps(3),
-																				_1: {ctor: '[]'}
-																			}
-																		},
+																		_0: _w0rm$rendering_text_with_webgl$Slides$outlineStep(4),
 																		_1: {
 																			ctor: '::',
-																			_0: {
-																				ctor: '::',
-																				_0: _w0rm$rendering_text_with_webgl$Custom$outlines(
-																					{width: 1280, height: 720, step: 5}),
-																				_1: {
-																					ctor: '::',
-																					_0: _w0rm$rendering_text_with_webgl$Slides$steps(4),
-																					_1: {ctor: '[]'}
-																				}
-																			},
+																			_0: _w0rm$rendering_text_with_webgl$Slides$outlineStep(5),
 																			_1: {
 																				ctor: '::',
 																				_0: {
@@ -31441,64 +31415,56 @@ var _w0rm$rendering_text_with_webgl$Slides$slides = A2(
 																								ctor: '::',
 																								_0: {
 																									ctor: '::',
-																									_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																										{step: 3, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																									_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(3),
 																									_1: {ctor: '[]'}
 																								},
 																								_1: {
 																									ctor: '::',
 																									_0: {
 																										ctor: '::',
-																										_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																											{step: 4, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																										_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(4),
 																										_1: {ctor: '[]'}
 																									},
 																									_1: {
 																										ctor: '::',
 																										_0: {
 																											ctor: '::',
-																											_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																												{step: 5, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																											_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(5),
 																											_1: {ctor: '[]'}
 																										},
 																										_1: {
 																											ctor: '::',
 																											_0: {
 																												ctor: '::',
-																												_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																													{step: 6, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																												_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(6),
 																												_1: {ctor: '[]'}
 																											},
 																											_1: {
 																												ctor: '::',
 																												_0: {
 																													ctor: '::',
-																													_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																														{step: 7, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																													_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(7),
 																													_1: {ctor: '[]'}
 																												},
 																												_1: {
 																													ctor: '::',
 																													_0: {
 																														ctor: '::',
-																														_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																															{step: 8, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																														_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(8),
 																														_1: {ctor: '[]'}
 																													},
 																													_1: {
 																														ctor: '::',
 																														_0: {
 																															ctor: '::',
-																															_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																																{step: 9, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																															_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(9),
 																															_1: {ctor: '[]'}
 																														},
 																														_1: {
 																															ctor: '::',
 																															_0: {
 																																ctor: '::',
-																																_0: _w0rm$rendering_text_with_webgl$Custom$wordwapping(
-																																	{step: 16, width: 1280, height: 720, lineWidth: 500, fontSize: 200, text: 'Word wrapping'}),
+																																_0: _w0rm$rendering_text_with_webgl$Slides$wordwappingStep(16),
 																																_1: {ctor: '[]'}
 																															},
 																															_1: {
