@@ -1,12 +1,13 @@
-module Font.Font
-    exposing
-        ( Font
-        , decode
-        , empty
-        , getGlyph
-        )
+module Font.Font exposing
+    ( Font
+    , decode
+    , empty
+    , getGlyph
+    )
 
-import Array.Hamt as Array exposing (Array)
+-- import Array.Hamt as Array exposing (Array)
+
+import Array exposing (Array)
 import Char
 import Dict exposing (Dict)
 import Font.Glyph as Glyph exposing (Glyph)
@@ -48,7 +49,7 @@ decode : Decode.Decoder Font
 decode =
     Decode.map7 Font
         (Decode.map Array.fromList (Decode.field "glyphs" (Decode.list Glyph.decode)))
-        (Decode.map (List.filterMap (\( a, index ) -> Maybe.map (\code -> ( code, index )) (String.toInt a |> Result.toMaybe)) >> Dict.fromList) (Decode.field "cmap" (Decode.keyValuePairs Decode.int)))
+        (Decode.map (List.filterMap (\( a, index ) -> Maybe.map (\code -> ( code, index )) (String.toInt a)) >> Dict.fromList) (Decode.field "cmap" (Decode.keyValuePairs Decode.int)))
         (Decode.field "ligatures" (Decode.list Ligatures.decode))
         (Decode.field "gpos" Gpos.decode)
         (Decode.field "ascender" Decode.float)

@@ -1,6 +1,8 @@
 module Font.Feature exposing (Feature(..), FeatureTable, decode, empty, get)
 
-import Array.Hamt as Array exposing (Array)
+-- import Array.Hamt as Array exposing (Array)
+
+import Array exposing (Array)
 import Json.Decode as Decode
 
 
@@ -97,7 +99,7 @@ decodeFeature =
                 "kern" ->
                     Decode.succeed Kern
 
-                feature ->
-                    Decode.fail ("Unsupported feature " ++ feature)
+                f ->
+                    Decode.fail ("Unsupported feature " ++ f)
         )
         Decode.string

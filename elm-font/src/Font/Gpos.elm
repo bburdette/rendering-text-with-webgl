@@ -1,12 +1,13 @@
-module Font.Gpos
-    exposing
-        ( Gpos
-        , decode
-        , empty
-        , get
-        )
+module Font.Gpos exposing
+    ( Gpos
+    , decode
+    , empty
+    , get
+    )
 
-import Array.Hamt as Array exposing (Array)
+-- import Array.Hamt as Array exposing (Array)
+
+import Array exposing (Array)
 import Font.ClassifiedGlyph exposing (ClassifiedGlyph)
 import Font.Feature as Feature exposing (Feature, FeatureTable)
 import Json.Decode as Decode
