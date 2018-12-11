@@ -8,6 +8,7 @@
         "Font.Font",
         "Font.Glyph",
         "Font.Text",
+        "Font.Mesh",
         "Font.TextStepper",
         "Font.PathCommand"
     ],
@@ -16,6 +17,8 @@
         "elm/core": "1.0.0 <= v < 2.0.0",
         "elm/json": "1.0.0 <= v < 2.0.0",
         "elm/parser": "1.1.0 <= v < 2.0.0",
+        "elm-explorations/linear-algebra": "1.0.3 <= v < 2.0.0",
+        "elm-explorations/webgl": "1.0.1 <= v < 2.0.0",
         "ianmackenzie/elm-geometry": "1.2.1 <= v < 2.0.0",
         "ianmackenzie/elm-triangular-mesh": "1.0.2 <= v < 2.0.0"
     },
