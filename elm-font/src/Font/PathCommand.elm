@@ -9,6 +9,7 @@ module Font.PathCommand exposing
 
 import CubicSpline2d exposing (CubicSpline2d)
 import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
+import Font.ParseHelp exposing (listOf)
 import Parser exposing ((|.), (|=), Parser)
 import Point2d exposing (Point2d)
 import Polygon2d as Polygon2d exposing (Polygon2d)
@@ -245,14 +246,16 @@ parse string =
 path : Parser (List (List PathCommand))
 path =
     Parser.succeed identity
-        |= Parser.repeat Parser.zeroOrMore commands
+        |= listOf commands
+        -- |= Parser.repeat Parser.zeroOrMore commands
         |. Parser.end
 
 
 commands : Parser (List PathCommand)
 commands =
     Parser.succeed identity
-        |= Parser.repeat Parser.zeroOrMore command
+        |= listOf command
+        -- |= Parser.repeat Parser.zeroOrMore command
         |. close
 
 
@@ -337,4 +340,10 @@ number =
 
 spaces : Parser ()
 spaces =
-    Parser.ignore Parser.zeroOrMore (\char -> char == ' ')
+    Parser.chompIf (\char -> char == ' ')
+
+
+
+--    Parser.succeed ()
+--        |. Parser.symbol " "
+--    Parser.ignore Parser.zeroOrMore (\char -> char == ' ')
