@@ -1,12 +1,11 @@
-module Font.PathCommand
-    exposing
-        ( PathCommand(..)
-        , parse
-        , pathToPolygon
-        , removeDuplicates
-        , triangulate
-        , winding
-        )
+module Font.PathCommand exposing
+    ( PathCommand(..)
+    , parse
+    , pathToPolygon
+    , removeDuplicates
+    , triangulate
+    , winding
+    )
 
 import CubicSpline2d exposing (CubicSpline2d)
 import Curve.ParameterValue as ParameterValue exposing (ParameterValue)
@@ -76,8 +75,8 @@ pointInPath startPath point =
             else
                 result
 
-        pointInPathHelp veryFirst path result =
-            case path of
+        pointInPathHelp veryFirst path_ result =
+            case path_ of
                 first :: second :: rest ->
                     pointInPathHelp
                         veryFirst
@@ -99,10 +98,10 @@ pointInPath startPath point =
 
 
 triangulate : List (List Point2d) -> List ( Point2d, Point2d, Point2d )
-triangulate path =
+triangulate path_ =
     let
         ( outlines, holes ) =
-            List.partition winding path
+            List.partition winding path_
     in
     outlines
         |> List.map
@@ -124,14 +123,14 @@ triangulate path =
 
 
 pathToPolygon : Int -> List PathCommand -> List Point2d
-pathToPolygon n commands =
+pathToPolygon n cmds =
     removeDuplicates
-        (List.reverse (pathToPolygonHelp (ParameterValue.steps n) commands []))
+        (List.reverse (pathToPolygonHelp (ParameterValue.steps n) cmds []))
 
 
 pathToPolygonHelp : List ParameterValue -> List PathCommand -> List Point2d -> List Point2d
-pathToPolygonHelp samples commands loop =
-    case commands of
+pathToPolygonHelp samples cmds loop =
+    case cmds of
         [] ->
             loop
 
