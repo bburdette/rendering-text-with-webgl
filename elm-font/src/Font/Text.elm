@@ -1,12 +1,11 @@
-module Font.Text
-    exposing
-        ( GlyphInfo
-        , Style
-        , style
-        , text
-        )
+module Font.Text exposing
+    ( GlyphInfo
+    , Style
+    , style
+    , text
+    )
 
-import Array.Hamt as Array exposing (Array)
+import Array exposing (Array)
 import Dict exposing (Dict)
 import Font.ClassifiedGlyph as ClassifiedGlyph exposing (Class(..), ClassifiedGlyph)
 import Font.Feature exposing (Feature(..))
@@ -78,23 +77,23 @@ text :
     -> Style glyph
     -> String
     -> ( List (GlyphInfo glyph), Style glyph )
-text glyphFn (Style style) string =
+text glyphFn (Style style_) string =
     string
         -- unicode string to classified glyph indices
-        |> ClassifiedGlyph.fromString style.font.cmap
+        |> ClassifiedGlyph.fromString style_.font.cmap
         -- substitute ligatures
-        |> (if List.member Liga style.features then
-                Ligatures.substitute style.font.ligatures
+        |> (if List.member Liga style_.features then
+                Ligatures.substitute style_.font.ligatures
 
             else
                 identity
            )
         -- initialize the  context
-        |> init style
+        |> init style_
         -- process the layout
         |> process glyphFn
         -- extract the result
-        |> end style
+        |> end style_
 
 
 init : InternalStyle glyph -> List ClassifiedGlyph -> Context glyph
@@ -126,18 +125,18 @@ process glyphFn ctx =
                     Array.get classifiedGlyph.index ctx.font.glyphs
                         |> Maybe.withDefault Glyph.empty
 
-                ( glyph, cache ) =
+                ( glyph__, cache ) =
                     case Dict.get classifiedGlyph.index ctx.cache of
                         Just glyph ->
                             ( glyph, ctx.cache )
 
                         Nothing ->
                             let
-                                glyph =
+                                glyph_ =
                                     glyphFn fontGlyph
                             in
-                            ( glyph
-                            , Dict.insert classifiedGlyph.index glyph ctx.cache
+                            ( glyph_
+                            , Dict.insert classifiedGlyph.index glyph_ ctx.cache
                             )
 
                 xAdvance =
@@ -189,7 +188,7 @@ process glyphFn ctx =
                                 | cache = cache
                                 , penX = newX
                                 , glyphs =
-                                    { glyph = glyph
+                                    { glyph = glyph__
                                     , x = ctx.penX
                                     , y = ctx.penY
                                     , size = ctx.size
@@ -204,7 +203,7 @@ end :
     InternalStyle glyph
     -> Context glyph
     -> ( List (GlyphInfo glyph), Style glyph )
-end style context =
+end style_ context =
     ( List.reverse context.glyphs
-    , Style { style | cache = context.cache }
+    , Style { style_ | cache = context.cache }
     )
