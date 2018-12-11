@@ -3,16 +3,15 @@
 -}
 
 
-module Font.TextStepper
-    exposing
-        ( Context
-        , GlyphInfo
-        , Style
-        , style
-        , text
-        )
+module Font.TextStepper exposing
+    ( Context
+    , GlyphInfo
+    , Style
+    , style
+    , text
+    )
 
-import Array.Hamt as Array exposing (Array)
+import Array exposing (Array)
 import Dict exposing (Dict)
 import Font.ClassifiedGlyph as ClassifiedGlyph exposing (Class(..), ClassifiedGlyph)
 import Font.Feature exposing (Feature(..))
@@ -88,19 +87,19 @@ text :
     -> Style glyph
     -> String
     -> Context glyph
-text glyphFn (Style style) string =
+text glyphFn (Style style_) string =
     string
         -- unicode string to classified glyph indices
-        |> ClassifiedGlyph.fromString style.font.cmap
+        |> ClassifiedGlyph.fromString style_.font.cmap
         -- substitute ligatures
-        |> (if List.member Liga style.features then
-                Ligatures.substitute style.font.ligatures
+        |> (if List.member Liga style_.features then
+                Ligatures.substitute style_.font.ligatures
 
             else
                 identity
            )
         -- initialize the  context
-        |> init style
+        |> init style_
         -- process the layout
         |> process glyphFn
 
@@ -140,16 +139,16 @@ process glyphFn ctx =
 
                 ( glyph, cache ) =
                     case Dict.get classifiedGlyph.index ctx.cache of
-                        Just glyph ->
-                            ( glyph, ctx.cache )
+                        Just glyph_ ->
+                            ( glyph_, ctx.cache )
 
                         Nothing ->
                             let
-                                glyph =
+                                glyph_ =
                                     glyphFn fontGlyph
                             in
-                            ( glyph
-                            , Dict.insert classifiedGlyph.index glyph ctx.cache
+                            ( glyph_
+                            , Dict.insert classifiedGlyph.index glyph_ ctx.cache
                             )
 
                 xAdvance =

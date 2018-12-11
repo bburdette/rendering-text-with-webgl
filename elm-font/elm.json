@@ -8,6 +8,7 @@
         "Font.Font",
         "Font.Glyph",
         "Font.Text",
+        "Font.TextStepper",
         "Font.PathCommand"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
