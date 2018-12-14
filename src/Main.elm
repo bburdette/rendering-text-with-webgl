@@ -17,17 +17,25 @@ type alias Model =
 view : Model -> Html Msg
 view m =
     I.view
-        { text = "blah"
-        , fontSize = 12
-        , lineHeight = 12
-        , width = 30
-        , color = vec3 50 100 150
-        , height = 12
-        , features = []
+        { features = []
+        , fontSize = 115
+        , text = "ABCDEFGHIJ KLMNOPQR STUVWXYZab cdefghijklmno pqrstuvwxyz 0123456789"
+        , lineHeight = 1
+        , width = 430
+        , height = 705
+        , color = vec3 0.5 0.5 0.5
         }
 
 
 
+{- text = "blah"
+   , fontSize = 12
+   , lineHeight = 12
+   , width = 30
+   , color = vec3 0.5 0.5 0.5
+   , height = 12
+   , features = []
+-}
 --    Html.text "blah"
 
 
